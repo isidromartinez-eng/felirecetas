@@ -698,6 +698,67 @@ footer {
   }
   .nav-links li:last-child a { border-right: none !important; }
 }
+</style><style id="patch2">
+
+/* 1. Ocultar barra de aviso en mobile */
+@media (max-width: 768px) {
+  #status-bar { display: none !important; }
+}
+
+/* 2. Nav: transicion para hide/show on scroll */
+nav {
+  transition: transform 0.28s ease;
+  will-change: transform;
+}
+nav.nav--hidden { transform: translateY(-120%) !important; }
+
+/* 3a. Galeria: 2 columnas, todas las fotos, sin scroll horizontal */
+@media (max-width: 768px) {
+  #galeria [style*="grid-template-columns:repeat(3,1fr)"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: unset !important;
+    grid-auto-flow: row !important;
+    grid-auto-columns: unset !important;
+    overflow-x: hidden !important;
+    scroll-snap-type: none !important;
+    height: auto !important;
+    gap: 8px !important;
+  }
+  #galeria [style*="grid-template-columns:repeat(3,1fr)"] > div {
+    height: auto !important;
+    width: auto !important;
+    aspect-ratio: 1 !important;
+    scroll-snap-align: none !important;
+  }
+
+  /* 3b. Modales: mas arriba, centrados, sin scroll detras */
+  .modal-overlay {
+    align-items: flex-start !important;
+    padding: 6vh 1rem 1rem !important;
+    overflow: hidden !important;
+  }
+  .modal-overlay .modal {
+    border-radius: 18px !important;
+    max-height: 86vh !important;
+    overflow-y: hidden !important;
+    transform: translateY(-24px) scale(0.97) !important;
+    width: 100% !important;
+  }
+  .modal-overlay.modal-visible .modal {
+    transform: translateY(0) scale(1) !important;
+  }
+
+  /* 3c. Foto del producto: completa, sin crop */
+  .modal-img {
+    height: auto !important;
+    max-height: 130px !important;
+    object-fit: contain !important;
+    background: #F5EBE0 !important;
+    border-radius: 10px !important;
+    margin-bottom: 0.4rem !important;
+  }
+}
 </style></head>
 <body>
 
@@ -1881,6 +1942,47 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeStory()
         a.href = 'https://wa.me/5492216023377?text=' + encodeURIComponent('Hola! Me gustarÃ­a consultar por: ' + name);
       });
     }, 30);
+  };
+})();
+</script><script id="patch2-js">
+/* Nav: aparece al scrollear para arriba, se oculta al bajar */
+(function () {
+  var nav = document.querySelector('nav');
+  if (!nav) return;
+  var lastY = 0;
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY;
+    if (y < 60) {
+      nav.classList.remove('nav--hidden');
+    } else if (y > lastY + 4) {
+      nav.classList.add('nav--hidden');
+    } else if (y < lastY - 3) {
+      nav.classList.remove('nav--hidden');
+    }
+    lastY = y;
+  }, { passive: true });
+})();
+
+/* iOS body scroll lock: evita que la pagina se mueva detras del modal */
+(function () {
+  var _open  = window.openModal;
+  var _close = window.closeModal;
+  var _sy = 0;
+
+  window.openModal = function (id) {
+    _sy = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top      = '-' + _sy + 'px';
+    document.body.style.width    = '100%';
+    _open(id);
+  };
+
+  window.closeModal = function (id) {
+    _close(id);
+    document.body.style.position = '';
+    document.body.style.top      = '';
+    document.body.style.width    = '';
+    window.scrollTo(0, _sy);
   };
 })();
 </script></body>
