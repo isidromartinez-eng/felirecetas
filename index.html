@@ -2085,25 +2085,6 @@ function closeStory(){
 }
 document.getElementById('stOverlay').addEventListener('click',function(e){if(e.target===this)closeStory();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeStory();});
-</script><script>
-/* Pre-fill WhatsApp with product name when opening product modals */
-(function(){
-  var _o = openModal;
-  openModal = function(id) {
-    _o(id);
-    setTimeout(function(){
-      var el = document.getElementById(id);
-      if (!el) return;
-      if (!el.querySelector('.modal-img')) return; // solo modales de producto
-      var t = el.querySelector('.modal-title');
-      if (!t) return;
-      var name = t.textContent.trim();
-      el.querySelectorAll('a[href*="wa.me"]').forEach(function(a){
-        a.href = 'https://wa.me/5492216023377?text=' + encodeURIComponent('Hola! Me gustar&iacute;a consultar por: ' + name);
-      });
-    }, 30);
-  };
-})();
 </script><script id="patch2-js">
 /* Nav hide/show on scroll - SOLO MOBILE */
 (function () {
