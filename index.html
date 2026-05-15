@@ -1005,9 +1005,9 @@ nav {
   var isMobile = window.innerWidth <= 768;
 
   if (isMobile && vid) {
-    /* ── MOBILE: scroll-driven video ── */
+    /* ── MOBILE: drag-driven video con scroll bloqueado ── */
 
-    // Swap to vertical video
+    // Swap a video vertical
     var src = vid.querySelector('source');
     if (src) { src.src = 'head-mobile.mp4'; }
     vid.removeAttribute('autoplay');
@@ -1016,53 +1016,78 @@ nav {
     vid.preload = 'auto';
     vid.load();
 
-    // Wrap all hero children in a sticky div
-    var sticky = document.createElement('div');
-    sticky.style.cssText = 'position:sticky;top:0;height:100vh;width:100%;overflow:hidden;';
-    while (hero.firstChild) sticky.appendChild(hero.firstChild);
-    hero.appendChild(sticky);
+    // Hero queda en 100vh — sin sección extra larga (evita cuadrado negro)
+    hero.style.height   = window.innerHeight + 'px';
+    hero.style.overflow = 'hidden';
 
-    // Hero becomes tall scroll container (updated once duration is known)
-    hero.style.height   = '500vh';
-    hero.style.overflow = 'visible';
+    // Bloquear scroll de página
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 
+    // Mostrar primer frame en cuanto cargue
     vid.addEventListener('loadedmetadata', function() {
-      // 30vh per second of video; min 300vh
-      hero.style.height = Math.max(300, Math.round(vid.duration * 30)) + 'vh';
+      vid.currentTime = 0;
     });
 
-    function mobileCheck() {
-      var top       = hero.offsetTop;
-      var scrollable = hero.offsetHeight - window.innerHeight;
-      var progress  = scrollable > 0
-        ? Math.min(1, Math.max(0, (window.scrollY - top) / scrollable))
-        : 0;
+    // Preparar el video para seeking en el primer toque
+    var primed = false;
+    function primeVideo() {
+      if (primed) return;
+      primed = true;
+      vid.play().then(function(){ vid.pause(); }).catch(function(){});
+    }
 
-      // Drive video by scroll
-      if (vid.duration && vid.readyState >= 2) {
-        vid.currentTime = progress * vid.duration;
-      }
+    var unlocked  = false;
+    var totalDrag = 0;  // px acumulados de arrastre hacia arriba
+    var lastY     = 0;
+    // 300 px de arrastre = 1 segundo de video → velocidad natural de scroll
+    var PX_PER_SEC = 300;
 
-      // Nav: slide in after halfway through scroll
+    document.addEventListener('touchstart', function(e) {
+      if (unlocked) return;
+      primeVideo();
+      lastY = e.touches[0].clientY;
+    }, {passive: true});
+
+    document.addEventListener('touchmove', function(e) {
+      if (unlocked) return;
+      e.preventDefault(); // bloquea el scroll de la página
+
+      var dy = lastY - e.touches[0].clientY; // positivo = dedo sube (scroll down)
+      lastY  = e.touches[0].clientY;
+      totalDrag = Math.max(0, totalDrag + dy); // no retrocede
+
+      if (!vid.duration) return;
+
+      var progress = Math.min(1, totalDrag / (PX_PER_SEC * vid.duration));
+      if (vid.readyState >= 2) vid.currentTime = progress * vid.duration;
+
+      // Nav aparece cuando el video llegó al 50%
       var showNav = progress >= 0.5;
       nav.style.transform     = showNav ? 'translateY(0)' : 'translateY(-100%)';
       nav.style.opacity       = showNav ? '1' : '0';
       nav.style.pointerEvents = showNav ? '' : 'none';
 
-      // WA: appear only after hero fully scrolled past
-      var heroGone = window.scrollY >= hero.offsetTop + hero.offsetHeight;
+      // Video terminó → desbloquear scroll
+      if (progress >= 1) {
+        unlocked = true;
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+      }
+    }, {passive: false});
+
+    // WA aparece una vez que el hero quedó fuera de la pantalla (post-unlock)
+    window.addEventListener('scroll', function() {
+      if (!unlocked) return;
+      var heroGone = window.scrollY >= hero.offsetHeight;
       if (wa) {
         wa.style.opacity       = heroGone ? '1' : '0';
         wa.style.pointerEvents = heroGone ? '' : 'none';
       }
-    }
-
-    window.addEventListener('scroll', mobileCheck, {passive:true});
-    window.addEventListener('resize', mobileCheck);
-    mobileCheck();
+    }, {passive: true});
 
   } else {
-    /* ── DESKTOP: normal autoplay video ── */
+    /* ── DESKTOP: video autoplay normal ── */
     function check() {
       var h        = hero ? hero.offsetHeight : window.innerHeight;
       var pastHero = window.scrollY > h * 0.5;
