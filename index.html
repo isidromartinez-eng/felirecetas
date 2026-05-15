@@ -919,8 +919,18 @@ nav.nav--hidden { transform: translateY(-120%) !important; }
          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
     <source src="head.mp4" type="video/mp4">
   </video>
-  <div style="position:absolute;right:3.5rem;top:50%;transform:translateY(-50%);text-align:right;pointer-events:none;">
-    <p style="font-family:'Playfair Display',serif;font-size:52px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 24px rgba(0,0,0,0.5);">Feli Recetas</p>
+  <!-- Contenido derecho sobre el video -->
+  <div style="position:absolute;right:4rem;top:50%;transform:translateY(-50%);text-align:right;max-width:420px;">
+    <p style="font-family:'Playfair Display',serif;font-size:54px;color:#fff;font-weight:400;font-style:italic;margin:0 0 1.4rem 0;text-shadow:0 2px 24px rgba(0,0,0,0.5);line-height:1.1;">Feli Recetas</p>
+    <p style="font-family:'DM Sans',sans-serif;font-size:17px;color:#fff;font-weight:300;margin:0 0 0.5rem 0;opacity:0.92;text-shadow:0 1px 8px rgba(0,0,0,0.4);">Pastelería artesanal hecha con amor</p>
+    <p style="font-family:'DM Sans',sans-serif;font-size:17px;color:#fff;font-weight:300;margin:0 0 0.5rem 0;opacity:0.92;text-shadow:0 1px 8px rgba(0,0,0,0.4);">Macarons, tortas y delicias únicas</p>
+    <p style="font-family:'DM Sans',sans-serif;font-size:17px;color:#fff;font-weight:300;margin:0 0 2.2rem 0;opacity:0.92;text-shadow:0 1px 8px rgba(0,0,0,0.4);">La Plata y alrededores · Pedidos: 48hs</p>
+    <div style="display:flex;gap:1rem;justify-content:flex-end;">
+      <a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'});"
+         style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.6);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:0.65rem 1.6rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(4px);transition:background 0.2s;">Catálogo</a>
+      <a href="#" onclick="event.preventDefault();openModal('modal-como-pedir');"
+         style="background:#fff;color:#8B3A3A;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:0.65rem 1.6rem;border-radius:100px;text-decoration:none;transition:opacity 0.2s;">Cómo pedir</a>
+    </div>
   </div>
 </section>
 
@@ -983,7 +993,7 @@ function closeMobileMenu(){document.getElementById('mobileMenu').classList.remov
 (function(){
   function check(){
     var h = document.getElementById('hero-video').offsetHeight;
-    var show = window.scrollY > h * 0.85;
+    var show = window.scrollY > h * 0.5;
     var nav = document.querySelector('nav');
     var sb  = document.getElementById('status-bar');
     nav.style.opacity = show ? '' : '0';
