@@ -930,12 +930,12 @@ nav {
   <div style="position:absolute;left:0;right:0;top:25%;transform:translateY(-50%);text-align:center;">
     <p style="font-family:'Playfair Display',serif;font-size:72px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 28px rgba(0,0,0,0.4);line-height:1.05;">Feli Recetas</p>
   </div>
-  <!-- Botones a la mitad de la pantalla -->
-  <div style="position:absolute;top:50%;right:4rem;transform:translateY(-50%);display:flex;gap:1.2rem;">
+  <!-- Botones centrados -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:1.2rem;">
     <a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'});"
        style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Catálogo</a>
     <a href="#" onclick="event.preventDefault();openModal('modal-como-pedir');"
-       style="background:#fff;color:#8B3A3A;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;white-space:nowrap;">Cómo pedir</a>
+       style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Cómo pedir</a>
   </div>
 </section>
 
@@ -969,7 +969,7 @@ nav {
   </div>
   <ul class="nav-links">
     <li><a href="#catalogo" data-section="catalogo" onclick="smoothTo(event,'catalogo')">Catálogo</a></li>
-    <li><a href="#testimonios" data-section="testimonios" onclick="smoothTo(event,'testimonios')">Reseñas</a></li>
+    <li><a href="#nosotros" data-section="nosotros" onclick="smoothTo(event,'nosotros')">Nosotros</a></li>
     <li><a href="#galeria" data-section="galeria" onclick="smoothTo(event,'galeria')">Galería</a></li>
     <li><a href="#faq" data-section="faq" onclick="smoothTo(event,'faq')">FAQ</a></li>
     <li><a href="#pedido-personalizado" data-section="pedido-personalizado" onclick="event.preventDefault();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});">Pedido personalizado</a></li>
@@ -1018,7 +1018,8 @@ nav {
     }
 
     // Secciones en orden de aparición en la página
-    var sectionIds = ['catalogo','testimonios','galeria','faq','pedido-personalizado'];
+    // 'nosotros' cubre tanto la sección nosotros como testimonios (van seguidas)
+    var sectionIds = ['catalogo','nosotros','galeria','faq','pedido-personalizado'];
 
     function updateActiveNav() {
       var mid = window.scrollY + window.innerHeight * 0.4;
