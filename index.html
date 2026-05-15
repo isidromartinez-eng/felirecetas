@@ -124,18 +124,59 @@ nav {
 }
 .stat-label { font-size: 12px; color: #9B7B5A; margin-top: 6px; letter-spacing: 0.02em; }
 
-/* Hero desktop: texto y botones a la derecha */
+/* ── HERO layouts ── */
+.hero-mobile { display: block; position: absolute; inset: 0; }
+.hero-desktop { display: none; }
+
 @media (min-width: 769px) {
-  .hero-title-overlay {
-    left: auto !important;
-    right: 4rem !important;
-    text-align: right !important;
+  .hero-mobile  { display: none; }
+  .hero-desktop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6rem;
+    width: 100%; height: 100%;
+    padding: 0 6rem;
   }
-  .hero-buttons-overlay {
-    left: auto !important;
-    right: 4rem !important;
-    transform: translateY(-50%) !important;
+  .hero-oval {
+    width: 36vw; height: 72vh;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
   }
+  .hero-oval video {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .hero-desktop-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .hero-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 54px; font-weight: 400; font-style: italic;
+    color: #fff; margin: 0 0 1.4rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    line-height: 1.1;
+  }
+  .hero-nav-list {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .hero-nav-list a {
+    color: #fff; text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 22px; font-weight: 400;
+    display: flex; align-items: center; gap: 0.7rem;
+    opacity: 0.88;
+    transition: opacity 0.2s;
+  }
+  .hero-nav-list a:hover { opacity: 1; }
+  .hero-nav-list a::before { content: '·'; font-size: 28px; line-height: 0.8; }
 }
 
 /* Lazy render: el browser no pinta estas secciones hasta que aparecen en pantalla */
@@ -942,22 +983,42 @@ nav {
 <body>
 
 <!-- HERO VIDEO -->
-<section id="hero-video" style="width:100%;height:100vh;position:relative;overflow:hidden;background:#1a0f08;">
-  <video autoplay muted playsinline loop preload="metadata"
-         style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
-    <source src="head.mp4" type="video/mp4">
-  </video>
-  <!-- Feli Recetas a 1/4 de la pantalla, centrado -->
-  <div class="hero-title-overlay" style="position:absolute;left:0;right:0;top:25%;transform:translateY(-50%);text-align:center;">
-    <p style="font-family:'Playfair Display',serif;font-size:72px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 28px rgba(0,0,0,0.4);line-height:1.05;">Feli Recetas</p>
+<section id="hero-video" style="width:100%;height:100vh;overflow:hidden;background:#1a0f08;position:relative;">
+
+  <!-- MOBILE: video fullscreen + overlays -->
+  <div class="hero-mobile">
+    <video autoplay muted playsinline loop preload="metadata"
+           style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
+      <source src="head.mp4" type="video/mp4">
+    </video>
+    <div style="position:absolute;left:0;right:0;top:25%;transform:translateY(-50%);text-align:center;">
+      <p style="font-family:'Playfair Display',serif;font-size:72px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 28px rgba(0,0,0,0.4);line-height:1.05;">Feli Recetas</p>
+    </div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:1.2rem;">
+      <a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'});" style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Catálogo</a>
+      <a href="#" onclick="event.preventDefault();openModal('modal-como-pedir');" style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Cómo pedir</a>
+    </div>
   </div>
-  <!-- Botones centrados -->
-  <div class="hero-buttons-overlay" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:1.2rem;">
-    <a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'});"
-       style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Catálogo</a>
-    <a href="#" onclick="event.preventDefault();openModal('modal-como-pedir');"
-       style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Cómo pedir</a>
+
+  <!-- DESKTOP: oval izquierda + links derecha -->
+  <div class="hero-desktop">
+    <div class="hero-oval">
+      <video autoplay muted playsinline loop preload="metadata">
+        <source src="head.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-desktop-right">
+      <p class="hero-brand">Feli Recetas</p>
+      <ul class="hero-nav-list">
+        <li><a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Catálogo</a></li>
+        <li><a href="#" onclick="event.preventDefault();openModal('modal-como-pedir')">¿Cómo pedir?</a></li>
+        <li><a href="#pedido-personalizado" onclick="event.preventDefault();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'})">Pedido personalizado</a></li>
+        <li><a href="#nosotros" onclick="event.preventDefault();document.getElementById('nosotros').scrollIntoView({behavior:'smooth'})">Nosotros</a></li>
+        <li><a href="#galeria" onclick="event.preventDefault();document.getElementById('galeria').scrollIntoView({behavior:'smooth'})">Galería</a></li>
+      </ul>
+    </div>
   </div>
+
 </section>
 
 <div id="status-bar" style="background:#2C1A10;color:#F5EBE0;text-align:center;font-size:12px;font-weight:400;padding:0.5rem 1rem;letter-spacing:0.04em;">
