@@ -998,31 +998,87 @@ nav {
 </style>
 <script>
 (function(){
-  var nav = document.querySelector('nav');
-  var wa  = document.getElementById('wa-float');
+  var nav  = document.querySelector('nav');
+  var wa   = document.getElementById('wa-float');
+  var hero = document.getElementById('hero-video');
+  var vid  = hero ? hero.querySelector('video') : null;
+  var isMobile = window.innerWidth <= 768;
 
-  // Mobile video: swap src if on mobile and head-mobile.mp4 exists
-  var vid = document.querySelector('#hero-video video');
-  if (vid && window.innerWidth <= 768) {
+  if (isMobile && vid) {
+    /* ── MOBILE: scroll-driven video ── */
+
+    // Swap to vertical video
     var src = vid.querySelector('source');
-    if (src) { src.src = 'head-mobile.mp4'; vid.load(); }
-  }
+    if (src) { src.src = 'head-mobile.mp4'; }
+    vid.removeAttribute('autoplay');
+    vid.removeAttribute('loop');
+    vid.muted = true;
+    vid.preload = 'auto';
+    vid.load();
 
-  function check(){
-    var h = document.getElementById('hero-video').offsetHeight;
-    var pastHero = window.scrollY > h * 0.5;
-    var heroGone = window.scrollY >= h;
-    nav.style.transform    = pastHero ? 'translateY(0)' : 'translateY(-100%)';
-    nav.style.opacity      = pastHero ? '1' : '0';
-    nav.style.pointerEvents = pastHero ? '' : 'none';
-    if (wa) {
-      wa.style.opacity      = heroGone ? '1' : '0';
-      wa.style.pointerEvents = heroGone ? '' : 'none';
+    // Wrap all hero children in a sticky div
+    var sticky = document.createElement('div');
+    sticky.style.cssText = 'position:sticky;top:0;height:100vh;width:100%;overflow:hidden;';
+    while (hero.firstChild) sticky.appendChild(hero.firstChild);
+    hero.appendChild(sticky);
+
+    // Hero becomes tall scroll container (updated once duration is known)
+    hero.style.height   = '500vh';
+    hero.style.overflow = 'visible';
+
+    vid.addEventListener('loadedmetadata', function() {
+      // 30vh per second of video; min 300vh
+      hero.style.height = Math.max(300, Math.round(vid.duration * 30)) + 'vh';
+    });
+
+    function mobileCheck() {
+      var top       = hero.offsetTop;
+      var scrollable = hero.offsetHeight - window.innerHeight;
+      var progress  = scrollable > 0
+        ? Math.min(1, Math.max(0, (window.scrollY - top) / scrollable))
+        : 0;
+
+      // Drive video by scroll
+      if (vid.duration && vid.readyState >= 2) {
+        vid.currentTime = progress * vid.duration;
+      }
+
+      // Nav: slide in after halfway through scroll
+      var showNav = progress >= 0.5;
+      nav.style.transform     = showNav ? 'translateY(0)' : 'translateY(-100%)';
+      nav.style.opacity       = showNav ? '1' : '0';
+      nav.style.pointerEvents = showNav ? '' : 'none';
+
+      // WA: appear only after hero fully scrolled past
+      var heroGone = window.scrollY >= hero.offsetTop + hero.offsetHeight;
+      if (wa) {
+        wa.style.opacity       = heroGone ? '1' : '0';
+        wa.style.pointerEvents = heroGone ? '' : 'none';
+      }
     }
+
+    window.addEventListener('scroll', mobileCheck, {passive:true});
+    window.addEventListener('resize', mobileCheck);
+    mobileCheck();
+
+  } else {
+    /* ── DESKTOP: normal autoplay video ── */
+    function check() {
+      var h        = hero ? hero.offsetHeight : window.innerHeight;
+      var pastHero = window.scrollY > h * 0.5;
+      var heroGone = window.scrollY >= h;
+      nav.style.transform     = pastHero ? 'translateY(0)' : 'translateY(-100%)';
+      nav.style.opacity       = pastHero ? '1' : '0';
+      nav.style.pointerEvents = pastHero ? '' : 'none';
+      if (wa) {
+        wa.style.opacity       = heroGone ? '1' : '0';
+        wa.style.pointerEvents = heroGone ? '' : 'none';
+      }
+    }
+    window.addEventListener('scroll', check, {passive:true});
+    window.addEventListener('resize', check);
+    check();
   }
-  window.addEventListener('scroll', check, {passive:true});
-  window.addEventListener('resize', check);
-  check();
 })();
 </script>
 
