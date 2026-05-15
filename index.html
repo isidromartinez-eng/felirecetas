@@ -178,7 +178,13 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   font-size: 13px; color: var(--ink-soft);
   padding: 6px 4px; transition: color 0.2s;
 }
-.main-nav__links a:hover, .main-nav__links a.is-active { color: var(--bordeaux); }
+.main-nav__links a:hover { color: var(--bordeaux); }
+.main-nav__links a.is-active {
+  color: var(--bordeaux);
+  font-weight: 500;
+  border-bottom: 2px solid var(--bordeaux);
+  padding-bottom: 2px;
+}
 .main-nav__cta { display: flex; gap: 10px; align-items: center; }
 
 /* burger */
@@ -2039,7 +2045,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   }
 
   // Active section
-  const sectionIds = ['catalogo','pasos','nosotros','galeria','faq'];
+  const sectionIds = ['catalogo','pasos','nosotros','galeria','testimonios','faq','cta-personalizado'];
   function updateActiveNav() {
     const mid = window.scrollY + window.innerHeight * 0.35;
     let active = null;
