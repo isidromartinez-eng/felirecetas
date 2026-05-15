@@ -998,32 +998,34 @@ nav {
 </style>
 <script>
 (function(){
-  var nav  = document.querySelector('nav');
-  var wa   = document.getElementById('wa-float');
-  var hero = document.getElementById('hero-video');
-  var vid  = hero ? hero.querySelector('video') : null;
+  // DOMContentLoaded garantiza que todos los elementos (incl. #wa-float al final) ya existen
+  document.addEventListener('DOMContentLoaded', function() {
+    var nav  = document.querySelector('nav');
+    var wa   = document.getElementById('wa-float');
+    var hero = document.getElementById('hero-video');
+    var vid  = hero ? hero.querySelector('video') : null;
 
-  // En mobile usar video vertical
-  if (vid && window.innerWidth <= 768) {
-    var src = vid.querySelector('source');
-    if (src) { src.src = 'head-mobile.mp4'; vid.load(); }
-  }
-
-  function check() {
-    // Nav y WA aparecen solo cuando el hero ya no está en pantalla
-    var heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 0;
-    var heroGone   = window.scrollY >= heroBottom;
-    nav.style.transform     = heroGone ? 'translateY(0)' : 'translateY(-100%)';
-    nav.style.opacity       = heroGone ? '1' : '0';
-    nav.style.pointerEvents = heroGone ? '' : 'none';
-    if (wa) {
-      wa.style.opacity       = heroGone ? '1' : '0';
-      wa.style.pointerEvents = heroGone ? '' : 'none';
+    // En mobile usar video vertical
+    if (vid && window.innerWidth <= 768) {
+      var src = vid.querySelector('source');
+      if (src) { src.src = 'head-mobile.mp4'; vid.load(); }
     }
-  }
-  window.addEventListener('scroll', check, {passive:true});
-  window.addEventListener('resize', check);
-  check();
+
+    function check() {
+      // window.innerHeight es el alto real visible (evita el problema de 100vh en mobile)
+      var heroGone = window.scrollY >= window.innerHeight;
+      nav.style.transform     = heroGone ? 'translateY(0)' : 'translateY(-100%)';
+      nav.style.opacity       = heroGone ? '1' : '0';
+      nav.style.pointerEvents = heroGone ? '' : 'none';
+      if (wa) {
+        wa.style.opacity       = heroGone ? '1' : '0';
+        wa.style.pointerEvents = heroGone ? '' : 'none';
+      }
+    }
+    window.addEventListener('scroll', check, {passive: true});
+    window.addEventListener('resize', check);
+    check();
+  });
 })();
 </script>
 
