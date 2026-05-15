@@ -44,6 +44,12 @@ nav {
 .nav-links { display: flex; gap: 2.2rem; list-style: none; }
 .nav-links a { text-decoration: none; font-size: 13px; color: #6B4F3A; font-weight: 400; transition: color 0.2s; }
 .nav-links a:hover { color: #8B3A3A; }
+.nav-links a.nav-active {
+  color: #fff !important;
+  background: #8B3A3A !important;
+  border-radius: 100px;
+  padding: 0.25rem 0.8rem;
+}
 .btn-primary {
   background: #8B3A3A; color: #FBF7F2;
   border: none; padding: 0.55rem 1.4rem;
@@ -962,10 +968,11 @@ nav {
     <span class="logo-text">FELIRECETAS</span>
   </div>
   <ul class="nav-links">
-    <li><a href="#catalogo" onclick="smoothTo(event,'catalogo')">Catálogo</a></li>
-    <li><a href="#galeria" onclick="smoothTo(event,'galeria')">Galería</a></li>
-    <li><a href="#testimonios" onclick="smoothTo(event,'testimonios')">Reseñas</a></li>
-    <li><a href="#faq" onclick="smoothTo(event,'faq')">FAQ</a></li><li><a href="#pedido-personalizado" onclick="event.preventDefault();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});">Pedido personalizado</a></li>
+    <li><a href="#catalogo" data-section="catalogo" onclick="smoothTo(event,'catalogo')">Catálogo</a></li>
+    <li><a href="#testimonios" data-section="testimonios" onclick="smoothTo(event,'testimonios')">Reseñas</a></li>
+    <li><a href="#galeria" data-section="galeria" onclick="smoothTo(event,'galeria')">Galería</a></li>
+    <li><a href="#faq" data-section="faq" onclick="smoothTo(event,'faq')">FAQ</a></li>
+    <li><a href="#pedido-personalizado" data-section="pedido-personalizado" onclick="event.preventDefault();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});">Pedido personalizado</a></li>
   </ul>
   <button class="nav-burger" onclick="openMobileMenu()" aria-label="Menu"><span></span><span></span><span></span></button> <button class="btn-primary" onclick="openModal('modal-como-pedir')">Pedir ahora</button>
 </nav>
@@ -1010,20 +1017,35 @@ nav {
       if (src) { src.src = 'head-mobile.mp4'; vid.load(); }
     }
 
+    // Secciones en orden de aparición en la página
+    var sectionIds = ['catalogo','testimonios','galeria','faq','pedido-personalizado'];
+
+    function updateActiveNav() {
+      var mid = window.scrollY + window.innerHeight * 0.4;
+      var active = null;
+      sectionIds.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.offsetTop <= mid) active = id;
+      });
+      document.querySelectorAll('.nav-links a[data-section]').forEach(function(a) {
+        a.classList.toggle('nav-active', a.dataset.section === active);
+      });
+    }
+
     function check() {
       var heroH    = window.innerHeight;
-      // Mobile: espera a que el hero desaparezca del todo
-      // Desktop: aparece cuando scrolleaste el 50% del hero
       var heroGone = isMobile ? window.scrollY >= heroH : window.scrollY > heroH * 0.5;
 
-      nav.style.transform     = heroGone ? 'translateY(0)'    : 'translateY(-100%)';
-      nav.style.opacity       = heroGone ? '1'                : '0';
-      nav.style.pointerEvents = heroGone ? ''                 : 'none';
+      nav.style.transform     = heroGone ? 'translateY(0)' : 'translateY(-100%)';
+      nav.style.opacity       = heroGone ? '1'             : '0';
+      nav.style.pointerEvents = heroGone ? ''              : 'none';
 
       if (wa) {
         wa.style.opacity       = heroGone ? '1' : '0';
         wa.style.pointerEvents = heroGone ? ''  : 'none';
       }
+
+      updateActiveNav();
     }
 
     window.addEventListener('scroll', check, {passive: true});
