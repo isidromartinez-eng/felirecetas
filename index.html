@@ -1365,9 +1365,9 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
       <div class="hero-video__buttons">
         <a href="#catalogo" class="btn btn--light">Ver catálogo →</a>
         <a href="#" class="btn btn--ghost-light" onclick="openModal('modal-como-pedir'); return false;">¿Cómo pedir?</a>
-      </div>
-      <div style="width:100%;display:flex;justify-content:center;margin-top:14px;">
-        <a href="#cta-personalizado" class="btn btn--outline" style="border-color:rgba(251,247,242,0.5);color:var(--cream);">Pedido personalizado →</a>
+        <div style="flex:0 0 100%;display:flex;justify-content:center;margin-top:2px;">
+          <a href="#cta-personalizado" class="btn btn--outline" style="border-color:rgba(251,247,242,0.5);color:var(--cream);">Pedido personalizado →</a>
+        </div>
       </div>
     </div>
 
@@ -2074,7 +2074,9 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
       const el = id && document.getElementById(id);
       if (el) {
         e.preventDefault();
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const navH = document.getElementById('mainNav').offsetHeight || 72;
+        const top = el.getBoundingClientRect().top + window.scrollY - navH;
+        window.scrollTo({ top, behavior: 'smooth' });
       }
     });
   });
