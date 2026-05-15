@@ -910,21 +910,6 @@ nav.nav--hidden { transform: translateY(-120%) !important; }
     z-index: 10 !important;
   }
 }
-</style><style id="hero-overlay-css">
-/* Nav transparente mientras el hero-video esta activo */
-body.hero-active nav {
-  background: transparent !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-body.hero-active nav .logo-text,
-body.hero-active nav .nav-links a,
-body.hero-active nav .nav-cta {
-  color: #fff !important;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-}
-body.hero-active nav .logo-icon { background: rgba(255,255,255,0.15) !important; }
-body.hero-active nav .nav-burger svg line { stroke: #fff !important; }
 </style></head>
 <body>
 
@@ -975,92 +960,13 @@ body.hero-active nav .nav-burger svg line { stroke: #fff !important; }
   <a href="#pedido-personalizado" onclick="closeMobileMenu();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});">Pedido personalizado</a>
 </div>
 
-<!-- HERO -->
-<div id="hero-overlay" style="position:fixed;inset:0;z-index:9999;background:#1a0f08;">
-  <video id="hero-vid" autoplay muted playsinline loop preload="auto"
-         style="width:100%;height:100%;object-fit:cover;display:block;"
-         src="head.mp4"></video>
-  <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);color:#fff;text-align:center;opacity:0.85;pointer-events:none;white-space:nowrap;">
-    <div style="font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">Deslizá para ver más</div>
-    <div style="font-size:20px;display:inline-block;animation:heroArrow 1.4s infinite;">↓</div>
-  </div>
-  <div id="hero-play-btn" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;cursor:pointer;flex-direction:column;gap:1rem;">
-    <div style="width:80px;height:80px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.5);backdrop-filter:blur(4px);">
-      <span style="color:#fff;font-size:32px;margin-left:6px;">▶</span>
-    </div>
-    <span style="color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:0.08em;opacity:0.8;">Tocá para ver</span>
-  </div>
-  <button id="hero-skip" style="position:absolute;top:1.2rem;right:1.5rem;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:0.08em;padding:0.4rem 1rem;border-radius:100px;cursor:pointer;">SALTAR ✕</button>
-</div>
-<style>
-@keyframes heroArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
-</style>
-<script id="hero-scroll-js">
-(function(){
-  var overlay = document.getElementById("hero-overlay");
-  var vid     = document.getElementById("hero-vid");
-  var done  = false;
-  var ready = false;
-
-  document.documentElement.style.overflow = "hidden";
-  document.body.style.overflow = "hidden";
-  document.body.style.position = "fixed";
-  document.body.style.width = "100%";
-  document.body.classList.add("hero-active");
-
-  var playBtn = document.getElementById('hero-play-btn');
-
-  function tryPlay(){
-    var p = vid.play();
-    if(p && p.catch) p.catch(function(){
-      playBtn.style.display = 'flex';
-    });
-  }
-  tryPlay();
-
-  /* Si a los 800ms el video sigue pausado, mostrar botón de play */
-  setTimeout(function(){
-    if(vid.paused){ playBtn.style.display = 'flex'; }
-  }, 800);
-
-  /* Click en el botón de play o en el overlay arranca el video */
-  playBtn.addEventListener('click', function(){
-    vid.play().then(function(){ playBtn.style.display = 'none'; }).catch(function(){});
-  });
-  vid.addEventListener('playing', function(){ playBtn.style.display = 'none'; });
-
-  /* Solo se puede cerrar después de 2s para evitar cierre accidental */
-  setTimeout(function(){ ready = true; }, 2000);
-
-  function dismiss(){
-    if(done || !ready) return;
-    done = true;
-    document.documentElement.style.overflow = "";
-    document.body.style.overflow = "";
-    document.body.style.position = "";
-    document.body.style.width = "";
-    document.body.classList.remove("hero-active");
-    overlay.style.transition = "opacity 0.8s ease";
-    overlay.style.opacity = "0";
-    setTimeout(function(){ overlay.style.display = "none"; }, 850);
-  }
-
-  window.addEventListener("wheel", function(e){ if(!done && ready && e.deltaY > 0) dismiss(); }, {passive:true});
-
-  var ty0 = 0;
-  window.addEventListener("touchstart", function(e){ ty0 = e.touches[0].clientY; }, {passive:true});
-  window.addEventListener("touchmove", function(e){ if(!done && ready && ty0 - e.touches[0].clientY > 40) dismiss(); }, {passive:true});
-
-  window.addEventListener("keydown", function(e){
-    if(!done && ready && (e.key==="ArrowDown"||e.key==="PageDown"||e.key===" ")){ e.preventDefault(); dismiss(); }
-  });
-
-  document.getElementById("hero-skip").addEventListener("click", function(){ ready = true; dismiss(); });
-})();
-</script>
-lick="closeMobileMenu();setTimeout(function(){document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});},100);" >Pedido personalizado</a>
-  <a href="#" onclick="closeMobileMenu();openModal('modal-como-pedir');" class="mm-cta">Hacer pedido</a>
-</div>
+<!-- HERO VIDEO -->
+<section style="width:100%;height:100vh;position:relative;overflow:hidden;background:#1a0f08;">
+  <video autoplay muted playsinline loop preload="auto"
+         style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
+    <source src="head.mp4" type="video/mp4">
+  </video>
+</section>
 <script>
 function openMobileMenu(){document.getElementById('mobileMenu').classList.add('open');document.body.style.overflow='hidden';}
 function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.body.style.overflow='';}
