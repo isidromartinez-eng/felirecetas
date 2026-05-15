@@ -2126,11 +2126,19 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   if (isMobile) {
+    // Guardar estado inicial para que el primer "atrás" vuelva al top en vez de salir
+    history.replaceState({ section: null }, '', location.href);
     window.addEventListener('popstate', function(e) {
-      const target = e.state && e.state.scrollY != null
-        ? e.state.scrollY
-        : (location.hash ? (document.getElementById(location.hash.slice(1))?.getBoundingClientRect().top + window.scrollY - 72) : 0);
-      window.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+      var id = e.state && e.state.section;
+      if (id) {
+        var el = document.getElementById(id);
+        if (el) {
+          var navH = document.getElementById('mainNav').offsetHeight || 72;
+          window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - navH, behavior: 'smooth' });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
   }
   onScroll();
@@ -2145,7 +2153,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
         const navH = document.getElementById('mainNav').offsetHeight || 72;
         const top = el.getBoundingClientRect().top + window.scrollY - navH;
         window.scrollTo({ top, behavior: 'smooth' });
-        if (isMobile) history.pushState({ scrollY: Math.round(top) }, '', '#' + id);
+        if (isMobile) history.pushState({ section: id }, '', '#' + id);
       }
     });
   });
