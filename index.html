@@ -124,6 +124,20 @@ nav {
 }
 .stat-label { font-size: 12px; color: #9B7B5A; margin-top: 6px; letter-spacing: 0.02em; }
 
+/* Hero desktop: texto y botones a la derecha */
+@media (min-width: 769px) {
+  .hero-title-overlay {
+    left: auto !important;
+    right: 4rem !important;
+    text-align: right !important;
+  }
+  .hero-buttons-overlay {
+    left: auto !important;
+    right: 4rem !important;
+    transform: translateY(-50%) !important;
+  }
+}
+
 /* Lazy render: el browser no pinta estas secciones hasta que aparecen en pantalla */
 #catalogo, #nosotros, #testimonios, #galeria, #faq,
 .sobre, section[style*="padding:5rem"] {
@@ -934,11 +948,11 @@ nav {
     <source src="head.mp4" type="video/mp4">
   </video>
   <!-- Feli Recetas a 1/4 de la pantalla, centrado -->
-  <div style="position:absolute;left:0;right:0;top:25%;transform:translateY(-50%);text-align:center;">
+  <div class="hero-title-overlay" style="position:absolute;left:0;right:0;top:25%;transform:translateY(-50%);text-align:center;">
     <p style="font-family:'Playfair Display',serif;font-size:72px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 28px rgba(0,0,0,0.4);line-height:1.05;">Feli Recetas</p>
   </div>
   <!-- Botones centrados -->
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:1.2rem;">
+  <div class="hero-buttons-overlay" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;gap:1.2rem;">
     <a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'});"
        style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Catálogo</a>
     <a href="#" onclick="event.preventDefault();openModal('modal-como-pedir');"
@@ -1033,7 +1047,10 @@ nav {
       var active = null;
       sectionIds.forEach(function(id) {
         var el = document.getElementById(id);
-        if (el && el.offsetTop <= mid) active = id;
+        if (!el) return;
+        // getBoundingClientRect().top + scrollY = posición real desde el tope del documento
+        var top = el.getBoundingClientRect().top + window.scrollY;
+        if (top <= mid) active = id;
       });
       document.querySelectorAll('.nav-links a[data-section]').forEach(function(a) {
         a.classList.toggle('nav-active', a.dataset.section === active);
