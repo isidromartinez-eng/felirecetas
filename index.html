@@ -129,54 +129,37 @@ nav {
 .hero-desktop { display: none; }
 
 @media (min-width: 769px) {
-  .hero-mobile  { display: none; }
+  .hero-mobile { display: none; }
   .hero-desktop {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6rem;
-    width: 100%; height: 100%;
-    padding: 0 6rem;
-  }
-  .hero-oval {
-    width: 36vw; height: 72vh;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-    position: relative;
-  }
-  .hero-oval video {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-  }
-  .hero-desktop-right {
-    flex: 1;
-    display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 1rem;
+    position: absolute;
+    top: 50%; right: 5rem;
+    transform: translateY(-50%);
+    text-align: right;
   }
   .hero-brand {
     font-family: 'Playfair Display', serif;
-    font-size: 54px; font-weight: 400; font-style: italic;
-    color: #fff; margin: 0 0 1.4rem;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-    line-height: 1.1;
+    font-size: 58px; font-weight: 400; font-style: italic;
+    color: #fff; margin: 0 0 0.6rem;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.45);
+    line-height: 1.05;
   }
   .hero-nav-list {
     list-style: none; padding: 0; margin: 0;
-    display: flex; flex-direction: column; gap: 0.5rem;
+    display: flex; flex-direction: column; gap: 0.25rem;
+    align-items: flex-end;
   }
   .hero-nav-list a {
     color: #fff; text-decoration: none;
     font-family: 'DM Sans', sans-serif;
-    font-size: 22px; font-weight: 400;
-    display: flex; align-items: center; gap: 0.7rem;
+    font-size: 20px; font-weight: 400;
     opacity: 0.88;
     transition: opacity 0.2s;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.4);
   }
   .hero-nav-list a:hover { opacity: 1; }
-  .hero-nav-list a::before { content: '·'; font-size: 28px; line-height: 0.8; }
 }
 
 /* Lazy render: el browser no pinta estas secciones hasta que aparecen en pantalla */
@@ -983,14 +966,14 @@ nav {
 <body>
 
 <!-- HERO VIDEO -->
-<section id="hero-video" style="width:100%;height:100vh;overflow:hidden;background:#1a0f08;position:relative;">
+<section id="hero-video" style="width:100%;height:100vh;position:relative;overflow:hidden;background:#1a0f08;">
+  <video autoplay muted playsinline loop preload="metadata"
+         style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
+    <source src="head.mp4" type="video/mp4">
+  </video>
 
-  <!-- MOBILE: video fullscreen + overlays -->
+  <!-- MOBILE overlays -->
   <div class="hero-mobile">
-    <video autoplay muted playsinline loop preload="metadata"
-           style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
-      <source src="head.mp4" type="video/mp4">
-    </video>
     <div style="position:absolute;left:0;right:0;top:25%;transform:translateY(-50%);text-align:center;">
       <p style="font-family:'Playfair Display',serif;font-size:72px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 28px rgba(0,0,0,0.4);line-height:1.05;">Feli Recetas</p>
     </div>
@@ -1000,23 +983,16 @@ nav {
     </div>
   </div>
 
-  <!-- DESKTOP: oval izquierda + links derecha -->
+  <!-- DESKTOP overlay: título + links sobre el video -->
   <div class="hero-desktop">
-    <div class="hero-oval">
-      <video autoplay muted playsinline loop preload="metadata">
-        <source src="head.mp4" type="video/mp4">
-      </video>
-    </div>
-    <div class="hero-desktop-right">
-      <p class="hero-brand">Feli Recetas</p>
-      <ul class="hero-nav-list">
-        <li><a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Catálogo</a></li>
-        <li><a href="#" onclick="event.preventDefault();openModal('modal-como-pedir')">¿Cómo pedir?</a></li>
-        <li><a href="#pedido-personalizado" onclick="event.preventDefault();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'})">Pedido personalizado</a></li>
-        <li><a href="#nosotros" onclick="event.preventDefault();document.getElementById('nosotros').scrollIntoView({behavior:'smooth'})">Nosotros</a></li>
-        <li><a href="#galeria" onclick="event.preventDefault();document.getElementById('galeria').scrollIntoView({behavior:'smooth'})">Galería</a></li>
-      </ul>
-    </div>
+    <p class="hero-brand">Feli Recetas</p>
+    <ul class="hero-nav-list">
+      <li><a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">Catálogo</a></li>
+      <li><a href="#" onclick="event.preventDefault();openModal('modal-como-pedir')">¿Cómo pedir?</a></li>
+      <li><a href="#pedido-personalizado" onclick="event.preventDefault();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'})">Pedido personalizado</a></li>
+      <li><a href="#nosotros" onclick="event.preventDefault();document.getElementById('nosotros').scrollIntoView({behavior:'smooth'})">Nosotros</a></li>
+      <li><a href="#galeria" onclick="event.preventDefault();document.getElementById('galeria').scrollIntoView({behavior:'smooth'})">Galería</a></li>
+    </ul>
   </div>
 
 </section>
