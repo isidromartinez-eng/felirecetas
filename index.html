@@ -972,7 +972,10 @@ body.hero-active nav .nav-burger svg line { stroke: #fff !important; }
   <a href="#testimonios" onclick="closeMobileMenu()">Clientes</a>
   <a href="#galeria" onclick="closeMobileMenu()">Creaciones</a>
   <a href="#faq" onclick="closeMobileMenu()">Preguntas frecuentes</a>
-  <a href="#pedido-personalizado" onc<!-- HERO -->
+  <a href="#pedido-personalizado" onclick="closeMobileMenu();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});">Pedido personalizado</a>
+</div>
+
+<!-- HERO -->
 <div id="hero-overlay" style="position:fixed;inset:0;z-index:9999;background:#1a0f08;">
   <video id="hero-vid" autoplay muted playsinline loop preload="auto"
          style="width:100%;height:100%;object-fit:cover;display:block;"
