@@ -708,12 +708,11 @@ footer {
   #status-bar { display: none !important; }
 }
 
-/* 2. Nav: transicion para hide/show on scroll */
+/* 2. Nav: transicion */
 nav {
   transition: transform 0.28s ease;
   will-change: transform;
 }
-nav.nav--hidden { transform: translateY(-120%) !important; }
 
 /* 3a. Galeria: 2 columnas, todas las fotos, sin scroll horizontal */
 @media (max-width: 768px) {
@@ -763,10 +762,9 @@ nav.nav--hidden { transform: translateY(-120%) !important; }
   }
 }
 </style><style id="patch3">
-/* Nav: transition y hide solo en mobile */
+/* Nav: sin transicion en desktop */
 @media (min-width: 769px) {
   nav { transition: none !important; }
-  nav.nav--hidden { transform: none !important; }
 }
 
 /* Cat-* classes: solo aplican en mobile (JS las agrega en mobile) */
@@ -2137,24 +2135,6 @@ function closeStory(){
 document.getElementById('stOverlay').addEventListener('click',function(e){if(e.target===this)closeStory();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeStory();});
 </script><script id="patch2-js">
-/* Nav hide/show on scroll - SOLO MOBILE */
-(function () {
-  if (window.innerWidth > 768) return;
-  var nav = document.querySelector('nav');
-  if (!nav) return;
-  var lastY = 0;
-  window.addEventListener('scroll', function () {
-    var y = window.scrollY;
-    if (y < 60) {
-      nav.classList.remove('nav--hidden');
-    } else if (y > lastY + 4) {
-      nav.classList.add('nav--hidden');
-    } else if (y < lastY - 3) {
-      nav.classList.remove('nav--hidden');
-    }
-    lastY = y;
-  }, { passive: true });
-})();
 
 /* iOS body scroll lock: evita que la pagina se mueva detras del modal */
 (function () {
