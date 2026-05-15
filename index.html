@@ -390,8 +390,10 @@ footer {
   .hero-title { font-size: 38px; }
   .hero-right { min-height: 320px; }
 
-  .stats { grid-template-columns: 1fr 1fr; }
-  .stat { border-right: none; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
+  .stat { padding: 1.2rem 0.5rem; }
+  .stat-num { font-size: 28px; }
+  .stat-label { font-size: 10px; }
 
   .section { padding: 3rem 1.5rem; }
   .grid-3, .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -502,7 +504,7 @@ footer {
 /* â”€â”€ Responsive 480px â”€â”€ */
 @media (max-width: 480px) {
   .hero-title { font-size: 30px; }
-  .stats { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
   #galeria [style*="grid-template-columns:repeat(3,1fr)"],
   #galeria [style*="grid-template-columns: repeat(3, 1fr)"] {
