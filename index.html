@@ -913,6 +913,17 @@ nav.nav--hidden { transform: translateY(-120%) !important; }
 </style></head>
 <body>
 
+<!-- HERO VIDEO -->
+<section id="hero-video" style="width:100%;height:100vh;position:relative;overflow:hidden;background:#1a0f08;">
+  <video autoplay muted playsinline loop preload="auto"
+         style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
+    <source src="head.mp4" type="video/mp4">
+  </video>
+  <div style="position:absolute;right:3.5rem;top:50%;transform:translateY(-50%);text-align:right;pointer-events:none;">
+    <p style="font-family:'Playfair Display',serif;font-size:52px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 24px rgba(0,0,0,0.5);">Feli Recetas</p>
+  </div>
+</section>
+
 <div id="status-bar" style="background:#2C1A10;color:#F5EBE0;text-align:center;font-size:12px;font-weight:400;padding:0.5rem 1rem;letter-spacing:0.04em;">
   ✦ &nbsp; Tomando pedidos para junio &nbsp;·&nbsp; Tiempo de entrega mínimo: 48hs &nbsp;·&nbsp; Zona: La Plata y alrededores &nbsp; ✦
 </div>
@@ -960,16 +971,29 @@ nav.nav--hidden { transform: translateY(-120%) !important; }
   <a href="#pedido-personalizado" onclick="closeMobileMenu();document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});">Pedido personalizado</a>
 </div>
 
-<!-- HERO VIDEO -->
-<section style="width:100%;height:100vh;position:relative;overflow:hidden;background:#1a0f08;">
-  <video autoplay muted playsinline loop preload="auto"
-         style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;">
-    <source src="head.mp4" type="video/mp4">
-  </video>
-</section>
+
 <script>
 function openMobileMenu(){document.getElementById('mobileMenu').classList.add('open');document.body.style.overflow='hidden';}
 function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.body.style.overflow='';}
+</script>
+<style>
+#status-bar, nav { transition: opacity 0.5s ease; }
+</style>
+<script>
+(function(){
+  function check(){
+    var h = document.getElementById('hero-video').offsetHeight;
+    var show = window.scrollY > h * 0.85;
+    var nav = document.querySelector('nav');
+    var sb  = document.getElementById('status-bar');
+    nav.style.opacity = show ? '' : '0';
+    nav.style.pointerEvents = show ? '' : 'none';
+    sb.style.opacity  = show ? '' : '0';
+  }
+  window.addEventListener('scroll', check, {passive:true});
+  window.addEventListener('resize', check);
+  check();
+})();
 </script>
 
 <!-- STATS -->
