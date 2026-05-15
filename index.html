@@ -161,9 +161,13 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   display: flex; align-items: center; gap: 12px; cursor: pointer;
 }
 .main-nav__logo-mark {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: var(--butter); display: flex; align-items: center; justify-content: center;
-  font-family: var(--display); font-style: italic; font-size: 19px; color: var(--bordeaux);
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  color: var(--bordeaux);
+}
+.main-nav__logo-mark svg { width: 20px; height: 20px; }
+.main-nav__logo-mark .logo-fr {
+  font-family: var(--display); font-style: italic; font-size: 15px; font-weight: 700;
+  line-height: 1; letter-spacing: 0.03em;
 }
 .main-nav__logo-text {
   font-family: var(--display); font-size: 19px;
@@ -1373,7 +1377,21 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
      ════════════════════════════════════════════════════════════ -->
 <nav class="main-nav" id="mainNav">
   <div class="main-nav__logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-    <div class="main-nav__logo-mark">F</div>
+    <div class="main-nav__logo-mark">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- handle -->
+        <line x1="12" y1="23" x2="12" y2="14.5"/>
+        <!-- outer left arc -->
+        <path d="M12 14.5 C8 14.5 4.5 12 4.5 8.5 C4.5 5 7.5 2 12 2"/>
+        <!-- outer right arc -->
+        <path d="M12 14.5 C16 14.5 19.5 12 19.5 8.5 C19.5 5 16.5 2 12 2"/>
+        <!-- inner left wire -->
+        <path d="M12 14.5 C9 13 6 10.5 7 7"/>
+        <!-- inner right wire -->
+        <path d="M12 14.5 C15 13 18 10.5 17 7"/>
+      </svg>
+      <span class="logo-fr">FR</span>
+    </div>
     <span class="main-nav__logo-text">Feli<em> Recetas</em></span>
   </div>
   <ul class="main-nav__links">
@@ -1927,25 +1945,25 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
 <div class="modal-overlay" id="modal-producto" onclick="if(event.target===this)closeModal('modal-producto')">
   <div class="modal">
     <button class="modal__close" onclick="closeModal('modal-producto')">&#x2715;</button>
-    <div style="height:200px;border-radius:14px;margin-bottom:18px;background:repeating-linear-gradient(135deg,#C9A0A0 0 14px,#B07878 14px 28px);"></div>
-    <div class="eyebrow modal__eyebrow">Tortas · destacado</div>
-    <h3 class="modal__title">Red Velvet de <em>la casa</em></h3>
-    <p style="font-family:var(--display);font-style:italic;font-size:24px;color:var(--bordeaux);margin-bottom:18px;">desde $ 18.500</p>
+    <div id="modal-producto-img" style="height:200px;border-radius:14px;margin-bottom:18px;background:repeating-linear-gradient(135deg,#C9A0A0 0 14px,#B07878 14px 28px);"></div>
+    <div id="modal-producto-eyebrow" class="eyebrow modal__eyebrow">Tortas · destacado</div>
+    <h3 id="modal-producto-title" class="modal__title">Red Velvet de <em>la casa</em></h3>
+    <p id="modal-producto-price" style="font-family:var(--display);font-style:italic;font-size:24px;color:var(--bordeaux);margin-bottom:18px;">desde $ 18.500</p>
 
     <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px;font-weight:500;">Descripción</div>
-    <p style="font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:18px;">
+    <p id="modal-producto-desc" style="font-size:14px;color:var(--ink-soft);line-height:1.7;margin-bottom:18px;">
       Bizcocho de chocolate aterciopelado con un toque de remolacha natural. Frosting de queso crema y manteca, cubierta de migas del propio bizcocho. Para los que prefieren algo sutil y elegante.
     </p>
 
     <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px;font-weight:500;">Tamaños</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+    <div id="modal-producto-sizes" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
       <span style="background:var(--butter);color:var(--bordeaux);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;">12 porciones · $18.500</span>
       <span style="background:var(--butter);color:var(--bordeaux);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;">16 porciones · $24.000</span>
       <span style="background:var(--butter);color:var(--bordeaux);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;">24 porciones · $34.500</span>
     </div>
 
     <div class="modal__cta">
-      <a href="https://wa.me/5492216023377?text=Hola!%20Quiero%20hacer%20un%20pedido.%20Pod%C3%A9s%20indicarme%20tama%C3%B1os%20disponibles%2C%20precio%20y%20fecha%20de%20entrega%3F%20Muchas%20gracias!" target="_blank" class="btn btn--primary">Encargar por WhatsApp →</a>
+      <a id="modal-producto-wa" href="https://wa.me/5492216023377?text=Hola!%20Quiero%20hacer%20un%20pedido.%20Pod%C3%A9s%20indicarme%20tama%C3%B1os%20disponibles%2C%20precio%20y%20fecha%20de%20entrega%3F%20Muchas%20gracias!" target="_blank" class="btn btn--primary">Encargar por WhatsApp →</a>
       <a href="https://instagram.com/felirecetas" target="_blank" class="btn btn--outline">Instagram</a>
     </div>
   </div>
@@ -2087,13 +2105,94 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   }
 })();
 
+// Product data for dynamic modal
+var productData = {
+  'Red Velvet': {
+    category: 'Tortas · destacado',
+    price: 'desde $ 18.500',
+    description: 'Bizcocho de chocolate aterciopelado con un toque de remolacha natural. Frosting de queso crema y manteca, cubierta de migas del propio bizcocho. Para los que prefieren algo sutil y elegante.',
+    sizes: ['12 porciones · $18.500', '16 porciones · $24.000', '24 porciones · $34.500'],
+    bg: 'repeating-linear-gradient(135deg,#C9A0A0 0 14px,#B07878 14px 28px)'
+  },
+  'Macarons': {
+    category: 'Clásicos · caja x 6',
+    price: '$ 4.800',
+    description: 'Pequeñas delicias de merengue francés con ganache o crema. Frágiles por fuera, cremosos por dentro. Disponibles en 6 sabores de temporada: frambuesa, vainilla, chocolate, pistache, limón y caramelo salado.',
+    sizes: ['Caja x 6 · $4.800', 'Caja x 12 · $9.200', 'Caja x 24 · $17.500'],
+    bg: 'repeating-linear-gradient(135deg,#F2E4D2 0 14px,#EAD7BF 14px 28px)'
+  },
+  'Croissants': {
+    category: 'Viennoiserie · nuevo',
+    price: '$ 1.200 c/u',
+    description: 'Elaborados con masa laminada de manteca pura y fermentación lenta de 72 horas. Crocantes por fuera, tiernos y con alvéolos perfectos por dentro. Disponibles de jueves a domingo.',
+    sizes: ['1 unidad · $1.200', 'Caja x 4 · $4.600', 'Caja x 6 · $6.800'],
+    bg: 'repeating-linear-gradient(135deg,#C9A484 0 14px,#B58866 14px 28px)'
+  },
+  'Cookies': {
+    category: 'Galletitas · popular',
+    price: '$ 3.600',
+    description: 'Galletas grandes de chocolate doble: chips de cobertura semi-amarga y trozos de chocolate belga. Crocantes en los bordes, fundentes en el centro. La favorita de los que no se conforman con poco.',
+    sizes: ['Caja x 6 · $3.600', 'Caja x 12 · $6.800'],
+    bg: 'repeating-linear-gradient(135deg,#EFE1CC 0 14px,#E2CFB1 14px 28px)'
+  },
+  'Cake pops': {
+    category: 'Eventos · personalizables',
+    price: '$ 6.400',
+    description: 'Bocados de bizcocho húmedo envueltos en chocolate de colores. Ideales para cumpleaños, baby showers y eventos corporativos. Se personalizan en paleta de colores y decoración a pedido.',
+    sizes: ['Docena x 12 · $6.400', 'Docena x 24 · $12.000'],
+    bg: 'repeating-linear-gradient(135deg,#F1D9CB 0 14px,#E5BFA9 14px 28px)'
+  },
+  'Lemon pie': {
+    category: 'Temporada · tarta',
+    price: '$ 8.200',
+    description: 'Base de masa sablée, relleno de lemon curd con limón de primera prensada y merengue italiano tostado. Fresco, ácido y elegante. Disponible sólo en temporada de citrus.',
+    sizes: ['8 porciones · $8.200', '12 porciones · $12.500'],
+    bg: 'repeating-linear-gradient(135deg,#D8E0C8 0 14px,#B8C4A8 14px 28px)'
+  },
+  'Brownies': {
+    category: 'Clásicos · bandeja',
+    price: '$ 5.400',
+    description: 'Densos, húmedos y con una corteza que cruje levemente. Usamos chocolate semi-amargo 70% y una proporción de manteca que los hace irresistibles en frío o recalentados 30 segundos.',
+    sizes: ['Bandeja x 9 · $5.400', 'Bandeja x 16 · $9.600'],
+    bg: 'repeating-linear-gradient(135deg,#C9A484 0 14px,#8B5A3A 14px 28px)'
+  },
+  'Alfajores': {
+    category: 'Clásicos · caja',
+    price: '$ 3.200',
+    description: 'Tapas de maicena bien tiernas, rellenas de dulce de leche repostero y bañadas en chocolate semi-amargo o cubiertas de coco rallado. Un clásico argentino en versión boutique.',
+    sizes: ['Caja x 4 · $3.200', 'Caja x 8 · $6.000', 'Caja x 12 · $8.800'],
+    bg: 'repeating-linear-gradient(135deg,#F5EBE0 0 14px,#E5D5BF 14px 28px)'
+  },
+  'Cheesecake': {
+    category: 'Tortas · nuevo',
+    price: '$ 12.500',
+    description: 'Cheesecake estilo New York con base de galletitas de manteca y relleno de queso crema con vainilla natural. Cremoso, denso y con una textura que se funde en la boca. Con coulis de frutos rojos al pedido.',
+    sizes: ['8 porciones · $12.500', '12 porciones · $18.000'],
+    bg: 'repeating-linear-gradient(135deg,#EFE1CC 0 14px,#D8B89E 14px 28px)'
+  }
+};
+
 // Modal helpers (global)
 function openProductModal(name) {
+    var p = productData[name] || productData['Red Velvet'];
+    // Image
+    document.getElementById('modal-producto-img').style.background = p.bg;
+    // Category eyebrow
+    document.getElementById('modal-producto-eyebrow').textContent = p.category;
+    // Title
+    document.getElementById('modal-producto-title').textContent = name;
+    // Price
+    document.getElementById('modal-producto-price').textContent = p.price;
+    // Description
+    document.getElementById('modal-producto-desc').textContent = p.description;
+    // Sizes
+    var sizesEl = document.getElementById('modal-producto-sizes');
+    sizesEl.innerHTML = p.sizes.map(function(s) {
+      return '<span style="background:var(--butter);color:var(--bordeaux);padding:6px 14px;border-radius:100px;font-size:12px;font-weight:500;">' + s + '</span>';
+    }).join('');
+    // WhatsApp link
     var msg = encodeURIComponent('Hola! Quiero hacer un pedido de ' + name + '. Podés indicarme tamaños disponibles, precio y fecha de entrega? Muchas gracias!');
-    var waBtn = document.querySelector('#modal-producto .modal__cta .btn--primary');
-    if (waBtn) waBtn.href = 'https://wa.me/5492216023377?text=' + msg;
-    var modalTitle = document.querySelector('#modal-producto .modal__producto-name');
-    if (modalTitle) modalTitle.textContent = name;
+    document.getElementById('modal-producto-wa').href = 'https://wa.me/5492216023377?text=' + msg;
     openModal('modal-producto');
   }
   function openModal(id) {
