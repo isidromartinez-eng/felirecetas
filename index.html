@@ -192,15 +192,29 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   transition: transform 0.25s, opacity 0.25s;
 }
 
-/* Mobile menu overlay */
-.mobile-menu {
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--cream);
-  display: none; flex-direction: column;
-  padding: 80px var(--gutter) 40px;
-  opacity: 0; transition: opacity 0.3s ease;
+/* Mobile menu overlay backdrop */
+.mobile-menu-overlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(28,20,14,0.45);
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
 }
-.mobile-menu.is-open { display: flex; opacity: 1; }
+.mobile-menu-overlay.is-open {
+  opacity: 1; visibility: visible;
+  transition: opacity 0.35s ease, visibility 0s;
+}
+
+/* Mobile menu panel */
+.mobile-menu {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 75%; z-index: 9999;
+  background: var(--cream);
+  display: flex; flex-direction: column;
+  padding: 80px var(--gutter) 40px;
+  transform: translateX(105%);
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -10px 0 40px rgba(28,20,14,0.18);
+}
+.mobile-menu.is-open { transform: translateX(0); }
 .mobile-menu__close {
   position: absolute; top: 18px; right: 18px;
   width: 42px; height: 42px; border-radius: 50%;
@@ -598,6 +612,12 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
 }
 
 /* ─── Testimonios ─── */
+.testimonio--clamp p {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .testimonios-grid {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px;
 }
@@ -1180,11 +1200,11 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   .modal__cta { flex-direction: column; }
   .modal__cta .btn { width: 100%; }
 
-  /* WA float — oculto en mobile (lo reemplaza la barra fija) */
-  .wa-float { display: none; }
-  .mobile-cta-bar { display: flex; }
-  /* Padding bottom para que la barra fija no tape contenido */
-  .footer { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)); }
+  /* WA float — visible en mobile, barra fija eliminada */
+  .wa-float { display: flex; }
+  .mobile-cta-bar { display: none !important; }
+  /* Foto nosotros — centrar en macarons */
+  .about__photo-1 img { object-position: center center !important; }
 }
 
 @media (max-width: 420px) {
@@ -1395,6 +1415,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
 <!-- ════════════════════════════════════════════════════════════
      Mobile menu overlay
      ════════════════════════════════════════════════════════════ -->
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 <div class="mobile-menu" id="mobileMenu">
   <button class="mobile-menu__close" onclick="closeMobileMenu()" aria-label="Cerrar">&#x2715;</button>
   <ul class="mobile-menu__list">
@@ -1769,8 +1790,8 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   </div>
 
   <div class="testimonios-grid">
-    <article class="testimonio testimonio--featured">
-      <p>Las tortas más lindas que vi en mi vida. Y el sabor te vuelve loco.</p>
+    <article class="testimonio testimonio--featured testimonio--clamp">
+      <p>Las tortas más lindas que vi en mi vida. Y el sabor te vuelve loco. Hice el pedido por Instagram y me respondieron en el día, con todos los detalles bien aclarados. La decoración era exactamente lo que había pedido, incluso mejor de lo que imaginé. No puedo creer el nivel de dedicación.</p>
       <div class="testimonio__author">
         <div class="testimonio__avatar">C</div>
         <div>
@@ -1780,8 +1801,8 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
       </div>
     </article>
 
-    <article class="testimonio">
-      <p>Cumplió cada detalle del pedido. Llegó impecable, fresca, hermosa.</p>
+    <article class="testimonio testimonio--clamp">
+      <p>Cumplió cada detalle del pedido. Llegó impecable, fresca, perfecta. La caja venía embalada con muchísimo cuidado y con una tarjeta escrita a mano. No esperaba tanto amor en los detalles. Ya tenemos el pedido para el próximo aniversario hecho.</p>
       <div class="testimonio__author">
         <div class="testimonio__avatar">M</div>
         <div>
@@ -1792,7 +1813,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
     </article>
 
     <article class="testimonio">
-      <p>Los macarons son una locura. Ya pedí tres veces este mes.</p>
+      <p>Los macarons son una locura. Ya pedí tres veces este mes y siempre llegan perfectos. Los sabores cambian con la temporada y eso me encanta. El packaging es muy bonito, ideal para regalar.</p>
       <div class="testimonio__author">
         <div class="testimonio__avatar">L</div>
         <div>
@@ -1803,7 +1824,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
     </article>
 
     <article class="testimonio testimonio--featured">
-      <p>Pedimos la mesa dulce del casamiento y fue un éxito total. Recomendadísima.</p>
+      <p>Pedimos la mesa dulce para el casamiento y fue un éxito total. Feli se ocupó de cada detalle desde la consulta inicial hasta el montaje. Nuestros invitados no paraban de preguntar por los postres. Recomendadísima para eventos.</p>
       <div class="testimonio__author">
         <div class="testimonio__avatar">S</div>
         <div>
@@ -2073,16 +2094,21 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-  // Make small catalog cards a horizontal row on mobile
+  // Make small catalog cards two horizontal rows on mobile
   if (isMobile) {
     const grid = document.querySelector('.catalog__grid');
     if (grid) {
-      const cards = grid.querySelectorAll('.product-card');
+      const cards = Array.from(grid.querySelectorAll('.product-card'));
       if (cards.length) {
-        const wrap = document.createElement('div');
-        wrap.className = 'catalog__small-row';
-        cards.forEach(c => wrap.appendChild(c));
-        grid.appendChild(wrap);
+        const mid = Math.ceil(cards.length / 2);
+        const row1 = document.createElement('div');
+        row1.className = 'catalog__small-row';
+        const row2 = document.createElement('div');
+        row2.className = 'catalog__small-row';
+        cards.slice(0, mid).forEach(c => row1.appendChild(c));
+        cards.slice(mid).forEach(c => row2.appendChild(c));
+        grid.appendChild(row1);
+        grid.appendChild(row2);
       }
     }
   }
@@ -2202,10 +2228,12 @@ function closeModal(id) {
 // Mobile menu
 function openMobileMenu() {
   document.getElementById('mobileMenu').classList.add('is-open');
+  document.getElementById('mobileMenuOverlay').classList.add('is-open');
   document.body.style.overflow = 'hidden';
 }
 function closeMobileMenu() {
   document.getElementById('mobileMenu').classList.remove('is-open');
+  document.getElementById('mobileMenuOverlay').classList.remove('is-open');
   document.body.style.overflow = '';
 }
 
