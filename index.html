@@ -552,9 +552,8 @@ footer {
   background: #25D366; display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 16px rgba(37,211,102,0.4);
   cursor: pointer; text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s, opacity 0.5s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
   animation: wa-pulse 2.5s infinite;
-  opacity: 0; pointer-events: none;
 }
 #wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(37,211,102,0.5); }
 @keyframes wa-pulse {
@@ -993,41 +992,18 @@ nav {
   position: fixed !important;
   top: 0; left: 0; right: 0;
   z-index: 200;
-  transform: translateY(-100%);
-  opacity: 0;
-  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), opacity 0.6s ease;
+  transform: translateY(0);
+  opacity: 1;
 }
 </style>
 <script>
 (function(){
-  // DOMContentLoaded garantiza que todos los elementos (incl. #wa-float al final) ya existen
-  document.addEventListener('DOMContentLoaded', function() {
-    var nav  = document.querySelector('nav');
-    var wa   = document.getElementById('wa-float');
-    var hero = document.getElementById('hero-video');
-    var vid  = hero ? hero.querySelector('video') : null;
-
-    // En mobile usar video vertical
-    if (vid && window.innerWidth <= 768) {
-      var src = vid.querySelector('source');
-      if (src) { src.src = 'head-mobile.mp4'; vid.load(); }
-    }
-
-    function check() {
-      // window.innerHeight es el alto real visible (evita el problema de 100vh en mobile)
-      var heroGone = window.scrollY >= window.innerHeight;
-      nav.style.transform     = heroGone ? 'translateY(0)' : 'translateY(-100%)';
-      nav.style.opacity       = heroGone ? '1' : '0';
-      nav.style.pointerEvents = heroGone ? '' : 'none';
-      if (wa) {
-        wa.style.opacity       = heroGone ? '1' : '0';
-        wa.style.pointerEvents = heroGone ? '' : 'none';
-      }
-    }
-    window.addEventListener('scroll', check, {passive: true});
-    window.addEventListener('resize', check);
-    check();
-  });
+  // En mobile usar video vertical
+  var vid = document.querySelector('#hero-video video');
+  if (vid && window.innerWidth <= 768) {
+    var src = vid.querySelector('source');
+    if (src) { src.src = 'head-mobile.mp4'; vid.load(); }
+  }
 })();
 </script>
 
