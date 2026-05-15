@@ -1168,16 +1168,21 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   .catalog__hero-body { left: 20px; right: 20px; bottom: 20px; }
   .catalog__hero-tag { top: 16px; left: 16px; font-size: 9px; padding: 5px 12px; }
 
-  /* Catalog horizontal scroll on small cards */
+  /* Catalog — 2 filas en grid con scroll horizontal */
   .catalog__small-row {
-    display: flex !important; gap: 14px;
-    overflow-x: auto; scroll-snap-type: x mandatory;
+    display: grid !important;
+    grid-template-columns: repeat(4, 72vw);
+    grid-template-rows: auto auto;
+    grid-auto-flow: row;
+    gap: 14px;
+    overflow-x: auto; overflow-y: visible;
+    scroll-snap-type: x mandatory;
     padding-bottom: 8px;
     -webkit-overflow-scrolling: touch;
   }
   .catalog__small-row::-webkit-scrollbar { display: none; }
   .catalog__small-row .product-card {
-    flex: 0 0 76vw; scroll-snap-align: start;
+    width: 72vw; scroll-snap-align: start;
   }
 
   /* Steps */
@@ -2169,21 +2174,16 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-  // Make small catalog cards two horizontal rows on mobile
+  // Make small catalog cards a 2-row horizontal scroll grid on mobile
   if (isMobile) {
     const grid = document.querySelector('.catalog__grid');
     if (grid) {
       const cards = Array.from(grid.querySelectorAll('.product-card'));
       if (cards.length) {
-        const mid = Math.ceil(cards.length / 2);
-        const row1 = document.createElement('div');
-        row1.className = 'catalog__small-row';
-        const row2 = document.createElement('div');
-        row2.className = 'catalog__small-row';
-        cards.slice(0, mid).forEach(c => row1.appendChild(c));
-        cards.slice(mid).forEach(c => row2.appendChild(c));
-        grid.appendChild(row1);
-        grid.appendChild(row2);
+        const wrap = document.createElement('div');
+        wrap.className = 'catalog__small-row';
+        cards.forEach(c => wrap.appendChild(c));
+        grid.appendChild(wrap);
       }
     }
   }
