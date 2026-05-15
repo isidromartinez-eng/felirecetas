@@ -2169,19 +2169,28 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-  // Catalog: 2 independent scroll rows on mobile, cheesecake gets macaron photo
+  // Catalog: 2 independent scroll rows on mobile + photo swaps
   if (isMobile) {
     var grid = document.querySelector('.catalog__grid');
     if (grid) {
       var cards = Array.from(grid.querySelectorAll('.product-card'));
       if (cards.length) {
+        // Read hero background before any changes
+        var heroImgEl = grid.querySelector('.catalog__hero-img');
+        var heroBg = heroImgEl ? window.getComputedStyle(heroImgEl).backgroundImage : 'none';
+
         // Read computed backgrounds BEFORE moving DOM (nth-of-type still correct)
         var bgs = cards.map(function(c) {
           var img = c.querySelector('.product-card__img');
           return img ? window.getComputedStyle(img).backgroundImage : 'none';
         });
-        // Swap cheesecake photo (index 7) → macarons photo (index 0)
+
+        // Photo swaps:
+        // 1. Cheesecake (index 7) gets macarons photo (index 0)
         bgs[7] = bgs[0];
+        // 2. Lemon pie (index 4) gets hero photo; save lemon's original for hero
+        var lemonOrigBg = bgs[4];
+        bgs[4] = heroBg;
 
         // Split into 2 independent rows
         var mid = Math.ceil(cards.length / 2);
@@ -2194,7 +2203,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
         grid.appendChild(row1);
         grid.appendChild(row2);
 
-        // Reapply correct backgrounds inline with !important (fixes broken nth-of-type)
+        // Reapply backgrounds inline with !important (fixes broken nth-of-type)
         cards.forEach(function(c, i) {
           if (!bgs[i] || bgs[i] === 'none') return;
           var img = c.querySelector('.product-card__img');
@@ -2203,6 +2212,31 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
           img.style.setProperty('background-size', 'cover', 'important');
           img.style.setProperty('background-position', 'center', 'important');
         });
+
+        // Apply lemon pie's original photo to the hero card
+        if (heroImgEl && lemonOrigBg && lemonOrigBg !== 'none') {
+          heroImgEl.style.setProperty('background-image', lemonOrigBg, 'important');
+          heroImgEl.style.setProperty('background-size', 'cover', 'important');
+          heroImgEl.style.setProperty('background-position', 'center', 'important');
+        }
+      }
+    }
+  } else {
+    // Desktop: swap hero ↔ lemon pie photos
+    var heroImg = document.querySelector('.catalog__hero-img');
+    var lemonImg = document.querySelector('.catalog__grid .product-card:nth-of-type(5) .product-card__img');
+    if (heroImg && lemonImg) {
+      var heroBg = window.getComputedStyle(heroImg).backgroundImage;
+      var lemonBg = window.getComputedStyle(lemonImg).backgroundImage;
+      if (lemonBg && lemonBg !== 'none') {
+        heroImg.style.setProperty('background-image', lemonBg, 'important');
+        heroImg.style.setProperty('background-size', 'cover', 'important');
+        heroImg.style.setProperty('background-position', 'center', 'important');
+      }
+      if (heroBg && heroBg !== 'none') {
+        lemonImg.style.setProperty('background-image', heroBg, 'important');
+        lemonImg.style.setProperty('background-size', 'cover', 'important');
+        lemonImg.style.setProperty('background-position', 'center', 'important');
       }
     }
   }
