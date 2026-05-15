@@ -157,6 +157,37 @@ nav.main-nav {
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+/* ─── Mobile subnav (3 botones bajo el header) ─── */
+.mobile-subnav {
+  display: none;
+  position: fixed; top: 52px; left: 0; right: 0; z-index: 199;
+  background: rgba(251,247,242,0.96);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 0.5px solid var(--line);
+  padding: 8px 16px;
+  gap: 8px;
+  transform: translateY(-200%);
+  transition: transform 0.5s ease;
+}
+.mobile-subnav.is-visible { transform: translateY(0); }
+.mobile-subnav__btn {
+  flex: 1; text-align: center;
+  padding: 7px 6px; border-radius: 100px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.01em;
+  color: var(--ink-soft);
+  border: 0.5px solid var(--line);
+  background: transparent;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.mobile-subnav__btn.is-active {
+  color: var(--bordeaux);
+  border-color: var(--bordeaux);
+  background: rgba(139,58,58,0.07);
+  font-weight: 600;
+}
 .main-nav__logo {
   display: flex; align-items: center; gap: 12px; cursor: pointer;
 }
@@ -1076,6 +1107,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   /* Nav */
   nav.main-nav { padding: 12px var(--gutter); }
   .main-nav__links { display: none; }
+  .mobile-subnav { display: flex; }
   .main-nav__cta .btn { padding: 9px 18px; font-size: 12px; }
   .burger { display: flex; }
   /* Status bar */
@@ -1427,6 +1459,13 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
     </button>
   </div>
 </nav>
+
+<!-- Mobile subnav (3 botones, solo mobile) -->
+<div class="mobile-subnav" id="mobileSubnav">
+  <a href="#catalogo" class="mobile-subnav__btn" data-section="catalogo">Catálogo</a>
+  <a href="#pasos" class="mobile-subnav__btn" data-section="pasos">Cómo pedir</a>
+  <a href="#cta-personalizado" class="mobile-subnav__btn" data-section="cta-personalizado">Pedido pers.</a>
+</div>
 
 <!-- ════════════════════════════════════════════════════════════
      Mobile menu overlay
@@ -2060,7 +2099,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
       const top = el.getBoundingClientRect().top + window.scrollY;
       if (top <= mid) active = id;
     });
-    document.querySelectorAll('.main-nav__links a').forEach(a => {
+    document.querySelectorAll('.main-nav__links a, .mobile-subnav__btn').forEach(a => {
       a.classList.toggle('is-active', a.dataset.section === active);
     });
   }
@@ -2069,12 +2108,14 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   const nav = document.getElementById('mainNav');
   const wa  = document.getElementById('waFloat');
   const ctaBar = document.getElementById('mobileCtaBar');
+  const mobileSubnav = document.getElementById('mobileSubnav');
   function onScroll() {
     const heroH = window.innerHeight;
     const past = window.scrollY > heroH * (isMobile ? 0.85 : 0.5);
     nav.classList.toggle('is-visible', past);
     if (wa) wa.classList.toggle('is-visible', past);
     if (ctaBar) ctaBar.classList.toggle('is-visible', past);
+    if (mobileSubnav) mobileSubnav.classList.toggle('is-visible', past);
     updateActiveNav();
   }
   window.addEventListener('scroll', onScroll, { passive: true });
