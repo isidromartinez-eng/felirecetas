@@ -161,16 +161,22 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
 /* ─── Mobile subnav (3 botones bajo el header) ─── */
 .mobile-subnav {
   display: none;
-  position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 199;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 199;
   background: rgba(251,247,242,0.96);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border-bottom: 0.5px solid var(--line);
   padding: 8px 16px;
   gap: 8px;
-  transform: translateY(-200%);
-  transition: transform 0.5s ease;
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
-.mobile-subnav.is-visible { transform: translateY(0); }
+.mobile-subnav.is-visible {
+  transform: translateY(62px);
+  opacity: 1;
+  pointer-events: auto;
+}
 .mobile-subnav__btn {
   flex: 1; text-align: center;
   padding: 7px 6px; border-radius: 100px;
@@ -2119,6 +2125,14 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
     updateActiveNav();
   }
   window.addEventListener('scroll', onScroll, { passive: true });
+  if (isMobile) {
+    window.addEventListener('popstate', function(e) {
+      const target = e.state && e.state.scrollY != null
+        ? e.state.scrollY
+        : (location.hash ? (document.getElementById(location.hash.slice(1))?.getBoundingClientRect().top + window.scrollY - 72) : 0);
+      window.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+    });
+  }
   onScroll();
 
   // Smooth-scroll on hash links
@@ -2131,6 +2145,7 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
         const navH = document.getElementById('mainNav').offsetHeight || 72;
         const top = el.getBoundingClientRect().top + window.scrollY - navH;
         window.scrollTo({ top, behavior: 'smooth' });
+        if (isMobile) history.pushState({ scrollY: Math.round(top) }, '', '#' + id);
       }
     });
   });
