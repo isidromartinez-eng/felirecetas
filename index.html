@@ -1168,21 +1168,16 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   .catalog__hero-body { left: 20px; right: 20px; bottom: 20px; }
   .catalog__hero-tag { top: 16px; left: 16px; font-size: 9px; padding: 5px 12px; }
 
-  /* Catalog — 2 filas en grid con scroll horizontal */
+  /* Catalog — 2 filas independientes con scroll horizontal */
   .catalog__small-row {
-    display: grid !important;
-    grid-template-columns: repeat(4, 72vw);
-    grid-template-rows: auto auto;
-    grid-auto-flow: row;
-    gap: 14px;
-    overflow-x: auto; overflow-y: visible;
-    scroll-snap-type: x mandatory;
+    display: flex !important; gap: 14px;
+    overflow-x: auto; scroll-snap-type: x mandatory;
     padding-bottom: 8px;
     -webkit-overflow-scrolling: touch;
   }
   .catalog__small-row::-webkit-scrollbar { display: none; }
   .catalog__small-row .product-card {
-    width: 72vw; scroll-snap-align: start;
+    flex: 0 0 76vw; scroll-snap-align: start;
   }
 
   /* Steps */
@@ -2174,16 +2169,40 @@ nav.main-nav.is-visible { transform: translateY(0); opacity: 1; pointer-events: 
   }, { threshold: 0.15 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-  // Make small catalog cards a 2-row horizontal scroll grid on mobile
+  // Catalog: 2 independent scroll rows on mobile, cheesecake gets macaron photo
   if (isMobile) {
-    const grid = document.querySelector('.catalog__grid');
+    var grid = document.querySelector('.catalog__grid');
     if (grid) {
-      const cards = Array.from(grid.querySelectorAll('.product-card'));
+      var cards = Array.from(grid.querySelectorAll('.product-card'));
       if (cards.length) {
-        const wrap = document.createElement('div');
-        wrap.className = 'catalog__small-row';
-        cards.forEach(c => wrap.appendChild(c));
-        grid.appendChild(wrap);
+        // Read computed backgrounds BEFORE moving DOM (nth-of-type still correct)
+        var bgs = cards.map(function(c) {
+          var img = c.querySelector('.product-card__img');
+          return img ? window.getComputedStyle(img).backgroundImage : 'none';
+        });
+        // Swap cheesecake photo (index 7) → macarons photo (index 0)
+        bgs[7] = bgs[0];
+
+        // Split into 2 independent rows
+        var mid = Math.ceil(cards.length / 2);
+        var row1 = document.createElement('div');
+        row1.className = 'catalog__small-row';
+        var row2 = document.createElement('div');
+        row2.className = 'catalog__small-row';
+        cards.slice(0, mid).forEach(function(c) { row1.appendChild(c); });
+        cards.slice(mid).forEach(function(c) { row2.appendChild(c); });
+        grid.appendChild(row1);
+        grid.appendChild(row2);
+
+        // Reapply correct backgrounds inline with !important (fixes broken nth-of-type)
+        cards.forEach(function(c, i) {
+          if (!bgs[i] || bgs[i] === 'none') return;
+          var img = c.querySelector('.product-card__img');
+          if (!img) return;
+          img.style.setProperty('background-image', bgs[i], 'important');
+          img.style.setProperty('background-size', 'cover', 'important');
+          img.style.setProperty('background-position', 'center', 'important');
+        });
       }
     }
   }
