@@ -550,8 +550,9 @@ footer {
   background: #25D366; display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 16px rgba(37,211,102,0.4);
   cursor: pointer; text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.5s ease;
   animation: wa-pulse 2.5s infinite;
+  opacity: 0; pointer-events: none;
 }
 #wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(37,211,102,0.5); }
 @keyframes wa-pulse {
@@ -923,8 +924,8 @@ nav.nav--hidden { transform: translateY(-120%) !important; }
   <div style="position:absolute;right:4rem;top:50%;transform:translateY(-50%);text-align:right;">
     <p style="font-family:'Playfair Display',serif;font-size:72px;color:#fff;font-weight:400;font-style:italic;margin:0;text-shadow:0 2px 28px rgba(0,0,0,0.5);line-height:1.05;">Feli Recetas</p>
   </div>
-  <!-- Botones hacia el centro -->
-  <div style="position:absolute;bottom:4rem;left:50%;transform:translateX(-20%);display:flex;gap:1.2rem;">
+  <!-- Botones derecha abajo -->
+  <div style="position:absolute;bottom:4rem;right:4rem;display:flex;gap:1.2rem;">
     <a href="#catalogo" onclick="event.preventDefault();document.getElementById('catalogo').scrollIntoView({behavior:'smooth'});"
        style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.7);color:#fff;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;padding:1rem 2.4rem;border-radius:100px;text-decoration:none;backdrop-filter:blur(6px);white-space:nowrap;">Catálogo</a>
     <a href="#" onclick="event.preventDefault();openModal('modal-como-pedir');"
@@ -998,12 +999,26 @@ nav {
 <script>
 (function(){
   var nav = document.querySelector('nav');
+  var wa  = document.getElementById('wa-float');
+
+  // Mobile video: swap src if on mobile and head-mobile.mp4 exists
+  var vid = document.querySelector('#hero-video video');
+  if (vid && window.innerWidth <= 768) {
+    var src = vid.querySelector('source');
+    if (src) { src.src = 'head-mobile.mp4'; vid.load(); }
+  }
+
   function check(){
     var h = document.getElementById('hero-video').offsetHeight;
-    var show = window.scrollY > h * 0.5;
-    nav.style.transform = show ? 'translateY(0)' : 'translateY(-100%)';
-    nav.style.opacity   = show ? '1' : '0';
-    nav.style.pointerEvents = show ? '' : 'none';
+    var pastHero = window.scrollY > h * 0.5;
+    var heroGone = window.scrollY >= h;
+    nav.style.transform    = pastHero ? 'translateY(0)' : 'translateY(-100%)';
+    nav.style.opacity      = pastHero ? '1' : '0';
+    nav.style.pointerEvents = pastHero ? '' : 'none';
+    if (wa) {
+      wa.style.opacity      = heroGone ? '1' : '0';
+      wa.style.pointerEvents = heroGone ? '' : 'none';
+    }
   }
   window.addEventListener('scroll', check, {passive:true});
   window.addEventListener('resize', check);
@@ -1012,7 +1027,7 @@ nav {
 </script>
 
 <!-- STATS -->
-<div class="stats fade-in">
+<div class="stats fade-in" style="margin-top:3.5rem;">
   <div class="stat"><div class="stat-num">6+</div><div class="stat-label">años de experiencia</div></div>
   <div class="stat"><div class="stat-num">500+</div><div class="stat-label">clientes felices</div></div>
   <div class="stat"><div class="stat-num">100%</div><div class="stat-label">artesanal</div></div>
@@ -1075,7 +1090,7 @@ nav {
     </div>
   </div>
 
-  <h3>Tambi&eacute;n te va a encantar</h3>
+  <h3 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:400;color:#2C1A10;margin:4rem 0 2rem;letter-spacing:-0.01em;">Tambi&eacute;n te va a encantar</h3>
 
   <div class="grid-3">
     <div class="card" style="cursor:pointer" onclick="openModal('modal-tarta')">
