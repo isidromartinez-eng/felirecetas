@@ -2279,26 +2279,36 @@ function openProductModal(name) {
     document.getElementById('modal-producto-wa').href = 'https://wa.me/5492216023377?text=' + msg;
     openModal('modal-producto');
   }
-  function openModal(id) {
-    document.body.style.top = '-' + window.scrollY + 'px';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-  const m = document.getElementById(id);
-  if (!m) return;
-  m.classList.add('is-visible');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(id) {
+  function closeModalVisually(id) {
     var scrollY = parseInt(document.body.style.top || '0') * -1;
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.width = '';
     window.scrollTo(0, scrollY);
-  const m = document.getElementById(id);
-  if (!m) return;
-  m.classList.remove('is-visible');
-  document.body.style.overflow = '';
-}
+    var m = document.getElementById(id);
+    if (!m) return;
+    m.classList.remove('is-visible');
+    document.body.style.overflow = '';
+  }
+  function openModal(id) {
+    document.body.style.top = '-' + window.scrollY + 'px';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    var m = document.getElementById(id);
+    if (!m) return;
+    m.classList.add('is-visible');
+    document.body.style.overflow = 'hidden';
+    history.pushState({ modal: id }, '');
+  }
+  function closeModal(id) {
+    closeModalVisually(id);
+    if (history.state && history.state.modal) history.back();
+  }
+  window.addEventListener('popstate', function() {
+    document.querySelectorAll('.modal-overlay.is-visible').forEach(function(m) {
+      closeModalVisually(m.id);
+    });
+  });
 
 // Mobile menu
 function openMobileMenu() {
