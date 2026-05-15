@@ -973,63 +973,48 @@ body.hero-active nav .nav-burger svg line { stroke: #fff !important; }
   <a href="#galeria" onclick="closeMobileMenu()">Creaciones</a>
   <a href="#faq" onclick="closeMobileMenu()">Preguntas frecuentes</a>
   <a href="#pedido-personalizado" onc<!-- HERO -->
-<div id="hero-overlay" style="position:fixed;inset:0;z-index:200;background:#1a0f08;overflow:hidden;">
-  <video id="hero-vid" autoplay muted playsinline preload="auto"
+<div id="hero-overlay" style="position:fixed;inset:0;z-index:9999;background:#1a0f08;">
+  <video id="hero-vid" autoplay muted playsinline loop preload="auto"
          style="width:100%;height:100%;object-fit:cover;display:block;"
          src="head.mp4"></video>
-  <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);color:#fff;text-align:center;opacity:0.75;pointer-events:none;">
-    <div style="font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:0.08em;margin-bottom:0.5rem;">DESLIZÁ PARA VER MÁS</div>
-    <div style="font-size:22px;animation:bounceDown 1.2s infinite;">↓</div>
+  <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);color:#fff;text-align:center;opacity:0.85;pointer-events:none;white-space:nowrap;">
+    <div style="font-family:&apos;DM Sans&apos;,sans-serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.6rem;">Deslizá para ver más</div>
+    <div style="font-size:20px;display:inline-block;animation:heroArrow 1.4s infinite;">↓</div>
   </div>
 </div>
 <style>
-@keyframes bounceDown {
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(8px);}
-}
+@keyframes heroArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
 </style>
-
 <script id="hero-scroll-js">
 (function(){
-  var overlay = document.getElementById('hero-overlay');
-  var vid     = document.getElementById('hero-vid');
+  var overlay = document.getElementById("hero-overlay");
+  var vid     = document.getElementById("hero-vid");
   var done    = false;
-
-  document.body.classList.add('hero-active');
-  document.body.style.overflowY = 'hidden';
-
-  var p = vid.play();
-  if (p && p.catch) p.catch(function(){});
-
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+  document.body.classList.add("hero-active");
+  vid.play().catch(function(){});
   function dismiss(){
-    if (done) return;
+    if(done) return;
     done = true;
-    document.body.classList.remove('hero-active');
-    document.body.style.overflowY = '';
-    overlay.style.transition = 'opacity 0.7s ease, transform 0.7s cubic-bezier(.4,0,.2,1)';
-    overlay.style.opacity    = '0';
-    overlay.style.transform  = 'translateY(-6%)';
-    setTimeout(function(){ overlay.style.display = 'none'; }, 750);
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.width = "";
+    document.body.classList.remove("hero-active");
+    overlay.style.transition = "opacity 0.7s ease";
+    overlay.style.opacity = "0";
+    setTimeout(function(){ overlay.style.display = "none"; }, 750);
   }
-
-  window.addEventListener('wheel', function(e){
-    if (done) return;
-    if (e.deltaY > 0) dismiss();
-  }, {passive:true});
-
+  window.addEventListener("wheel", function(e){ if(!done && e.deltaY > 0) dismiss(); }, {passive:true});
   var ty0 = 0;
-  window.addEventListener('touchstart', function(e){ ty0 = e.touches[0].clientY; }, {passive:true});
-  window.addEventListener('touchmove', function(e){
-    if (done) return;
-    if (ty0 - e.touches[0].clientY > 30) dismiss();
-  }, {passive:true});
-
-  window.addEventListener('keydown', function(e){
-    if (done) return;
-    if (e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); dismiss(); }
+  window.addEventListener("touchstart", function(e){ ty0 = e.touches[0].clientY; }, {passive:true});
+  window.addEventListener("touchmove", function(e){ if(!done && ty0 - e.touches[0].clientY > 30) dismiss(); }, {passive:true});
+  window.addEventListener("keydown", function(e){
+    if(!done && (e.key==="ArrowDown"||e.key==="PageDown"||e.key===" ")){ e.preventDefault(); dismiss(); }
   });
-
-  vid.addEventListener('ended', dismiss);
 })();
 </script>
 lick="closeMobileMenu();setTimeout(function(){document.getElementById('pedido-personalizado').scrollIntoView({behavior:'smooth'});},100);" >Pedido personalizado</a>
