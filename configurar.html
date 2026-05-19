@@ -721,6 +721,7 @@ const state = {
   if (p.get('cobertura'))   state.cobertura     = p.get('cobertura');
   if (p.get('porciones'))   state.porciones     = parseInt(p.get('porciones'));
   if (p.get('restriccion')) state.restricciones = [p.get('restriccion')];
+  if (p.get('deco'))        state.decoracion    = p.get('deco');
 })();
 
 const PRICES = { 12: 18500, 16: 23800, 24: 33500 };
@@ -1291,18 +1292,14 @@ if (state._draftStep && state._draftStep > 1) {
   });
   setSizeHighlight(items, activeItem);
 
-  // Abrir float bar para mostrar el resumen pre-cargado
-  const _fbSummary = document.getElementById('floatBarSummary');
-  const _fbBtn     = document.getElementById('floatBarToggle');
-  if (_fbSummary && _fbBtn) {
-    _fbSummary.classList.add('open');
-    _fbBtn.textContent = 'Ocultar ↓';
-  }
+  // Sync deco card selection
+  document.querySelectorAll('[data-deco]').forEach(d => {
+    d.classList.toggle('selected', d.dataset.deco === state.decoracion);
+  });
 
-  // Saltar al paso 2 con todos desbloqueados, para que el usuario
-  // vea inmediatamente los rellenos y cobertura pre-cargados
+  // Saltar al paso 4 con todo pre-cargado
   state.maxStep = 4;
-  goStep(2);
+  goStep(4);
 })();
 </script>
 </body>
