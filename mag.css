@@ -308,8 +308,8 @@ section#inicio {
    MOBILE — ajustes según diseño M1
    ============================================ */
 @media (max-width: 767px) {
-  /* Ocultar CTAs del hero */
-  .split-ctas { display: none; }
+  /* CTAs del hero en mobile */
+  .split-ctas { display: flex; }
 
   /* Headline */
   .split-headline {
