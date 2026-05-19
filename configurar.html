@@ -1291,9 +1291,18 @@ if (state._draftStep && state._draftStep > 1) {
   });
   setSizeHighlight(items, activeItem);
 
-  // Jump to step 4 with all steps unlocked
+  // Abrir float bar para mostrar el resumen pre-cargado
+  const _fbSummary = document.getElementById('floatBarSummary');
+  const _fbBtn     = document.getElementById('floatBarToggle');
+  if (_fbSummary && _fbBtn) {
+    _fbSummary.classList.add('open');
+    _fbBtn.textContent = 'Ocultar ↓';
+  }
+
+  // Saltar al paso 2 con todos desbloqueados, para que el usuario
+  // vea inmediatamente los rellenos y cobertura pre-cargados
   state.maxStep = 4;
-  goStep(4);
+  goStep(2);
 })();
 </script>
 </body>
