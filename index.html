@@ -267,7 +267,7 @@
 
     <!-- Featured big card -->
     <div class="featured-wrap" style="padding:0 22px 16px">
-      <div class="card product-card product-card-big" data-cat="tortas" data-product="red-velvet" onclick="openProduct('red-velvet')" style="cursor:pointer">
+      <div class="card product-card product-card-big" data-cat="tortas" data-product="pavlova" onclick="openProduct('pavlova')" style="cursor:pointer">
         <div class="card-img img-placeholder wine" style="height:200px;position:relative;background-image:url('red-velvet.jpg');background-size:cover;background-position:center">
           <span class="chip-tag">Destacado del mes</span>
         </div>
@@ -285,7 +285,7 @@
     <!-- Grid -->
     <div class="products-grid" id="productsGrid">
 
-      <div class="card product-card" data-cat="chocolates" data-product="macarons" onclick="openProduct('macarons')" style="cursor:pointer">
+      <div class="card product-card" data-cat="chocolates" data-product="brownie" onclick="openProduct('brownie')" style="cursor:pointer">
         <div class="card-img img-placeholder cream" data-bg="macarons.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
           <span class="chip-tag">Clásico</span>
         </div>
@@ -299,7 +299,7 @@
         </div>
       </div>
 
-      <div class="card product-card" data-cat="cheesecakes" data-product="croissants" onclick="openProduct('croissants')" style="cursor:pointer">
+      <div class="card product-card" data-cat="cheesecakes" data-product="cheesecake-frutilla" onclick="openProduct('cheesecake-frutilla')" style="cursor:pointer">
         <div class="card-img img-placeholder gold" data-bg="croissants.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
           <span class="chip-tag sage">Nuevo</span>
         </div>
@@ -313,7 +313,7 @@
         </div>
       </div>
 
-      <div class="card product-card" data-cat="tortas" data-product="cookies" onclick="openProduct('cookies')" style="cursor:pointer">
+      <div class="card product-card" data-cat="tortas" data-product="torta-coco" onclick="openProduct('torta-coco')" style="cursor:pointer">
         <div class="card-img img-placeholder choc" data-bg="cookies.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
           <span class="chip-tag gold">Popular</span>
         </div>
@@ -327,7 +327,7 @@
         </div>
       </div>
 
-      <div class="card product-card" data-cat="chocolates" data-product="cake-pops" onclick="openProduct('cake-pops')" style="cursor:pointer">
+      <div class="card product-card" data-cat="chocolates" data-product="chocotorta" onclick="openProduct('chocotorta')" style="cursor:pointer">
         <div class="card-img img-placeholder wine" data-bg="cake-pops.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
         </div>
         <div class="card-body">
@@ -354,7 +354,7 @@
         </div>
       </div>
 
-      <div class="card product-card" data-cat="chocolates" data-product="brownies" onclick="openProduct('brownies')" style="cursor:pointer">
+      <div class="card product-card" data-cat="chocolates" data-product="marquise" onclick="openProduct('marquise')" style="cursor:pointer">
         <div class="card-img img-placeholder choc" data-bg="brownie.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
           <span class="chip-tag">Clásico</span>
         </div>
@@ -368,7 +368,7 @@
         </div>
       </div>
 
-      <div class="card product-card" data-cat="tortas" data-product="alfajores" onclick="openProduct('alfajores')" style="cursor:pointer">
+      <div class="card product-card" data-cat="tortas" data-product="tarta-tofee" onclick="openProduct('tarta-tofee')" style="cursor:pointer">
         <div class="card-img img-placeholder cream" data-bg="alfajores.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
           <span class="chip-tag gold">Popular</span>
         </div>
@@ -1123,13 +1123,14 @@
         card.style.display = show ? '' : 'none';
         if (show) count++;
       });
-      document.getElementById('resultsCount').textContent = count + ' productos';
+      const rc = document.getElementById('resultsCount');
+      if (rc) rc.textContent = count + ' productos';
     });
   });
 
   // ── Product data ──
   const PRODUCTS = {
-    'red-velvet': {
+    'pavlova': {
       name: 'Pavlova de la casa', cat: 'Torta · destacada', tone: 'wine', img: 'red-velvet.jpg',
       desc: 'Merengue crujiente por fuera y suave por dentro, cubierto con crema chantilly batida a mano y frutos rojos de estación. El postre favorito de la casa.',
       tags: ['Sin gluten', 'Frutos rojos', 'Hecho el día anterior'],
@@ -1139,7 +1140,7 @@
         { label: '24 porciones', persons: 'Ideal para 20–30 personas', price: 33500 },
       ],
     },
-    'macarons': {
+    'brownie': {
       name: 'Brownie', cat: 'Chocolate · clásico', tone: 'cream', img: 'macarons.jpg',
       desc: 'Brownie de chocolate semi-amargo con centro cremoso y corteza ligeramente crocante. Hecho con chocolate de cobertura, manteca y huevos frescos. Sin polvo de hornear.',
       tags: ['Semi-amargo', 'Centro cremoso', 'Sin conservantes'],
@@ -1149,7 +1150,7 @@
         { label: 'Caja x 24', persons: 'Para eventos', price: 16500 },
       ],
     },
-    'croissants': {
+    'cheesecake-frutilla': {
       name: 'Cheesecake de frutilla', cat: 'Cheesecake · nuevo', tone: 'gold', img: 'croissants.jpg',
       desc: 'Base de galletitas desmenuzadas, relleno cremoso de queso crema y cobertura de frutillas frescas maceradas. Horneado en baño maría y servido bien frío.',
       tags: ['Frutillas frescas', 'Baño maría', 'Servir frío'],
@@ -1159,7 +1160,7 @@
         { label: 'x 6 unidades', persons: 'Para 5–6 personas', price: 3100 },
       ],
     },
-    'cookies': {
+    'torta-coco': {
       name: 'Torta de coco', cat: 'Torta · popular', tone: 'choc', img: 'cookies.jpg',
       desc: 'Bizcocho húmedo de coco rallado con relleno de crema de vainilla y cobertura de coco tostado. Liviana, perfumada y perfecta para cualquier ocasión.',
       tags: ['Coco rallado', 'Crema de vainilla', 'Sin conservantes'],
@@ -1169,7 +1170,7 @@
         { label: 'Caja x 24', persons: 'Para eventos', price: 12500 },
       ],
     },
-    'cake-pops': {
+    'chocotorta': {
       name: 'Chocotorta', cat: 'Chocolate · clásico', tone: 'wine', img: 'cake-pops.jpg',
       desc: 'El clásico de los clásicos. Galletitas de chocolate, dulce de leche artesanal y queso crema en capas. Sin horno, bien fría. La torta de cumpleaños de toda Argentina.',
       tags: ['Sin horno', 'Dulce de leche', 'Hecho a mano'],
@@ -1189,7 +1190,7 @@
         { label: '12 porciones', persons: 'Bandeja grande', price: 14800 },
       ],
     },
-    'brownies': {
+    'marquise': {
       name: 'Marquise', cat: 'Chocolate · clásico', tone: 'choc', img: 'brownie.jpg',
       desc: 'Torta de chocolate amargo sin harina, de textura sedosa entre mousse y fondant. Requiere solo cuatro ingredientes: chocolate, manteca, azúcar y huevos. Servir a temperatura ambiente.',
       tags: ['Sin harina', 'Chocolate amargo', 'Textura sedosa'],
@@ -1199,7 +1200,7 @@
         { label: 'x 16 unidades', persons: 'Para eventos', price: 8900 },
       ],
     },
-    'alfajores': {
+    'tarta-tofee': {
       name: 'Tarta Tofee', cat: 'Torta · popular', tone: 'cream', img: 'alfajores.jpg',
       desc: 'Base de masa sablée mantecosa, relleno de caramelo tofee casero y cobertura de crema chantilly. Dulce, cremosa y con ese toque crocante en la base que no podés dejar de comer.',
       tags: ['Caramelo tofee', 'Base crocante', 'Crema chantilly'],
