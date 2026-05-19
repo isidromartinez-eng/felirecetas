@@ -550,7 +550,7 @@
     </div>
 
     <div class="about-grid">
-    <div class="about-img" style="background:url('nosotros.jpg') center/cover no-repeat"></div>
+    <div class="about-img" data-bg="nosotros.jpg" style="background-size:cover;background-position:center"></div>
 
     <div class="about-content">
       <p style="font-size:15px;line-height:1.65;color:rgba(255,255,255,.8)">
@@ -1397,7 +1397,7 @@
         lazyBgObserver.unobserve(el);
       }
     });
-  }, { rootMargin: '300px' });
+  }, { rootMargin: '200px' });
   document.querySelectorAll('[data-bg]').forEach(el => lazyBgObserver.observe(el));
 
   // ── FAQ accordion ──
