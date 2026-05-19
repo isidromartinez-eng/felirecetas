@@ -1402,14 +1402,18 @@
   }
 
   // ── Draft resume banner ──
-  (function() {
+  function showDraftBannerIfExists() {
     const raw = localStorage.getItem('felirecetas_draft');
-    if (!raw) return;
+    const banner = document.getElementById('draft-banner');
+    const descEl = document.getElementById('draft-desc');
+    if (!banner || !descEl) return;
+
+    if (!raw) {
+      banner.style.display = 'none';
+      return;
+    }
     try {
       const s = JSON.parse(raw);
-      const banner = document.getElementById('draft-banner');
-      const descEl = document.getElementById('draft-desc');
-      if (!banner || !descEl) return;
 
       // Mostrar solo lo que decidieron según el paso en que estaban
       const step = s.currentStep || 1;
@@ -1432,7 +1436,16 @@
       const fab = document.querySelector('.whatsapp-fab');
       if (fab) fab.classList.add('draft-lifted');
     } catch(e) {}
-  })();
+  }
+
+  // Carga normal
+  showDraftBannerIfExists();
+
+  // BFCache (swipe-back en iOS/Android): la página se restaura desde memoria
+  // sin re-ejecutar el script, por eso escuchamos pageshow con persisted=true
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) showDraftBannerIfExists();
+  });
 
   function dismissDraft() {
     localStorage.removeItem('felirecetas_draft');
