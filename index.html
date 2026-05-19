@@ -1316,6 +1316,11 @@
       document.getElementById('productModal').style.display = 'none';
       document.body.style.overflow = '';
     }
+    if (document.getElementById('ejemplosModal').style.display !== 'none') {
+      _ejemplosHistoryPushed = false;
+      document.getElementById('ejemplosModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
   });
 
   function renderPmSizes() {
@@ -1363,13 +1368,21 @@
   }
 
   // ── Ejemplos modal ──
+  let _ejemplosHistoryPushed = false;
+
   function openEjemplos() {
+    _ejemplosHistoryPushed = true;
+    history.pushState({ modal: 'ejemplos' }, '');
     document.getElementById('ejemplosModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
   function closeEjemplos() {
     document.getElementById('ejemplosModal').style.display = 'none';
     document.body.style.overflow = '';
+    if (_ejemplosHistoryPushed) {
+      _ejemplosHistoryPushed = false;
+      history.back(); // consume el estado pusheado para que el back no quede colgado
+    }
   }
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { closeProduct(); closeEjemplos(); }
