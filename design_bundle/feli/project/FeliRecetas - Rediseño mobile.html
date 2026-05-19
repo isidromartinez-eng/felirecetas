@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FeliRecetas — Rediseño mobile</title>
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+
+  <style>
+    html, body { margin: 0; padding: 0; background: #f0eee9; font-family: "DM Sans", system-ui, sans-serif; }
+    /* Tarjeta blanca por defecto pisada para que respete el bg de la pantalla */
+    .dc-card { background: transparent !important; }
+  </style>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Canvas + componentes compartidos + pantallas -->
+  <script type="text/babel" src="design-canvas.jsx"></script>
+  <script type="text/babel" src="shared.jsx"></script>
+  <script type="text/babel" src="screens-home.jsx"></script>
+  <script type="text/babel" src="screens-catalog.jsx"></script>
+  <script type="text/babel" src="screens-config.jsx"></script>
+  <script type="text/babel" src="screens-trust.jsx"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const W = 390, H = 844;
+
+    function App() {
+      return (
+        <DesignCanvas>
+          {/* — Sistema — */}
+          <DCSection id="sistema" title="Sistema" subtitle="Color, tipografía y voz · una sola dirección, bien pulida">
+            <DCArtboard id="tokens" label="Sistema de diseño" width={W} height={H}>
+              <ScreenSystem/>
+            </DCArtboard>
+          </DCSection>
+
+          {/* — Inicio + Menú — */}
+          <DCSection id="estructura" title="Estructura · Inicio y navegación" subtitle="Lo primero que ve quien viene de Instagram. Editorial, foto grande, dos CTAs claros.">
+            <DCArtboard id="home" label="01 · Inicio" width={W} height={H}>
+              <ScreenHome/>
+            </DCArtboard>
+            <DCArtboard id="menu" label="02 · Menú lateral" width={W} height={H}>
+              <ScreenMenu/>
+            </DCArtboard>
+          </DCSection>
+
+          {/* — Catálogo — */}
+          <DCSection id="catalogo" title="Catálogo y producto" subtitle="Foto grande, jerarquía clara con destacado del mes y grid de 2 columnas. Filtros como bottom-sheet.">
+            <DCArtboard id="cat" label="03 · Catálogo" width={W} height={H}>
+              <ScreenCatalog/>
+            </DCArtboard>
+            <DCArtboard id="filters" label="04 · Filtros" width={W} height={H}>
+              <ScreenCatalogFilters/>
+            </DCArtboard>
+            <DCArtboard id="prod" label="05 · Producto detalle" width={W} height={H}>
+              <ScreenProduct/>
+            </DCArtboard>
+          </DCSection>
+
+          {/* — Personalización — feature nueva */}
+          <DCSection id="config" title="Personalizar una torta · feature nueva" subtitle="Flujo guiado de 4 pasos. Recolecta datos antes de WhatsApp para que tu primer mensaje ya tenga todo.">
+            <DCArtboard id="c1" label="06 · Base" width={W} height={H}>
+              <ScreenConfig1/>
+            </DCArtboard>
+            <DCArtboard id="c2" label="07 · Sabor + relleno" width={W} height={H}>
+              <ScreenConfig2/>
+            </DCArtboard>
+            <DCArtboard id="c3" label="08 · Tamaño" width={W} height={H}>
+              <ScreenConfig3/>
+            </DCArtboard>
+            <DCArtboard id="c4" label="09 · Detalle final" width={W} height={H}>
+              <ScreenConfig4/>
+            </DCArtboard>
+            <DCArtboard id="calc" label="10 · Calculadora eventos" width={W} height={H}>
+              <ScreenCalculator/>
+            </DCArtboard>
+          </DCSection>
+
+          {/* — Confianza & conversión — */}
+          <DCSection id="confianza" title="Confianza · cómo pedir, historia, reviews, FAQ" subtitle="Las secciones que cierran la venta. Cada una se siente parte del mismo libro.">
+            <DCArtboard id="how" label="11 · Cómo pedir" width={W} height={H}>
+              <ScreenHowTo/>
+            </DCArtboard>
+            <DCArtboard id="about" label="12 · Historia" width={W} height={H}>
+              <ScreenAbout/>
+            </DCArtboard>
+            <DCArtboard id="reviews" label="13 · Testimonios" width={W} height={H}>
+              <ScreenReviews/>
+            </DCArtboard>
+            <DCArtboard id="faq" label="14 · FAQ" width={W} height={H}>
+              <ScreenFAQ/>
+            </DCArtboard>
+            <DCArtboard id="footer" label="15 · CTA final + footer" width={W} height={H}>
+              <ScreenFooter/>
+            </DCArtboard>
+          </DCSection>
+        </DesignCanvas>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+  </script>
+</body>
+</html>

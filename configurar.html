@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Personalizar torta · Feli Recetas</title>
+  <meta name="description" content="Armá tu torta personalizada paso a paso y enviá el pedido por WhatsApp."/>
+  <meta name="theme-color" content="#FBF7F0"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+
+  <style>
+    .config-tabs { display:flex; border-bottom:1px solid var(--rule-soft); }
+    .config-tab {
+      flex:1; padding:14px 4px; text-align:center; font-size:13px; font-weight:500;
+      color:var(--ink-3); border:0; background:none; cursor:pointer;
+      border-bottom:2px solid transparent; transition:color .15s,border-color .15s;
+    }
+    .config-tab.active { color:var(--ink); border-bottom:2px solid var(--ink); }
+
+    .step-page { display:none; }
+    .step-page.active { display:block; }
+
+    .size-preview {
+      display:flex; justify-content:center; align-items:flex-end;
+      gap:14px; padding:20px 22px 8px; min-height:180px;
+    }
+    .size-preview-item {
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      cursor:pointer; transition:opacity .2s;
+    }
+    .size-preview-cake { border-radius:6px; transition:box-shadow .2s; }
+
+    input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:4px; border-radius:2px; background:var(--rule); outline:none; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:var(--wine); cursor:pointer; border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.2); }
+    input[type=range]::-moz-range-thumb { width:20px; height:20px; border-radius:50%; background:var(--wine); cursor:pointer; border:2px solid #fff; }
+  /* ── Mobile: ocultar aside (evita resumen duplicado) y sticky bars ── */
+  .mobile-step-nav { display: none; }
+
+  @media (max-width: 767px) {
+    .config-aside  { display: none !important; }
+    .sticky-cta    { display: none !important; }
+    .step4-body    { padding-bottom: 28px; }
+
+    /* Nav inline entre pasos */
+    .mobile-step-nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 24px;
+      padding-bottom: 32px;
+    }
+    .mobile-step-nav-row { display: flex; gap: 8px; }
+    .mobile-step-nav-row .btn { flex: 1; height: 48px; font-size: 14px; }
+    .mobile-step-selection {
+      font-family: var(--serif, serif);
+      font-size: 15px;
+      font-style: italic;
+      color: #7A2836;
+      font-weight: 500;
+      margin-bottom: 10px;
+      min-height: 20px;
+    }
+
+    /* Botón WA inline paso 4 */
+    .step4-wa-inline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      background: #25D366;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: var(--sans, 'DM Sans', sans-serif);
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+    }
+  }
+
+  /* En desktop, el aside tiene WA — ocultar el bloque inline */
+  .step4-wa-inline { display: none; }
+  .step4-body { padding-bottom: 100px; }
+
+  @media (max-width: 767px) {
+    /* Dentro del mobile-step-nav el botón WA se muestra */
+    .mobile-step-nav .step4-wa-inline { display: flex; width: 100%; margin-top: 0; border-radius: 12px; }
+  }
+
+  @media (min-width: 768px) {
+    /* En paso 4, el único resumen es el aside — ocultar el duplicado */
+    #step4 .summary-box { display: none; }
+
+}
+  </style>
+</head>
+<body>
+<div class="content-wrap config-page">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <a href="index.html" class="topbar-btn" aria-label="Volver">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4L6 10l6 6"/></svg>
+    </a>
+    <a href="index.html" class="logo">Feli <em>Recetas</em></a>
+    <div style="width:28px"></div>
+  </header>
+
+  <!-- TABS: Configurador / Calculadora -->
+  <div class="config-tabs">
+    <button class="config-tab active" id="tabConfig" onclick="showTab('config')">Personalizar torta</button>
+    <button class="config-tab" id="tabCalc" onclick="showTab('calc')">Calculadora de eventos</button>
+  </div>
+
+  <!-- ╔═══════════════════════════════╗
+       ║   CONFIGURADOR (4 pasos)      ║
+       ╚═══════════════════════════════╝ -->
+  <div id="pageConfig">
+  <div class="config-layout">
+  <div class="config-main">
+
+    <!-- Progress stepper -->
+    <div class="config-stepper" id="stepperEl">
+      <!-- rendered by JS -->
+    </div>
+
+    <!-- PASO 1: BASE -->
+    <div class="step-page active" id="step1">
+      <div class="config-header">
+        <div class="eyebrow">— Personalizá tu torta · paso 1/4</div>
+        <div class="h1" style="margin-top:6px">Elegí <span class="serif-i">la base</span></div>
+        <p class="caption" style="margin-top:6px;font-size:13px">El bizcocho que va a llevar tu torta. Después elegís sabor y decoración.</p>
+      </div>
+
+      <div class="config-body" style="display:flex;flex-direction:column;gap:10px;padding-bottom:100px">
+        <div class="option-row selected" data-base="Red Velvet" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('red-velvet-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Red Velvet</div>
+            <div class="caption" style="margin-top:2px">Aterciopelada · clásica</div>
+          </div>
+          <div class="option-radio">✓</div>
+        </div>
+        <div class="option-row" data-base="Chocolate intenso" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('chocolate-intenso-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Chocolate intenso</div>
+            <div class="caption" style="margin-top:2px">70% · semi-amargo</div>
+          </div>
+          <div class="option-radio"></div>
+        </div>
+        <div class="option-row" data-base="Vainilla bourbon" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('vainilla-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Vainilla bourbon</div>
+            <div class="caption" style="margin-top:2px">Bizcocho liviano</div>
+          </div>
+          <div class="option-radio"></div>
+        </div>
+        <div class="option-row" data-base="Lemon poppy" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('limon-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Lemon poppy</div>
+            <div class="caption" style="margin-top:2px">Cítrica · semillas amapola</div>
+          </div>
+          <div class="option-radio"></div>
+        </div>
+        <div class="option-row" data-base="Zanahoria y nuez" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('zanahoria-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Zanahoria y nuez</div>
+            <div class="caption" style="margin-top:2px">Especiada · clásica</div>
+          </div>
+          <div class="option-radio"></div>
+        </div>
+        <div class="option-row" data-base="Pistacho" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('pistacho-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Pistacho</div>
+            <div class="caption" style="margin-top:2px">Edición limitada</div>
+          </div>
+          <div class="option-radio"></div>
+        </div>
+
+        <!-- Nav mobile paso 1 -->
+        <div class="mobile-step-nav" style="flex-direction:column;gap:8px;">
+          <div class="mobile-step-selection" id="navLabel1">(<span id="navBase">Red Velvet</span>)</div>
+          <div class="mobile-step-nav-row">
+            <button class="btn btn-wine" onclick="goStep(2)">Siguiente: Sabores →</button>
+          </div>
+          <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost" style="height:44px;display:flex;align-items:center;justify-content:center;text-decoration:none">← Ver catálogo</a>
+        </div>
+      </div>
+
+      <div class="sticky-cta">
+        <div class="label">
+          <div style="font-size:10px;opacity:.65;letter-spacing:.1em;text-transform:uppercase">Paso 1/4 · Base</div>
+          <div style="font-family:var(--serif);font-size:13px" id="step1Label">Red Velvet seleccionada</div>
+        </div>
+        <button class="btn btn-wine btn-sm" style="height:40px;padding:0 18px" onclick="goStep(2)">Siguiente →</button>
+      </div>
+    </div><!-- /step1 -->
+
+    <!-- PASO 2: RELLENO + COBERTURA -->
+    <div class="step-page" id="step2">
+      <div class="config-header">
+        <div class="eyebrow">— Personalizá tu torta · paso 2/4</div>
+        <div class="h1" style="margin-top:6px">Sabores y <span class="serif-i">rellenos</span></div>
+        <p class="caption" style="margin-top:6px;font-size:13px">Hasta 2 rellenos. Elegí los que más te gusten.</p>
+      </div>
+
+      <div class="config-body" style="padding-bottom:100px">
+        <!-- Rellenos -->
+        <div class="ornament left" style="gap:10px">
+          <span style="flex:0 0 auto">Rellenos <span id="fillCount" style="color:var(--wine)">(1/2)</span></span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px" id="fillGrid">
+          <!-- JS renders -->
+        </div>
+
+        <!-- Cobertura -->
+        <div class="ornament left" style="gap:10px;margin-top:22px">
+          <span style="flex:0 0 auto">Cobertura</span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px" id="coberturaGrid">
+          <!-- JS renders -->
+        </div>
+
+        <!-- Restricciones -->
+        <div class="ornament left" style="gap:10px;margin-top:22px">
+          <span style="flex:0 0 auto">Restricciones</span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px" id="restriccionesGrid">
+          <!-- JS renders -->
+        </div>
+
+        <!-- Nav mobile paso 2 -->
+        <div class="mobile-step-nav" style="flex-direction:column;gap:8px;">
+          <div class="mobile-step-selection" id="navLabel2"></div>
+          <div class="mobile-step-nav-row">
+            <button class="btn btn-ghost" onclick="goStep(1)">← Volver</button>
+            <button class="btn btn-wine" onclick="goStep(3)">Siguiente: Tamaño →</button>
+          </div>
+          <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost" style="height:44px;display:flex;align-items:center;justify-content:center;text-decoration:none">← Ver catálogo</a>
+        </div>
+      </div>
+
+      <div class="sticky-cta">
+        <div class="label">
+          <div style="font-size:10px;opacity:.65;letter-spacing:.1em;text-transform:uppercase">Paso 2/4 · Sabor</div>
+          <div style="font-family:var(--serif);font-size:13px" id="step2Label">Queso crema · frosting</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-soft btn-sm" style="height:40px" onclick="goStep(1)">← Volver</button>
+          <button class="btn btn-wine btn-sm" style="height:40px;padding:0 18px" onclick="goStep(3)">Siguiente →</button>
+        </div>
+      </div>
+    </div><!-- /step2 -->
+
+    <!-- PASO 3: TAMAÑO -->
+    <div class="step-page" id="step3">
+      <div class="config-header">
+        <div class="eyebrow">— Personalizá tu torta · paso 3/4</div>
+        <div class="h1" style="margin-top:6px">Tamaño y <span class="serif-i">porciones</span></div>
+        <p class="caption" style="margin-top:6px;font-size:13px">¿Cuántas personas vamos a hacer felices?</p>
+      </div>
+
+      <!-- Visual preview -->
+      <div class="size-preview" id="sizePreview">
+        <div class="size-preview-item" data-size="12" onclick="selectSize(this)" style="opacity:.35">
+          <svg id="shapePrev12" class="size-preview-cake" width="70" height="60" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 4px 8px rgba(122,40,54,.15))"><circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/></svg>
+          <div class="serif" style="font-size:15px;color:var(--ink-3)">12p</div>
+        </div>
+        <div class="size-preview-item active" data-size="16" onclick="selectSize(this)">
+          <svg id="shapePrev16" class="size-preview-cake" width="100" height="90" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 8px 20px rgba(122,40,54,.3))"><circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/></svg>
+          <div class="serif" style="font-size:15px;color:var(--wine)">16p</div>
+        </div>
+        <div class="size-preview-item" data-size="24" onclick="selectSize(this)" style="opacity:.35">
+          <svg id="shapePrev24" class="size-preview-cake" width="130" height="120" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 4px 8px rgba(122,40,54,.15))"><circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/></svg>
+          <div class="serif" style="font-size:15px;color:var(--ink-3)">24p</div>
+        </div>
+      </div>
+
+      <div class="config-body" style="padding-bottom:100px">
+        <!-- Stepper porciones -->
+        <div style="background:var(--bg-soft);border-radius:14px;padding:18px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div class="caption" style="text-transform:uppercase;letter-spacing:.1em;font-size:10.5px">Porciones</div>
+              <div class="serif" style="font-size:30px;margin-top:2px;font-feature-settings:'tnum'" id="porcionesNum">16</div>
+            </div>
+            <div class="stepper">
+              <button onclick="changePorciones(-1)">−</button>
+              <span class="v" id="porcionesVal">16</span>
+              <button onclick="changePorciones(1)">+</button>
+            </div>
+          </div>
+          <div class="caption" style="margin-top:6px;font-size:11px" id="porcionesHint">Recomendado para 12–18 personas</div>
+        </div>
+
+        <!-- Forma -->
+        <div class="ornament left" style="gap:10px;margin-top:22px">
+          <span style="flex:0 0 auto">Forma</span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px">
+          <div class="size-card selected" data-forma="Redonda" onclick="selectForma(this)">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="var(--ink)" stroke-width="1.4"><circle cx="20" cy="20" r="14"/></svg>
+            <div class="caption" style="margin-top:6px;font-size:11.5px;color:var(--ink)">Redonda</div>
+          </div>
+          <div class="size-card" data-forma="Cuadrada" onclick="selectForma(this)">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="var(--ink)" stroke-width="1.4"><rect x="6" y="6" width="28" height="28" rx="2"/></svg>
+            <div class="caption" style="margin-top:6px;font-size:11.5px;color:var(--ink)">Cuadrada</div>
+          </div>
+          <div class="size-card" data-forma="Corazón" onclick="selectForma(this)">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="var(--ink)" stroke-width="1.4"><path d="M20 32C8 23 8 13 14 11c3-1 5 1 6 3 1-2 3-4 6-3 6 2 6 12-6 21z"/></svg>
+            <div class="caption" style="margin-top:6px;font-size:11.5px;color:var(--ink)">Corazón</div>
+          </div>
+        </div>
+
+        <!-- Pisos -->
+        <div class="ornament left" style="gap:10px;margin-top:22px">
+          <span style="flex:0 0 auto">Pisos</span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <span class="chip active" data-pisos="1">1 piso</span>
+          <span class="chip" data-pisos="2">2 pisos · +$8.500</span>
+          <span class="chip" data-pisos="3">3 pisos · +$18.000</span>
+        </div>
+
+        <!-- Nav mobile paso 3 -->
+        <div class="mobile-step-nav" style="flex-direction:column;gap:8px;">
+          <div class="mobile-step-selection" id="navLabel3"></div>
+          <div class="mobile-step-nav-row">
+            <button class="btn btn-ghost" onclick="goStep(2)">← Volver</button>
+            <button class="btn btn-wine" onclick="goStep(4)">Siguiente: Decoración →</button>
+          </div>
+          <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost" style="height:44px;display:flex;align-items:center;justify-content:center;text-decoration:none">← Ver catálogo</a>
+        </div>
+      </div>
+
+      <div class="sticky-cta">
+        <div class="label">
+          <div style="font-size:10px;opacity:.65;letter-spacing:.1em;text-transform:uppercase">Paso 3/4 · Tamaño</div>
+          <div style="font-family:var(--serif);font-size:13px" id="step3Label">16 porc. · Redonda · 1 piso</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-soft btn-sm" style="height:40px" onclick="goStep(2)">← Volver</button>
+          <button class="btn btn-wine btn-sm" style="height:40px;padding:0 18px" onclick="goStep(4)">Siguiente →</button>
+        </div>
+      </div>
+    </div><!-- /step3 -->
+
+    <!-- PASO 4: DECORACIÓN + RESUMEN -->
+    <div class="step-page" id="step4">
+      <div class="config-header">
+        <div class="eyebrow">— Personalizá tu torta · paso 4/4</div>
+        <div class="h1" style="margin-top:6px">El <span class="serif-i">detalle</span> final</div>
+        <p class="caption" style="margin-top:6px;font-size:13px">Decoración y mensaje.</p>
+      </div>
+
+      <div class="config-body step4-body">
+        <!-- Decoración -->
+        <div class="ornament left" style="gap:10px">
+          <span style="flex:0 0 auto">Decoración</span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+          <div class="deco-card selected" data-deco="Minimalista" onclick="selectDeco(this)">
+            <div class="img-placeholder cream" style="height:80px"></div>
+            <div class="deco-body">
+              <div class="serif" style="font-size:14px;line-height:1.1">Minimalista</div>
+              <div class="caption" style="font-size:10.5px;margin-top:2px">Frosting liso + flor seca</div>
+            </div>
+          </div>
+          <div class="deco-card" data-deco="Macarons arriba" onclick="selectDeco(this)">
+            <div class="img-placeholder rose-soft" style="height:80px"></div>
+            <div class="deco-body">
+              <div class="serif" style="font-size:14px;line-height:1.1">Macarons arriba</div>
+              <div class="caption" style="font-size:10.5px;margin-top:2px">+ $3.500</div>
+            </div>
+          </div>
+          <div class="deco-card" data-deco="Frutas frescas" onclick="selectDeco(this)">
+            <div class="img-placeholder sage" style="height:80px"></div>
+            <div class="deco-body">
+              <div class="serif" style="font-size:14px;line-height:1.1">Frutas frescas</div>
+              <div class="caption" style="font-size:10.5px;margin-top:2px">Según temporada</div>
+            </div>
+          </div>
+          <div class="deco-card" data-deco="Drip de chocolate" onclick="selectDeco(this)">
+            <div class="img-placeholder choc" style="height:80px"></div>
+            <div class="deco-body">
+              <div class="serif" style="font-size:14px;line-height:1.1">Drip de chocolate</div>
+              <div class="caption" style="font-size:10.5px;margin-top:2px">+ $2.500</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensaje -->
+        <div class="ornament left" style="gap:10px;margin-top:22px">
+          <span style="flex:0 0 auto">Mensaje (opcional)</span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <textarea class="textarea" id="mensajeInput" placeholder="Ej: "Feliz cumple, Mati ♡"" maxlength="30" style="margin-top:12px;font-family:var(--serif);font-style:italic;font-size:16px" oninput="updateMsg()"></textarea>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <div class="caption" style="color:var(--ink-3)">Lo escribimos a mano. Máx 30 caracteres.</div>
+          <div class="caption" id="msgCount">0/30</div>
+        </div>
+
+        <!-- Resumen -->
+        <div class="summary-box" style="margin-top:24px">
+          <div class="eyebrow">— Resumen de tu torta</div>
+          <div class="h3 serif" style="margin-top:6px" id="summaryTitle">Red Velvet · 16 porciones</div>
+
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px" id="summaryRows">
+            <!-- JS renders -->
+          </div>
+
+          <hr class="rule-soft" style="margin:14px 0"/>
+          <div style="display:flex;justify-content:space-between;align-items:baseline">
+            <div>
+              <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Estimado</div>
+              <div class="serif" style="font-size:26px;color:var(--ink);margin-top:2px;font-feature-settings:'tnum'" id="summaryPrice">$ 23.800</div>
+            </div>
+            <span class="caption" style="color:var(--ink-3)">Reserva con seña</span>
+          </div>
+        </div>
+
+        <!-- Nav mobile paso 4 -->
+        <div class="mobile-step-nav" style="flex-direction:column;gap:8px;">
+          <button class="step4-wa-inline" onclick="sendWhatsApp()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+            Enviar pedido por WhatsApp
+          </button>
+          <div class="mobile-step-nav-row">
+            <button class="btn btn-ghost" onclick="goStep(3)">← Volver</button>
+            <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost" style="display:flex;align-items:center;justify-content:center;text-decoration:none">← Ver catálogo</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="sticky-cta green">
+        <div class="label">
+          <div style="font-size:10px;opacity:.85;letter-spacing:.1em;text-transform:uppercase">Paso 4/4 · Listo</div>
+          <div style="font-family:var(--serif);font-size:13px">Te respondo en minutos</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-soft btn-sm" style="height:40px" onclick="goStep(3)">← Volver</button>
+          <button class="btn btn-sm" style="height:40px;padding:0 14px;background:#fff;color:var(--ink)" onclick="sendWhatsApp()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+            Enviar pedido
+          </button>
+        </div>
+      </div>
+    </div><!-- /step4 -->
+
+  </div><!-- /config-main -->
+
+  <!-- Desktop aside: live summary -->
+  <aside class="config-aside" id="desktopAside">
+
+    <!-- Zona scrolleable: resumen -->
+    <div class="aside-body">
+      <div>
+        <div class="eyebrow" style="color:var(--wine)">— Tu torta</div>
+        <div class="h3 serif" style="margin-top:6px" id="asideTitle">Red Velvet · 16 porciones</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px" id="asideRows">
+        <!-- filled by JS -->
+      </div>
+
+      <div style="padding-top:16px;border-top:1px solid var(--rule-soft)">
+        <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Estimado</div>
+        <div class="serif" style="font-size:30px;color:var(--ink);margin-top:4px;font-feature-settings:'tnum'" id="asidePrice">$ 23.800</div>
+        <div class="caption" style="margin-top:4px;color:var(--ink-3)">Reserva con seña del 50%</div>
+      </div>
+
+      <div style="font-size:12px;color:var(--ink-3);line-height:1.55;padding:11px 13px;background:var(--bg-soft);border-radius:10px">
+        <span style="font-weight:600;color:var(--ink-2)">¿Dudas?</span> Escribime por WhatsApp antes de confirmar. Te respondo yo siempre.
+      </div>
+    </div>
+
+    <!-- Zona fija: acciones siempre visibles -->
+    <div class="aside-actions">
+      <!-- Desktop step navigation -->
+      <div id="desktopStepNav">
+        <button id="desktopNextStep" class="btn btn-wine btn-block" style="padding:13px 16px;font-size:15px"></button>
+        <button id="desktopPrevStep" class="btn btn-ghost btn-block" style="display:none">← Paso anterior</button>
+      </div>
+      <button id="asideWaBtn" class="btn btn-wine btn-block" onclick="sendWhatsApp()" style="display:none">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+        Enviar pedido por WhatsApp
+      </button>
+      <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost btn-block">Ver catálogo →</a>
+    </div>
+
+  </aside>
+
+  </div><!-- /config-layout -->
+  </div><!-- /pageConfig -->
+
+  <!-- ╔═══════════════════════════════╗
+       ║   CALCULADORA DE EVENTOS      ║
+       ╚═══════════════════════════════╝ -->
+  <div id="pageCalc" style="display:none">
+    <div style="padding:20px 22px 8px">
+      <div class="eyebrow">— Herramienta · gratis</div>
+      <div class="h1" style="margin-top:6px">¿Cuánto <span class="serif-i">pedir</span>?</div>
+      <p class="caption" style="margin-top:6px;font-size:13px">Decinos cómo es el evento y te decimos qué pedir, sin sobras y sin quedar corta.</p>
+    </div>
+
+    <div style="padding:16px 22px 0">
+      <!-- Invitados -->
+      <div class="card" style="padding:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="caption" style="text-transform:uppercase;letter-spacing:.1em;font-size:10.5px">Invitados</div>
+            <div class="serif" style="font-size:30px;margin-top:2px;font-feature-settings:'tnum'" id="guestNum">24</div>
+          </div>
+          <div class="stepper" style="height:44px">
+            <button onclick="changeGuests(-1)">−</button>
+            <span class="v" id="guestVal">24</span>
+            <button onclick="changeGuests(1)">+</button>
+          </div>
+        </div>
+        <input type="range" min="2" max="120" value="24" id="guestRange" oninput="setGuests(this.value)" style="margin-top:14px"/>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span class="caption" style="font-size:10px">2</span>
+          <span class="caption" style="font-size:10px">120</span>
+        </div>
+      </div>
+
+      <!-- Tipo evento -->
+      <div class="ornament left" style="gap:10px;margin-top:22px">
+        <span style="flex:0 0 auto">Tipo de evento</span>
+        <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px" id="eventoGrid">
+        <!-- JS renders -->
+      </div>
+
+      <!-- Apetito -->
+      <div class="ornament left" style="gap:10px;margin-top:22px">
+        <span style="flex:0 0 auto">Apetito</span>
+        <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px" id="apetitoGrid">
+        <span class="chip" data-apetito="Liviano" style="flex:1;justify-content:center" onclick="selectApetito(this)">Liviano</span>
+        <span class="chip active" data-apetito="Medio" style="flex:1;justify-content:center" onclick="selectApetito(this)">Medio</span>
+        <span class="chip" data-apetito="Goloso" style="flex:1;justify-content:center" onclick="selectApetito(this)">Goloso</span>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <div class="calc-result" style="margin-top:24px" id="calcResult">
+      <!-- JS renders -->
+    </div>
+
+    <div style="height:60px"></div>
+  </div><!-- /pageCalc -->
+
+</div><!-- /content-wrap -->
+
+<!-- WhatsApp FAB (only on config page) -->
+<a href="https://wa.me/5492216023377?text=Hola%20Feli,%20quiero%20hacer%20un%20pedido!" target="_blank" class="whatsapp-fab" id="wafab" aria-label="WhatsApp" style="display:none">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.78 14.16c-.25.71-1.42 1.36-2 1.45-.5.08-1.15.11-1.85-.12-.43-.14-.97-.32-1.67-.62-2.95-1.27-4.87-4.24-5.02-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.45.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.42-.07.66.5.25.62.85 2.07.93 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.32.39-.45.52-.15.15-.31.31-.13.62.17.3.78 1.28 1.67 2.07 1.15 1.02 2.11 1.34 2.42 1.49.31.15.49.13.67-.07.18-.2.78-.91.99-1.22.2-.31.4-.26.68-.15.27.1 1.72.81 2.02.96.3.15.49.22.57.35.07.13.07.74-.18 1.45z"/></svg>
+</a>
+
+<script>
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+const state = {
+  currentStep: 1,
+  maxStep: 1,
+  base: 'Red Velvet',
+  fills: ['Queso crema'],
+  cobertura: 'Frosting queso crema',
+  restricciones: [],
+  porciones: 16,
+  forma: 'Redonda',
+  pisos: 1,
+  decoracion: 'Minimalista',
+  mensaje: '',
+  guests: 24,
+  evento: 'Cumpleaños',
+  apetito: 'Medio',
+};
+
+// ── URL param pre-load ──
+(function() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('base'))        state.base          = p.get('base');
+  if (p.get('relleno'))     state.fills         = [p.get('relleno')];
+  if (p.get('cobertura'))   state.cobertura     = p.get('cobertura');
+  if (p.get('porciones'))   state.porciones     = parseInt(p.get('porciones'));
+  if (p.get('restriccion')) state.restricciones = [p.get('restriccion')];
+})();
+
+const PRICES = { 12: 18500, 16: 23800, 24: 33500 };
+const PISO_EXTRA = { 1: 0, 2: 8500, 3: 18000 };
+const DECO_EXTRA = { 'Minimalista': 0, 'Macarons arriba': 3500, 'Frutas frescas': 0, 'Drip de chocolate': 2500 };
+
+// ═══════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════
+function showTab(tab) {
+  document.getElementById('pageConfig').style.display = tab === 'config' ? '' : 'none';
+  document.getElementById('pageCalc').style.display   = tab === 'calc'   ? '' : 'none';
+  document.getElementById('tabConfig').classList.toggle('active', tab === 'config');
+  document.getElementById('tabCalc').classList.toggle('active', tab === 'calc');
+  if (tab === 'calc') renderCalcResult();
+}
+
+// handle #calculadora hash
+if (location.hash === '#calculadora') showTab('calc');
+
+// ═══════════════════════════════════════════
+//  STEPPER
+// ═══════════════════════════════════════════
+function renderStepper() {
+  const el = document.getElementById('stepperEl');
+  let html = '';
+  for (let n = 1; n <= 4; n++) {
+    const cls = n < state.currentStep ? 'done' : n === state.currentStep ? 'active' : 'future';
+    const label = n < state.currentStep ? '✓' : n;
+    html += `<div class="config-step-dot ${cls}">${label}</div>`;
+    if (n < 4) html += `<div class="config-step-line ${n < state.currentStep ? 'done' : 'future'}"></div>`;
+  }
+  el.innerHTML = html;
+}
+
+const STEP_LABELS = ['', 'Base', 'Sabores', 'Tamaño', 'Decoración'];
+
+function updateDesktopNav() {
+  const s = state.currentStep;
+  const nextBtn = document.getElementById('desktopNextStep');
+  const prevBtn = document.getElementById('desktopPrevStep');
+  const waBtn   = document.getElementById('asideWaBtn');
+  prevBtn.style.display = s > 1 ? '' : 'none';
+  prevBtn.onclick = () => goStep(s - 1);
+  if (s < 4) {
+    nextBtn.style.display = '';
+    nextBtn.textContent = 'Siguiente: ' + STEP_LABELS[s + 1] + ' →';
+    nextBtn.onclick = () => goStep(s + 1);
+  } else {
+    nextBtn.style.display = 'none';
+  }
+  // Botón WA solo en paso 4
+  if (waBtn) waBtn.style.display = s === 4 ? '' : 'none';
+}
+
+function goStep(n) {
+  document.getElementById('step' + state.currentStep).classList.remove('active');
+  state.currentStep = n;
+  state.maxStep = Math.max(state.maxStep, n);
+  document.getElementById('step' + n).classList.add('active');
+  renderStepper();
+  updateDesktopNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  renderSummary();
+}
+
+// ═══════════════════════════════════════════
+//  STEP 1 — BASE
+// ═══════════════════════════════════════════
+function updateNavLabel1() {
+  const el = document.getElementById('navBase');
+  if (el) el.textContent = state.base;
+}
+function updateNavLabel2() {
+  const el = document.getElementById('navLabel2');
+  if (!el) return;
+  const fillsLabel = state.fills.length === 2
+    ? state.fills[0] + ' + ' + state.fills[1]
+    : (state.fills[0] || '—');
+  el.textContent = '(' + fillsLabel + ' · ' + state.cobertura.split(' ').slice(0, 2).join(' ') + ')';
+}
+function updateNavLabel3() {
+  const el = document.getElementById('navLabel3');
+  if (el) el.textContent = '(' + state.porciones + ' porc. · ' + state.forma + ' · ' + state.pisos + ' piso' + (state.pisos > 1 ? 's' : '') + ')';
+}
+
+function selectBase(el) {
+  document.querySelectorAll('[data-base]').forEach(r => {
+    r.classList.remove('selected');
+    r.querySelector('.option-radio').textContent = '';
+  });
+  el.classList.add('selected');
+  el.querySelector('.option-radio').textContent = '✓';
+  state.base = el.dataset.base;
+  document.getElementById('step1Label').textContent = state.base + ' seleccionada';
+  updateNavLabel1();
+  renderSummary();
+}
+
+// ═══════════════════════════════════════════
+//  STEP 2 — RELLENOS
+// ═══════════════════════════════════════════
+const fills = ['Queso crema','Dulce de leche','Ganache chocolate','Frutos rojos','Crema de pistacho','Lemon curd','Crema de café','Praliné de avellana'];
+const coberturas = ['Frosting queso crema','Crema chantilly','Ganache','Buttercream','Drip de chocolate'];
+const restricciones = ['Sin gluten','Sin lactosa','Vegano','Sin frutos secos'];
+
+function renderFills() {
+  document.getElementById('fillGrid').innerHTML = fills.map(f => {
+    const sel = state.fills.includes(f);
+    return `<div class="fill-card ${sel ? 'selected' : ''}" data-fill="${f}" onclick="toggleFill(this)">
+      <div class="fill-check">✓</div>
+      <div class="serif" style="font-size:15.5px;line-height:1.15">${f}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderCoberturas() {
+  document.getElementById('coberturaGrid').innerHTML = coberturas.map((c, i) => {
+    const sel = state.cobertura === c;
+    return `<span class="chip ${sel ? 'active' : ''}" onclick="selectCobertura(this)" data-cob="${c}">${c}</span>`;
+  }).join('');
+}
+
+function renderRestricciones() {
+  document.getElementById('restriccionesGrid').innerHTML = restricciones.map(r => {
+    const sel = state.restricciones.includes(r);
+    return `<span class="chip ${sel ? 'wine' : ''}" onclick="toggleRestriccion(this)" data-res="${r}">+ ${r}</span>`;
+  }).join('');
+}
+
+function toggleFill(el) {
+  const fill = el.dataset.fill;
+  if (state.fills.includes(fill)) {
+    state.fills = state.fills.filter(f => f !== fill);
+    el.classList.remove('selected');
+  } else if (state.fills.length < 2) {
+    state.fills.push(fill);
+    el.classList.add('selected');
+  }
+  document.getElementById('fillCount').textContent = `(${state.fills.length}/2)`;
+  updateStep2Label();
+  renderSummary();
+}
+
+function selectCobertura(el) {
+  document.querySelectorAll('[data-cob]').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  state.cobertura = el.dataset.cob;
+  updateStep2Label();
+  renderSummary();
+}
+
+function toggleRestriccion(el) {
+  const res = el.dataset.res;
+  if (state.restricciones.includes(res)) {
+    state.restricciones = state.restricciones.filter(r => r !== res);
+    el.classList.remove('wine');
+  } else {
+    state.restricciones.push(res);
+    el.classList.add('wine');
+  }
+}
+
+function updateStep2Label() {
+  const fillLabel = state.fills.length ? state.fills[0] : '—';
+  document.getElementById('step2Label').textContent = fillLabel + ' · ' + (state.cobertura.split(' ').slice(0,2).join(' '));
+  updateNavLabel2();
+}
+
+// ═══════════════════════════════════════════
+//  STEP 3 — TAMAÑO
+// ═══════════════════════════════════════════
+function setSizeHighlight(items, selectedEl) {
+  items.forEach(i => {
+    const sel = i === selectedEl;
+    i.style.opacity = sel ? '1' : '.35';
+    const cake = i.querySelector('.size-preview-cake');
+    if (cake) cake.style.filter = sel ? 'drop-shadow(0 8px 20px rgba(122,40,54,.4))' : 'drop-shadow(0 4px 8px rgba(122,40,54,.15))';
+    i.querySelector('.serif').style.color = sel ? 'var(--wine)' : 'var(--ink-3)';
+  });
+}
+
+function selectSize(el) {
+  const items = document.querySelectorAll('.size-preview-item');
+  setSizeHighlight(items, el);
+  const size = parseInt(el.dataset.size);
+  state.porciones = size;
+  document.getElementById('porcionesVal').textContent = size;
+  document.getElementById('porcionesNum').textContent = size;
+  updatePorcionesHint();
+  updateStep3Label();
+  renderSummary();
+}
+
+function changePorciones(d) {
+  const options = [8, 10, 12, 14, 16, 18, 20, 24, 28, 32];
+  const idx = options.indexOf(state.porciones);
+  const newIdx = Math.max(0, Math.min(options.length - 1, idx + d));
+  state.porciones = options[newIdx];
+  document.getElementById('porcionesVal').textContent = state.porciones;
+  document.getElementById('porcionesNum').textContent = state.porciones;
+  updatePorcionesHint();
+  updateStep3Label();
+  renderSummary();
+  // Update size preview visual
+  const items = document.querySelectorAll('.size-preview-item');
+  let activeItem = null;
+  items.forEach(i => {
+    const s = parseInt(i.dataset.size);
+    if (s === state.porciones || (state.porciones > 18 && s === 24) || (state.porciones <= 14 && s === 12) || (state.porciones >= 15 && state.porciones <= 22 && s === 16)) {
+      activeItem = i;
+    }
+  });
+  setSizeHighlight(items, activeItem);
+}
+
+function updatePorcionesHint() {
+  const p = state.porciones;
+  const hint = p <= 12 ? `Ideal para ${p}–${p+2} personas` : p <= 16 ? `Recomendado para ${p-4}–${p+2} personas` : `Ideal para un evento de ${p-4}–${p+4} personas`;
+  document.getElementById('porcionesHint').textContent = hint;
+}
+
+const SHAPE_SVG = {
+  'Redonda':  '<circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/>',
+  'Cuadrada': '<rect x="8" y="8" width="84" height="84" rx="5" fill="#7A2836" opacity="0.85"/>',
+  'Corazón':  '<path d="M50 82C18 62,8 42,8 30C8 18,18 10,30 10C38 10,45 14,50 20C55 14,62 10,70 10C82 10,92 18,92 30C92 42,82 62,50 82Z" fill="#7A2836" opacity="0.85"/>'
+};
+
+function updateShapePreview(forma) {
+  const inner = SHAPE_SVG[forma] || SHAPE_SVG['Redonda'];
+  ['shapePrev12','shapePrev16','shapePrev24'].forEach(id => {
+    const svg = document.getElementById(id);
+    if (svg) svg.innerHTML = inner;
+  });
+}
+
+function selectForma(el) {
+  document.querySelectorAll('[data-forma]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.forma = el.dataset.forma;
+  updateShapePreview(state.forma);
+  updateStep3Label();
+  renderSummary();
+}
+
+document.querySelectorAll('[data-pisos]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('[data-pisos]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    state.pisos = parseInt(chip.dataset.pisos);
+    updateStep3Label();
+    renderSummary();
+  });
+});
+
+function updateStep3Label() {
+  document.getElementById('step3Label').textContent = `${state.porciones} porc. · ${state.forma} · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}`;
+  updateNavLabel3();
+}
+
+// ═══════════════════════════════════════════
+//  STEP 4 — DECORACIÓN + RESUMEN
+// ═══════════════════════════════════════════
+function selectDeco(el) {
+  document.querySelectorAll('[data-deco]').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  state.decoracion = el.dataset.deco;
+  renderSummary();
+}
+
+function updateMsg() {
+  state.mensaje = document.getElementById('mensajeInput').value;
+  document.getElementById('msgCount').textContent = state.mensaje.length + '/30';
+  renderSummary();
+}
+
+function calcPrice() {
+  const base = state.porciones <= 12 ? 18500 : state.porciones <= 16 ? 23800 : state.porciones <= 24 ? 33500 : 33500 + (state.porciones - 24) * 800;
+  const piso = PISO_EXTRA[state.pisos] || 0;
+  const deco = DECO_EXTRA[state.decoracion] || 0;
+  return base + piso + deco;
+}
+
+function renderSummary() {
+  const price = calcPrice();
+  const v2 = state.maxStep >= 2;
+  const v3 = state.maxStep >= 3;
+  const v4 = state.maxStep >= 4;
+  const title = `${state.base}${v3 ? ' · ' + state.porciones + ' porciones' : ''}`;
+  const rows = [
+    ['Base', state.base],
+    ['Relleno', v2 ? (state.fills.join(' + ') || '—') : '—'],
+    ['Cobertura', v2 ? state.cobertura : '—'],
+    ['Forma', v3 ? `${state.forma} · ${state.porciones} porc. · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}` : '—'],
+    ['Decoración', v4 ? state.decoracion : '—'],
+    ...(v4 && state.mensaje ? [['Mensaje', `"${state.mensaje}"`]] : []),
+    ...(v2 && state.restricciones.length ? [['Restricciones', state.restricciones.join(', ')]] : []),
+  ];
+  const rowsHtml = rows.map(([k, v]) =>
+    `<div class="summary-row"><span style="color:var(--ink-3)">${k}</span><span style="color:var(--ink);font-weight:500;text-align:right;max-width:60%">${v}</span></div>`
+  ).join('');
+  const priceStr = '$ ' + price.toLocaleString('es-AR');
+
+  // Step 4 summary panel
+  document.getElementById('summaryTitle').textContent = title;
+  document.getElementById('summaryPrice').textContent = priceStr;
+  document.getElementById('summaryRows').innerHTML = rowsHtml;
+
+  // Desktop aside
+  if (document.getElementById('asideTitle')) {
+    document.getElementById('asideTitle').textContent = title;
+    document.getElementById('asidePrice').textContent = priceStr;
+    document.getElementById('asideRows').innerHTML = rowsHtml;
+  }
+}
+
+function saveDraftAndGoToCatalog() {
+  localStorage.setItem('felirecetas_draft', JSON.stringify(state));
+  window.location.href = 'index.html#catalogo';
+}
+
+function sendWhatsApp() {
+  localStorage.removeItem('felirecetas_draft');
+  const price = calcPrice();
+  let msg = `Hola Feli, quiero encargar una torta personalizada:\n\n`;
+  msg += `🍰 *${state.base}*\n`;
+  msg += `• Relleno: ${state.fills.join(' + ') || '—'}\n`;
+  msg += `• Cobertura: ${state.cobertura}\n`;
+  msg += `• Forma: ${state.forma} · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}\n`;
+  msg += `• Porciones: ${state.porciones}\n`;
+  msg += `• Decoración: ${state.decoracion}\n`;
+  if (state.mensaje) msg += `• Mensaje: "${state.mensaje}"\n`;
+  if (state.restricciones.length) msg += `• Restricciones: ${state.restricciones.join(', ')}\n`;
+  msg += `\nPresupuesto estimado: $${price.toLocaleString('es-AR')}\n`;
+  msg += `\n¿Podemos coordinar fecha y entrega?`;
+
+  window.open('https://wa.me/5492216023377?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// ═══════════════════════════════════════════
+//  CALCULADORA
+// ═══════════════════════════════════════════
+const eventos = [
+  { n: 'Cumpleaños', sub: 'Postre + algo dulce' },
+  { n: 'Casamiento', sub: 'Mesa dulce completa' },
+  { n: 'Té / merienda', sub: 'Variedad pequeña' },
+  { n: 'Corporativo', sub: 'Coffee break' },
+];
+
+function renderEventos() {
+  document.getElementById('eventoGrid').innerHTML = eventos.map(e => {
+    const sel = state.evento === e.n;
+    return `<div style="padding:14px;border-radius:12px;cursor:pointer;border:${sel ? '1.5px solid var(--ink)' : '1px solid var(--rule-soft)'};background:${sel ? 'var(--bg-soft)' : 'var(--paper)'};" data-ev="${e.n}" onclick="selectEvento(this)">
+      <div class="serif" style="font-size:15.5px;line-height:1.1">${e.n}</div>
+      <div class="caption" style="font-size:11px;margin-top:4px">${e.sub}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectEvento(el) {
+  state.evento = el.dataset.ev;
+  renderEventos();
+  renderCalcResult();
+}
+
+function selectApetito(el) {
+  document.querySelectorAll('[data-apetito]').forEach(a => a.classList.remove('active','wine'));
+  el.classList.add('active');
+  state.apetito = el.dataset.apetito;
+  renderCalcResult();
+}
+
+function changeGuests(d) {
+  setGuests(Math.max(2, Math.min(120, state.guests + d)));
+}
+
+function setGuests(v) {
+  state.guests = parseInt(v);
+  document.getElementById('guestNum').textContent = state.guests;
+  document.getElementById('guestVal').textContent = state.guests;
+  document.getElementById('guestRange').value = state.guests;
+  renderCalcResult();
+}
+
+function renderCalcResult() {
+  const g = state.guests;
+  const apMult = state.apetito === 'Liviano' ? .75 : state.apetito === 'Goloso' ? 1.3 : 1;
+
+  // Build suggestions based on event type + guests
+  let items = [];
+  if (state.evento === 'Cumpleaños') {
+    items = [
+      { q: '1 torta', t: `Red Velvet · ${Math.max(12, Math.ceil(g * .6 / 8) * 8)} porc.`, p: Math.max(18500, Math.ceil(g * .6 / 8) * 8 * 1200) },
+      { q: Math.ceil(g / 12) + ' cajas', t: 'Macarons surtidos · 12 c/u', p: Math.ceil(g / 12) * 4800 },
+      { q: '1 bandeja', t: 'Brownies · 9 porciones', p: 5400 },
+    ];
+  } else if (state.evento === 'Casamiento') {
+    items = [
+      { q: '1 torta', t: `Principal · ${Math.max(24, g)} porc.`, p: Math.max(33500, g * 1200) },
+      { q: Math.ceil(g / 8) + ' cajas', t: 'Macarons surtidos', p: Math.ceil(g / 8) * 4800 },
+      { q: Math.ceil(g / 9) + ' bandejas', t: 'Brownies y cookies mix', p: Math.ceil(g / 9) * 5400 },
+      { q: Math.ceil(g / 12) + ' cajas', t: 'Alfajores x 12', p: Math.ceil(g / 12) * 8800 },
+    ];
+  } else if (state.evento === 'Té / merienda') {
+    items = [
+      { q: Math.ceil(g / 6) + ' cajas', t: 'Macarons surtidos · 6 c/u', p: Math.ceil(g / 6) * 4800 },
+      { q: Math.ceil(g / 9) + ' bandejas', t: 'Cookies y brownies mix', p: Math.ceil(g / 9) * 5400 },
+    ];
+  } else {
+    items = [
+      { q: Math.ceil(g / 9) + ' bandejas', t: 'Cookies chocolate', p: Math.ceil(g / 9) * 3600 },
+      { q: Math.ceil(g / 9) + ' bandejas', t: 'Brownies semi-amargo', p: Math.ceil(g / 9) * 5400 },
+      { q: Math.ceil(g / 6) + ' cajas', t: 'Alfajores · 4 c/u', p: Math.ceil(g / 6) * 3200 },
+    ];
+  }
+
+  const total = Math.round(items.reduce((s, i) => s + i.p, 0) * apMult);
+
+  const rows = items.map(i => `
+    <div class="calc-result-row">
+      <div style="flex:1">
+        <div style="font-family:var(--serif);font-size:11px;color:var(--rose);letter-spacing:.1em;text-transform:uppercase">${i.q}</div>
+        <div class="serif" style="font-size:16px;color:var(--paper);margin-top:2px">${i.t}</div>
+      </div>
+      <span class="serif" style="font-size:14px;color:var(--paper);font-feature-settings:'tnum'">$ ${Math.round(i.p * apMult).toLocaleString('es-AR')}</span>
+    </div>`).join('');
+
+  const msg = encodeURIComponent(`Hola Feli, quiero armar una mesa dulce para ${g} personas (evento: ${state.evento}, apetito ${state.apetito.toLowerCase()}).\n\nSugerencia calculada:\n${items.map(i => `• ${i.q} ${i.t}`).join('\n')}\n\nTotal estimado: $${total.toLocaleString('es-AR')}\n\n¿Podemos coordinar?`);
+
+  document.getElementById('calcResult').innerHTML = `
+    <div class="eyebrow" style="color:var(--rose)">— Tu mesa dulce sugerida</div>
+    <div class="h2 serif" style="margin-top:6px;color:var(--paper)">Para ${g} personas</div>
+    <div style="margin-top:16px">${rows}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:16px;align-items:baseline">
+      <span class="caption" style="color:var(--rose);font-size:11px">Total estimado</span>
+      <span class="serif" style="font-size:26px;color:var(--paper);font-feature-settings:'tnum'">$ ${total.toLocaleString('es-AR')}</span>
+    </div>
+    <a href="https://wa.me/5492216023377?text=${msg}" target="_blank" class="btn btn-green btn-block" style="margin-top:16px">
+      Pedir esta mesa por WhatsApp
+    </a>
+    <div class="caption" style="margin-top:8px;color:rgba(255,255,255,.5);text-align:center;font-size:11px">
+      O ajustá las cantidades a mano →
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════
+
+// Restaurar borrador si no hay URL params de preset
+(function() {
+  const p = new URLSearchParams(location.search);
+  if (p.has('base') || p.has('relleno') || p.has('porciones')) return;
+  const raw = localStorage.getItem('felirecetas_draft');
+  if (!raw) return;
+  try {
+    const d = JSON.parse(raw);
+    const targetStep = d.currentStep || 1;
+    Object.assign(state, d);
+    // Resetear a 1 para que el DOM inicial (step1 con 'active') coincida con state
+    state.currentStep = 1;
+    state._draftStep = targetStep;
+  } catch(e) {}
+})();
+
+renderStepper();
+renderFills();
+renderCoberturas();
+renderRestricciones();
+renderEventos();
+renderCalcResult();
+renderSummary();
+updateDesktopNav();
+updateNavLabel1();
+updateNavLabel2();
+updateNavLabel3();
+
+// Saltar al paso guardado del borrador
+if (state._draftStep && state._draftStep > 1) {
+  goStep(state._draftStep);
+  delete state._draftStep;
+}
+
+// ── Apply preset from URL params ──
+(function() {
+  const p = new URLSearchParams(location.search);
+  if (!p.has('base') && !p.has('relleno') && !p.has('porciones')) return;
+
+  // Step 1: sync base card selection
+  document.querySelectorAll('[data-base]').forEach(r => {
+    const sel = r.dataset.base === state.base;
+    r.classList.toggle('selected', sel);
+    const radio = r.querySelector('.option-radio');
+    if (radio) radio.textContent = sel ? '✓' : '';
+  });
+  document.getElementById('step1Label').textContent = state.base + ' seleccionada';
+
+  // Step 2: update labels
+  updateStep2Label();
+  document.getElementById('fillCount').textContent = `(${state.fills.length}/2)`;
+
+  // Step 3: porciones display
+  document.getElementById('porcionesVal').textContent = state.porciones;
+  document.getElementById('porcionesNum').textContent = state.porciones;
+  updatePorcionesHint();
+  updateStep3Label();
+
+  // Step 3: size preview highlight
+  const items = document.querySelectorAll('.size-preview-item');
+  let activeItem = null;
+  items.forEach(i => {
+    const s = parseInt(i.dataset.size);
+    if (s === state.porciones ||
+        (state.porciones > 18 && s === 24) ||
+        (state.porciones <= 14 && s === 12) ||
+        (state.porciones >= 15 && state.porciones <= 22 && s === 16)) {
+      activeItem = i;
+    }
+  });
+  setSizeHighlight(items, activeItem);
+
+  // Jump to step 4 with all steps unlocked
+  state.maxStep = 4;
+  goStep(4);
+})();
+</script>
+</body>
+</html>

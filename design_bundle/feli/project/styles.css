@@ -1,0 +1,268 @@
+/* FeliRecetas — sistema de diseño (boutique parisina, minimal) */
+
+:root {
+  /* Color — cálidos, baja saturación, tipo papel artesanal */
+  --bg: #F4EDE2;            /* crema cálido fondo principal */
+  --bg-soft: #EFE5D5;       /* crema un tono más profundo */
+  --paper: #FBF7F0;         /* casi blanco para tarjetas */
+  --paper-2: #F8F1E4;
+  --ink: #2A1F18;           /* tinta café muy oscura */
+  --ink-2: #5A4A3D;         /* secundario */
+  --ink-3: #8E7E6E;         /* terciario, captions */
+  --rule: #DCC9B0;          /* línea hairline */
+  --rule-soft: #E8DCC4;
+
+  /* Acentos */
+  --wine: #6E2A2A;          /* vino refinado, primario */
+  --wine-deep: #511F1F;
+  --rose: #E8C9B8;          /* rosé empolvado */
+  --rose-soft: #F4DDD0;
+  --sage: #8A9279;          /* verde oliva suave */
+  --gold: #B89968;          /* dorado opaco */
+
+  /* Sombra */
+  --shadow-sm: 0 1px 2px rgba(42,31,24,.06), 0 2px 8px rgba(42,31,24,.04);
+  --shadow-md: 0 4px 14px rgba(42,31,24,.08), 0 12px 32px rgba(42,31,24,.06);
+
+  /* Tipografía */
+  --serif: "Cormorant Garamond", "Cormorant", Georgia, serif;
+  --sans: "DM Sans", -apple-system, "Helvetica Neue", system-ui, sans-serif;
+  --mono: "DM Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Reset suave dentro de las artboards */
+.fr * { box-sizing: border-box; }
+.fr {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+.fr.scroll { overflow-y: auto; }
+
+/* Tipografía utilitarias */
+.fr .serif { font-family: var(--serif); font-weight: 500; letter-spacing: -0.01em; }
+.fr .serif-i { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.fr .display {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 44px;
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+}
+.fr .h1 { font-family: var(--serif); font-weight: 500; font-size: 32px; line-height: 1.05; letter-spacing: -0.018em; }
+.fr .h2 { font-family: var(--serif); font-weight: 500; font-size: 24px; line-height: 1.1; letter-spacing: -0.012em; }
+.fr .h3 { font-family: var(--serif); font-weight: 500; font-size: 19px; line-height: 1.2; letter-spacing: -0.008em; }
+.fr .eyebrow {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.fr .caption { font-size: 12px; color: var(--ink-3); letter-spacing: 0; }
+.fr .price-serif { font-family: var(--serif); font-weight: 500; font-size: 18px; }
+.fr .num { font-feature-settings: "tnum"; }
+
+/* Botones */
+.fr .btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 48px; padding: 0 22px;
+  border-radius: 999px;
+  font-family: var(--sans); font-weight: 500; font-size: 14px;
+  letter-spacing: 0.01em; cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform .15s, background .15s;
+}
+.fr .btn:active { transform: translateY(1px); }
+.fr .btn-primary { background: var(--ink); color: var(--paper); }
+.fr .btn-wine { background: var(--wine); color: #fff; }
+.fr .btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.fr .btn-soft { background: var(--bg-soft); color: var(--ink); }
+.fr .btn-block { width: 100%; }
+.fr .btn-sm { height: 36px; padding: 0 14px; font-size: 12.5px; }
+.fr .btn-icon { width: 42px; height: 42px; padding: 0; border-radius: 999px; }
+
+/* Chips / tags */
+.fr .chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--paper-2); color: var(--ink-2);
+  font-size: 12px; font-weight: 500;
+  border: 1px solid var(--rule-soft);
+}
+.fr .chip-tag {
+  display: inline-block;
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  background: var(--wine);
+  color: #fff;
+}
+.fr .chip-tag.muted { background: var(--bg-soft); color: var(--ink-2); }
+.fr .chip-tag.sage { background: var(--sage); color: #fff; }
+.fr .chip-tag.gold { background: var(--gold); color: #fff; }
+
+/* Hairline divider */
+.fr hr.rule { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+.fr hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
+
+/* Imagen placeholder (sin SVG complejo) */
+.fr .img {
+  position: relative; overflow: hidden;
+  background:
+    repeating-linear-gradient(135deg, rgba(110,42,42,.05) 0 1px, transparent 1px 14px),
+    linear-gradient(160deg, var(--rose-soft) 0%, var(--rose) 100%);
+}
+.fr .img.sage { background:
+  repeating-linear-gradient(135deg, rgba(0,0,0,.04) 0 1px, transparent 1px 14px),
+  linear-gradient(160deg, #C4CCB5 0%, var(--sage) 100%); }
+.fr .img.gold { background:
+  repeating-linear-gradient(135deg, rgba(0,0,0,.04) 0 1px, transparent 1px 14px),
+  linear-gradient(160deg, #E6D2A8 0%, var(--gold) 100%); }
+.fr .img.cream { background:
+  repeating-linear-gradient(135deg, rgba(110,80,40,.05) 0 1px, transparent 1px 14px),
+  linear-gradient(160deg, #F5E6D0 0%, #E5C9A0 100%); }
+.fr .img.wine { background:
+  repeating-linear-gradient(135deg, rgba(0,0,0,.06) 0 1px, transparent 1px 14px),
+  linear-gradient(160deg, #A55656 0%, var(--wine) 100%); }
+.fr .img.choc { background:
+  repeating-linear-gradient(135deg, rgba(0,0,0,.05) 0 1px, transparent 1px 14px),
+  linear-gradient(160deg, #8A5A3A 0%, #5C3520 100%); }
+.fr .img .img-label {
+  position: absolute; bottom: 8px; left: 8px;
+  font-family: var(--mono);
+  font-size: 9px; color: rgba(255,255,255,.85);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  background: rgba(0,0,0,.18); padding: 3px 6px; border-radius: 3px;
+  backdrop-filter: blur(4px);
+}
+
+/* Status bar genérica (cuando no usamos IOSDevice) */
+.fr .sb {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 22px 6px;
+  font-family: -apple-system, "SF Pro Text", system-ui;
+  font-size: 14px; font-weight: 600;
+  color: var(--ink);
+}
+.fr .sb svg { display: block; }
+
+/* Top bar / nav */
+.fr .topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule-soft);
+}
+.fr .topbar .logo {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+.fr .topbar .logo em { font-style: italic; color: var(--wine); }
+
+/* Bottom tab bar */
+.fr .tabbar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  padding: 10px 4px 24px;
+  background: rgba(251,247,240,.92);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--rule-soft);
+}
+.fr .tabbar .tab {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 500; color: var(--ink-3);
+}
+.fr .tabbar .tab.active { color: var(--wine); }
+.fr .tabbar .tab .dot {
+  width: 4px; height: 4px; border-radius: 999px; background: var(--wine);
+  margin-top: 2px;
+}
+
+/* Cards */
+.fr .card {
+  background: var(--paper);
+  border: 1px solid var(--rule-soft);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Pequeñas utilidades */
+.fr .row { display: flex; align-items: center; }
+.fr .col { display: flex; flex-direction: column; }
+.fr .gap-2 { gap: 8px; } .fr .gap-3 { gap: 12px; } .fr .gap-4 { gap: 16px; } .fr .gap-5 { gap: 20px; } .fr .gap-6 { gap: 24px; }
+.fr .px-5 { padding-left: 20px; padding-right: 20px; }
+.fr .py-3 { padding-top: 12px; padding-bottom: 12px; }
+.fr .py-4 { padding-top: 16px; padding-bottom: 16px; }
+.fr .mt-2 { margin-top: 8px; } .fr .mt-3 { margin-top: 12px; } .fr .mt-4 { margin-top: 16px; } .fr .mt-5 { margin-top: 20px; } .fr .mt-6 { margin-top: 24px; }
+
+/* Glassy sticky CTA inferior */
+.fr .stickycta {
+  position: absolute; left: 12px; right: 12px; bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px 10px 18px;
+  background: rgba(42,31,24,.96);
+  color: var(--paper);
+  border-radius: 999px;
+  box-shadow: 0 10px 32px rgba(42,31,24,.28);
+  backdrop-filter: blur(12px);
+}
+.fr .stickycta .label { flex: 1; font-size: 13px; }
+.fr .stickycta .price { font-family: var(--serif); font-size: 17px; }
+.fr .stickycta .go {
+  width: 38px; height: 38px; border-radius: 999px;
+  background: var(--paper); color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Decorativo: borde ornamental */
+.fr .ornament {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--ink-3); font-size: 11px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+}
+.fr .ornament::before, .fr .ornament::after {
+  content: ""; flex: 1; height: 1px; background: var(--rule);
+}
+
+/* Inputs */
+.fr .input {
+  width: 100%; height: 46px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 0 14px;
+  font-family: var(--sans);
+  font-size: 14px; color: var(--ink);
+}
+.fr .stepper {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--rule); border-radius: 999px;
+  background: var(--paper);
+  height: 38px;
+}
+.fr .stepper button {
+  width: 38px; height: 38px;
+  background: transparent; border: 0; cursor: pointer;
+  font-size: 16px; color: var(--ink);
+}
+.fr .stepper .v {
+  min-width: 28px; text-align: center; font-weight: 600; font-size: 14px;
+}
+
+/* Scrollbar oculto (ya manejado por dc-card *, pero por las dudas) */
+.fr::-webkit-scrollbar { display: none; }
+.fr { scrollbar-width: none; }
