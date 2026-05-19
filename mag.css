@@ -336,7 +336,7 @@ section#inicio {
 
   /* Tags */
   .split-tags { padding-top: 8px; gap: 2px; }
-  .split-tag  { font-size: 9px; letter-spacing: 0.5px; }
+  .split-tag  { font-size: 11px; letter-spacing: 0.8px; color: rgba(42,31,23,.65); }
   .split-tag:nth-child(3) { display: none; }
 
   /* Foto overlay — subido para no quedar tapado por la barra del browser */
