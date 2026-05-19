@@ -96,8 +96,104 @@
   @media (min-width: 768px) {
     /* En paso 4, el único resumen es el aside — ocultar el duplicado */
     #step4 .summary-box { display: none; }
+  }
 
-}
+  /* ─── Badge de precio en fill-cards ─── */
+  .fill-extra-badge {
+    font-family: var(--sans);
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--wine);
+    margin-top: 4px;
+  }
+
+  /* ─── Barra de precio flotante (solo mobile) ─── */
+  .float-bar { display: none; }
+
+  @media (max-width: 767px) {
+    .step4-body { padding-bottom: 80px; }
+
+    .float-bar {
+      display: block;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--paper);
+      border-top: 1px solid var(--rule-soft);
+      box-shadow: 0 -4px 20px rgba(42,31,23,.10);
+      z-index: 150;
+      border-radius: 16px 16px 0 0;
+    }
+    .float-bar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .float-bar-left { display: flex; flex-direction: column; gap: 1px; }
+    .float-bar-label {
+      font-family: var(--sans);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-3);
+    }
+    .float-bar-amount {
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--ink);
+      font-feature-settings: 'tnum';
+      line-height: 1;
+    }
+    .float-bar-btn {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--wine);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .float-bar-summary {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--rule-soft);
+    }
+    .float-bar-summary.open { display: block; }
+    .float-bar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(42,31,23,.05);
+    }
+    .float-bar-row-label { color: var(--ink-3); font-size: 12px; font-family: var(--sans); }
+    .float-bar-row-value { color: var(--ink); font-size: 13px; font-weight: 500; text-align: right; max-width: 65%; }
+    .float-bar-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+    .float-bar-total-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-3);
+      font-family: var(--sans);
+    }
+    .float-bar-total-amount {
+      font-family: var(--serif);
+      font-size: 20px;
+      color: var(--ink);
+      font-feature-settings: 'tnum';
+    }
+  }
   </style>
 </head>
 <body>
@@ -105,7 +201,7 @@
 
   <!-- TOP BAR -->
   <header class="topbar">
-    <a href="index.html" class="topbar-btn" aria-label="Volver">
+    <a href="#" class="topbar-btn" aria-label="Volver" onclick="saveDraftAndGoToCatalog(); return false;">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4L6 10l6 6"/></svg>
     </a>
     <a href="index.html" class="logo">Feli <em>Recetas</em></a>
@@ -429,8 +525,8 @@
           <hr class="rule-soft" style="margin:14px 0"/>
           <div style="display:flex;justify-content:space-between;align-items:baseline">
             <div>
-              <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Estimado</div>
-              <div class="serif" style="font-size:26px;color:var(--ink);margin-top:2px;font-feature-settings:'tnum'" id="summaryPrice">$ 23.800</div>
+              <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Desde</div>
+              <div class="serif" style="font-size:26px;color:var(--ink);margin-top:2px;font-feature-settings:'tnum'" id="summaryPrice">$ 18.500</div>
             </div>
             <span class="caption" style="color:var(--ink-3)">Reserva con seña</span>
           </div>
@@ -481,8 +577,8 @@
       </div>
 
       <div style="padding-top:16px;border-top:1px solid var(--rule-soft)">
-        <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Estimado</div>
-        <div class="serif" style="font-size:30px;color:var(--ink);margin-top:4px;font-feature-settings:'tnum'" id="asidePrice">$ 23.800</div>
+        <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Desde</div>
+        <div class="serif" style="font-size:30px;color:var(--ink);margin-top:4px;font-feature-settings:'tnum'" id="asidePrice">$ 18.500</div>
         <div class="caption" style="margin-top:4px;color:var(--ink-3)">Reserva con seña del 50%</div>
       </div>
 
@@ -508,6 +604,25 @@
   </aside>
 
   </div><!-- /config-layout -->
+
+  <!-- BARRA DE PRECIO FLOTANTE (solo mobile) -->
+  <div class="float-bar" id="floatBar">
+    <div class="float-bar-top" onclick="toggleFloatBar()">
+      <div class="float-bar-left">
+        <span class="float-bar-label">Desde</span>
+        <span class="float-bar-amount" id="floatBarAmount">$ 18.500</span>
+      </div>
+      <button class="float-bar-btn" id="floatBarToggle">Ver resumen ↑</button>
+    </div>
+    <div class="float-bar-summary" id="floatBarSummary">
+      <div id="floatBarRows"></div>
+      <div class="float-bar-total-row">
+        <span class="float-bar-total-label">Desde</span>
+        <span class="float-bar-total-amount" id="floatBarTotal">$ 18.500</span>
+      </div>
+    </div>
+  </div>
+
   </div><!-- /pageConfig -->
 
   <!-- ╔═══════════════════════════════╗
@@ -611,6 +726,15 @@ const state = {
 const PRICES = { 12: 18500, 16: 23800, 24: 33500 };
 const PISO_EXTRA = { 1: 0, 2: 8500, 3: 18000 };
 const DECO_EXTRA = { 'Minimalista': 0, 'Macarons arriba': 3500, 'Frutas frescas': 0, 'Drip de chocolate': 2500 };
+const FILL_EXTRA = {
+  'Queso crema': 0, 'Dulce de leche': 0, 'Ganache chocolate': 1500,
+  'Frutos rojos': 2000, 'Crema de pistacho': 2500, 'Lemon curd': 1200,
+  'Crema de café': 1000, 'Praliné de avellana': 2500
+};
+const COB_EXTRA = {
+  'Frosting queso crema': 0, 'Crema chantilly': 0, 'Ganache': 1500,
+  'Buttercream': 0, 'Drip de chocolate': 2500
+};
 
 // ═══════════════════════════════════════════
 //  TABS
@@ -620,6 +744,8 @@ function showTab(tab) {
   document.getElementById('pageCalc').style.display   = tab === 'calc'   ? '' : 'none';
   document.getElementById('tabConfig').classList.toggle('active', tab === 'config');
   document.getElementById('tabCalc').classList.toggle('active', tab === 'calc');
+  const floatBar = document.getElementById('floatBar');
+  if (floatBar) floatBar.style.display = tab === 'config' ? '' : 'none';
   if (tab === 'calc') renderCalcResult();
 }
 
@@ -714,18 +840,23 @@ const restricciones = ['Sin gluten','Sin lactosa','Vegano','Sin frutos secos'];
 
 function renderFills() {
   document.getElementById('fillGrid').innerHTML = fills.map(f => {
-    const sel = state.fills.includes(f);
+    const sel   = state.fills.includes(f);
+    const extra = FILL_EXTRA[f] || 0;
+    const badge = extra > 0 ? `<div class="fill-extra-badge">+$${extra.toLocaleString('es-AR')}</div>` : '';
     return `<div class="fill-card ${sel ? 'selected' : ''}" data-fill="${f}" onclick="toggleFill(this)">
       <div class="fill-check">✓</div>
       <div class="serif" style="font-size:15.5px;line-height:1.15">${f}</div>
+      ${badge}
     </div>`;
   }).join('');
 }
 
 function renderCoberturas() {
-  document.getElementById('coberturaGrid').innerHTML = coberturas.map((c, i) => {
-    const sel = state.cobertura === c;
-    return `<span class="chip ${sel ? 'active' : ''}" onclick="selectCobertura(this)" data-cob="${c}">${c}</span>`;
+  document.getElementById('coberturaGrid').innerHTML = coberturas.map(c => {
+    const sel   = state.cobertura === c;
+    const extra = COB_EXTRA[c] || 0;
+    const badge = extra > 0 ? ` · +$${extra.toLocaleString('es-AR')}` : '';
+    return `<span class="chip ${sel ? 'active' : ''}" onclick="selectCobertura(this)" data-cob="${c}">${c}${badge}</span>`;
   }).join('');
 }
 
@@ -884,9 +1015,11 @@ function updateMsg() {
 
 function calcPrice() {
   const base = state.porciones <= 12 ? 18500 : state.porciones <= 16 ? 23800 : state.porciones <= 24 ? 33500 : 33500 + (state.porciones - 24) * 800;
-  const piso = PISO_EXTRA[state.pisos] || 0;
-  const deco = DECO_EXTRA[state.decoracion] || 0;
-  return base + piso + deco;
+  const piso   = PISO_EXTRA[state.pisos] || 0;
+  const deco   = DECO_EXTRA[state.decoracion] || 0;
+  const fillEx = state.fills.reduce((s, f) => s + (FILL_EXTRA[f] || 0), 0);
+  const cobEx  = COB_EXTRA[state.cobertura] || 0;
+  return base + piso + deco + fillEx + cobEx;
 }
 
 function renderSummary() {
@@ -920,6 +1053,36 @@ function renderSummary() {
     document.getElementById('asidePrice').textContent = priceStr;
     document.getElementById('asideRows').innerHTML = rowsHtml;
   }
+
+  // Auto-guardar borrador en cada cambio (cubre swipe-back nativo del celular)
+  localStorage.setItem('felirecetas_draft', JSON.stringify(state));
+
+  // Barra flotante (mobile)
+  const floatAmt   = document.getElementById('floatBarAmount');
+  const floatTotal = document.getElementById('floatBarTotal');
+  const floatRows  = document.getElementById('floatBarRows');
+  if (floatAmt)   floatAmt.textContent   = priceStr;
+  if (floatTotal) floatTotal.textContent = priceStr;
+  if (floatRows) {
+    const visibleRows = rows.filter(([, v]) => v !== '—');
+    floatRows.innerHTML = visibleRows.map(([k, v]) =>
+      `<div class="float-bar-row">
+        <span class="float-bar-row-label">${k}</span>
+        <span class="float-bar-row-value">${v}</span>
+      </div>`
+    ).join('');
+  }
+}
+
+// ═══════════════════════════════════════════
+//  FLOAT BAR TOGGLE
+// ═══════════════════════════════════════════
+function toggleFloatBar() {
+  const summary = document.getElementById('floatBarSummary');
+  const btn     = document.getElementById('floatBarToggle');
+  const isOpen  = summary.classList.contains('open');
+  summary.classList.toggle('open', !isOpen);
+  btn.textContent = isOpen ? 'Ver resumen ↑' : 'Ocultar ↓';
 }
 
 function saveDraftAndGoToCatalog() {
@@ -939,7 +1102,7 @@ function sendWhatsApp() {
   msg += `• Decoración: ${state.decoracion}\n`;
   if (state.mensaje) msg += `• Mensaje: "${state.mensaje}"\n`;
   if (state.restricciones.length) msg += `• Restricciones: ${state.restricciones.join(', ')}\n`;
-  msg += `\nPresupuesto estimado: $${price.toLocaleString('es-AR')}\n`;
+  msg += `\nPrecio base desde: $${price.toLocaleString('es-AR')}\n`;
   msg += `\n¿Podemos coordinar fecha y entrega?`;
 
   window.open('https://wa.me/5492216023377?text=' + encodeURIComponent(msg), '_blank');
