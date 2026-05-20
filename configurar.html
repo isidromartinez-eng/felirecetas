@@ -399,7 +399,7 @@
       <div class="sticky-cta">
         <div class="label">
           <div style="font-size:10px;opacity:.65;letter-spacing:.1em;text-transform:uppercase">Paso 2/4 · Sabor</div>
-          <div style="font-family:var(--serif);font-size:13px" id="step2Label">Queso crema · frosting</div>
+          <div style="font-family:var(--serif);font-size:13px" id="step2Label">Queso crema · buttercream</div>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-soft btn-sm" style="height:40px" onclick="goStep(1)">← Volver</button>
@@ -747,7 +747,7 @@ const state = {
   maxStep: 1,
   base: 'Red Velvet',
   fills: ['Queso crema'],
-  cobertura: 'Frosting queso crema',
+  cobertura: 'Buttercream',
   restricciones: [],
   porciones: 16,
   forma: 'Redonda',
@@ -779,8 +779,10 @@ const FILL_EXTRA = {
   'Crema de café': 1000, 'Praliné de avellana': 2500
 };
 const COB_EXTRA = {
-  'Frosting queso crema': 0, 'Crema chantilly': 0, 'Ganache': 1500,
-  'Buttercream': 0, 'Drip de chocolate': 2500
+  'Buttercream': 0,
+  'Ganache choc. con leche': 1500,
+  'Ganache choc. blanco': 1800,
+  'Ganache semi-amargo': 1500,
 };
 
 // ═══════════════════════════════════════════
@@ -882,7 +884,7 @@ function selectBase(el) {
 //  STEP 2 — RELLENOS
 // ═══════════════════════════════════════════
 const fills = ['Queso crema','Dulce de leche','Ganache chocolate','Frutos rojos','Crema de pistacho','Lemon curd','Crema de café','Praliné de avellana'];
-const coberturas = ['Frosting queso crema','Crema chantilly','Ganache','Buttercream','Drip de chocolate'];
+const coberturas = ['Buttercream','Ganache choc. con leche','Ganache choc. blanco','Ganache semi-amargo'];
 const restricciones = ['Sin gluten','Sin lactosa','Vegano','Sin frutos secos'];
 
 function renderFills() {
