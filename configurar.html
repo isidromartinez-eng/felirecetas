@@ -250,7 +250,7 @@
     <a href="#" class="topbar-btn" aria-label="Volver" onclick="saveDraftAndGoToCatalog(); return false;">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4L6 10l6 6"/></svg>
     </a>
-    <a href="index.html" class="logo">Feli <em>Recetas</em></a>
+    <a href="index.html" class="logo">FELIRECETAS</a>
     <div style="width:28px"></div>
   </header>
 
@@ -376,15 +376,6 @@
           <!-- JS renders -->
         </div>
 
-        <!-- Restricciones -->
-        <div class="ornament left" style="gap:10px;margin-top:22px">
-          <span class="section-badge">Restricciones</span>
-          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px" id="restriccionesGrid">
-          <!-- JS renders -->
-        </div>
-
         <!-- Nav mobile paso 2 -->
         <div class="mobile-step-nav" style="flex-direction:column;gap:8px;">
           <div class="mobile-step-selection" id="navLabel2"></div>
@@ -399,7 +390,7 @@
       <div class="sticky-cta">
         <div class="label">
           <div style="font-size:10px;opacity:.65;letter-spacing:.1em;text-transform:uppercase">Paso 2/4 · Sabor</div>
-          <div style="font-family:var(--serif);font-size:13px" id="step2Label">Queso crema · frosting</div>
+          <div style="font-family:var(--serif);font-size:13px" id="step2Label">Queso crema · buttercream</div>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-soft btn-sm" style="height:40px" onclick="goStep(1)">← Volver</button>
@@ -747,8 +738,7 @@ const state = {
   maxStep: 1,
   base: 'Red Velvet',
   fills: ['Queso crema'],
-  cobertura: 'Frosting queso crema',
-  restricciones: [],
+  cobertura: 'Buttercream',
   porciones: 16,
   forma: 'Redonda',
   pisos: 1,
@@ -766,7 +756,6 @@ const state = {
   if (p.get('relleno'))     state.fills         = [p.get('relleno')];
   if (p.get('cobertura'))   state.cobertura     = p.get('cobertura');
   if (p.get('porciones'))   state.porciones     = parseInt(p.get('porciones'));
-  if (p.get('restriccion')) state.restricciones = [p.get('restriccion')];
   if (p.get('deco'))        state.decoracion    = p.get('deco');
 })();
 
@@ -779,8 +768,10 @@ const FILL_EXTRA = {
   'Crema de café': 1000, 'Praliné de avellana': 2500
 };
 const COB_EXTRA = {
-  'Frosting queso crema': 0, 'Crema chantilly': 0, 'Ganache': 1500,
-  'Buttercream': 0, 'Drip de chocolate': 2500
+  'Buttercream': 0,
+  'Ganache choc. con leche': 1500,
+  'Ganache choc. blanco': 1800,
+  'Ganache semi-amargo': 1500,
 };
 
 // ═══════════════════════════════════════════
@@ -882,9 +873,7 @@ function selectBase(el) {
 //  STEP 2 — RELLENOS
 // ═══════════════════════════════════════════
 const fills = ['Queso crema','Dulce de leche','Ganache chocolate','Frutos rojos','Crema de pistacho','Lemon curd','Crema de café','Praliné de avellana'];
-const coberturas = ['Frosting queso crema','Crema chantilly','Ganache','Buttercream','Drip de chocolate'];
-const restricciones = ['Sin gluten','Sin lactosa','Vegano','Sin frutos secos'];
-
+const coberturas = ['Buttercream','Ganache choc. con leche','Ganache choc. blanco','Ganache semi-amargo'];
 function renderFills() {
   document.getElementById('fillGrid').innerHTML = fills.map(f => {
     const sel   = state.fills.includes(f);
@@ -904,13 +893,6 @@ function renderCoberturas() {
     const extra = COB_EXTRA[c] || 0;
     const badge = extra > 0 ? ` · +$${extra.toLocaleString('es-AR')}` : '';
     return `<span class="chip ${sel ? 'active' : ''}" onclick="selectCobertura(this)" data-cob="${c}">${c}${badge}</span>`;
-  }).join('');
-}
-
-function renderRestricciones() {
-  document.getElementById('restriccionesGrid').innerHTML = restricciones.map(r => {
-    const sel = state.restricciones.includes(r);
-    return `<span class="chip ${sel ? 'wine' : ''}" onclick="toggleRestriccion(this)" data-res="${r}">+ ${r}</span>`;
   }).join('');
 }
 
@@ -934,17 +916,6 @@ function selectCobertura(el) {
   state.cobertura = el.dataset.cob;
   updateStep2Label();
   renderSummary();
-}
-
-function toggleRestriccion(el) {
-  const res = el.dataset.res;
-  if (state.restricciones.includes(res)) {
-    state.restricciones = state.restricciones.filter(r => r !== res);
-    el.classList.remove('wine');
-  } else {
-    state.restricciones.push(res);
-    el.classList.add('wine');
-  }
 }
 
 function updateStep2Label() {
@@ -1082,7 +1053,6 @@ function renderSummary() {
     ['Forma', v3 ? `${state.forma} · ${state.porciones} porc. · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}` : '—'],
     ['Decoración', v4 ? state.decoracion : '—'],
     ...(v4 && state.mensaje ? [['Mensaje', `"${state.mensaje}"`]] : []),
-    ...(v2 && state.restricciones.length ? [['Restricciones', state.restricciones.join(', ')]] : []),
   ];
   const rowsHtml = rows.map(([k, v]) =>
     `<div class="summary-row"><span style="color:var(--ink-3)">${k}</span><span style="color:var(--ink);font-weight:500;text-align:right;max-width:60%">${v}</span></div>`
@@ -1148,7 +1118,6 @@ function sendWhatsApp() {
   msg += `• Porciones: ${state.porciones}\n`;
   msg += `• Decoración: ${state.decoracion}\n`;
   if (state.mensaje) msg += `• Mensaje: "${state.mensaje}"\n`;
-  if (state.restricciones.length) msg += `• Restricciones: ${state.restricciones.join(', ')}\n`;
   msg += `\nPrecio base desde: $${price.toLocaleString('es-AR')}\n`;
   msg += `\n¿Podemos coordinar fecha y entrega?`;
 
@@ -1339,7 +1308,6 @@ function renderCalcResult() {
 renderStepper();
 renderFills();
 renderCoberturas();
-renderRestricciones();
 renderEventos();
 renderCalcResult();
 renderSummary();
