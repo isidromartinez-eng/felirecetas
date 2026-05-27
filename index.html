@@ -25,17 +25,11 @@
     /* ── Draft resume banner ── */
     #draft-banner {
       display: none;
-      position: fixed;
-      bottom: 78px;
-      left: 0; right: 0;
-      z-index: 50;
-      padding: 0 12px;
-      pointer-events: none;
-      animation: draftSlideUp .25s ease;
+      animation: draftSlideDown .25s ease;
     }
-    @keyframes draftSlideUp {
-      from { transform: translateY(14px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
+    @keyframes draftSlideDown {
+      from { transform: translateY(-10px); opacity: 0; }
+      to   { transform: translateY(0);     opacity: 1; }
     }
     .draft-banner-inner {
       background: #FBF7F0;
@@ -92,6 +86,7 @@
     }
     .draft-dismiss:hover { color: rgba(42,31,23,.65); }
 
+
     /* Ejemplos modal → bottom sheet en mobile */
     @media (max-width: 767px) {
       #ejemplosModal {
@@ -111,22 +106,18 @@
       }
     }
 
-    @media (min-width: 768px) {
-      #draft-banner {
-        bottom: 24px;
-        left: auto; right: 24px;
-        width: 380px; padding: 0;
-      }
-    }
-
     /* ═══ HERO FULL-BLEED ═══ */
     .hero-fullbleed {
       position: relative;
-      height: 100svh;
+      height: 100vh !important;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      background: #0c0306 !important;
+    }
+    @supports (height: 100svh) {
+      .hero-fullbleed { height: 100svh !important; }
     }
     .hero-bg {
       position: absolute;
@@ -271,6 +262,109 @@
     }
     /* ═══ FIN HERO ═══ */
 
+    /* ── Vistas: main (inicio) vs catálogo ── */
+
+    /* Cuando se muestra el catálogo: ocultar secciones principales */
+    body.showing-catalogo #inicio,
+    body.showing-catalogo #historia,
+    body.showing-catalogo #eventos,
+    body.showing-catalogo .cta-libre,
+    body.showing-catalogo #como-pedir,
+    body.showing-catalogo #testimonios,
+    body.showing-catalogo #faq,
+    body.showing-catalogo .final-cta,
+    body.showing-catalogo .site-footer,
+    body.showing-catalogo .page-bottom,
+    body.showing-catalogo .personalizar-banner { display: none !important; }
+
+    /* Cuando se muestra el inicio: ocultar catálogo */
+    body:not(.showing-catalogo) #catalogo,
+    body:not(.showing-catalogo) .cta-libre { display: none !important; }
+
+    /* Padding-top en catálogo para compensar el header fijo */
+    body.showing-catalogo #catalogo { padding-top: 56px !important; }
+    @media (min-width: 768px) {
+      body.showing-catalogo #catalogo { padding-top: 72px !important; }
+    }
+
+    /* ── Topbar: siempre visible, color según posición ── */
+    .topbar {
+      position: fixed !important;
+      top: 0; left: 0; right: 0;
+      transition: background .25s ease, border-color .25s ease;
+    }
+    /* Hero: fondo negro/oscuro, íconos blancos */
+    body .topbar.topbar-in-hero {
+      background: rgba(10,4,6,.72);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    body .topbar.topbar-in-hero .logo,
+    body .topbar.topbar-in-hero .topbar-btn { color: rgba(255,255,255,.9); }
+    /* La topbar del hero (logo+WA original) sigue oculta */
+    .hero-topbar { display: none !important; }
+    /* Side menu: siempre oscuro y semi-transparente */
+    .side-menu {
+      background: rgba(10,4,6,.88) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+    }
+    .side-menu .logo,
+    .side-menu .topbar-btn { color: rgba(255,255,255,.9) !important; }
+    .side-menu .menu-item-title { color: rgba(255,255,255,.9) !important; }
+    .side-menu .caption,
+    .side-menu .num { color: rgba(255,255,255,.42) !important; }
+    .side-menu .menu-item { border-bottom-color: rgba(255,255,255,.07) !important; }
+    .side-menu .menu-item:hover { background: rgba(255,255,255,.06) !important; }
+    .side-menu hr.rule-soft { border-color: rgba(255,255,255,.07) !important; }
+    .side-menu .side-menu-footer { border-top-color: rgba(255,255,255,.07) !important; }
+    /* Banner "seguir personalizando": vive dentro del hero, no sigue al scrollear */
+    #draft-banner {
+      position: absolute !important;
+      bottom: auto !important;
+      top: 58px;
+      left: 12px; right: 12px;
+      z-index: 10;
+      padding: 0;
+      pointer-events: none;
+    }
+    /* Banner transparente oscuro (siempre dentro del hero) */
+    #inicio .draft-banner-inner {
+      background: rgba(10,4,6,.52);
+      border: 1px solid rgba(255,255,255,.15);
+      border-left: 3px solid #c06070;
+      box-shadow: none;
+      margin: 0;
+    }
+    #inicio .draft-title   { color: #e8a0ac; }
+    #inicio .draft-desc    { color: rgba(255,255,255,.65); }
+    #inicio .draft-icon    { background: rgba(255,255,255,.10); }
+    #inicio .draft-icon svg { stroke: #e8a0ac; }
+    #inicio .draft-dismiss { color: rgba(255,255,255,.4); }
+    #inicio .draft-continue { background: rgba(255,255,255,.18); color: #fff; }
+    /* ── Split-header (desktop): fixed, oculto durante el hero ── */
+    .split-header {
+      position: fixed !important;
+      left: 0; right: 0; top: 0; width: 100%; box-sizing: border-box;
+      transform: translateY(-100%) !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: transform .3s ease, opacity .25s ease !important;
+    }
+    .split-header.nav-visible {
+      transform: translateY(0) !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+    }
+    /* ── Tabbar: ocultar durante el hero ── */
+    .tabbar {
+      transition: transform .35s cubic-bezier(.34,1.4,.64,1), opacity .25s ease;
+    }
+    .tabbar.nav-hidden {
+      transform: translateX(-50%) translateY(110%) !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+
     /* WA FAB sube cuando el banner está activo */
     @media (max-width: 767px) {
       .whatsapp-fab {
@@ -285,6 +379,56 @@
         pointer-events: none;
       }
     }
+
+    /* Espacio para que el tabbar no tape el último producto */
+    .products-grid { padding-bottom: 100px !important; }
+
+    /* ── Catalog cards: gradient overlay design ── */
+
+    /* Alturas */
+    .product-card-big .card-img                 { height: 280px !important; }
+    .product-card:not(.product-card-big) .card-img { height: 190px !important; }
+
+    /* Degradado oscuro en la parte de abajo de cada foto */
+    .product-card .card-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,4,6,.92) 0%,
+        rgba(10,4,6,.52) 44%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Card: el body flota encima de la imagen */
+    .product-card { position: relative !important; border: none !important; }
+    .product-card .card-body {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 13px 14px;
+      z-index: 2;
+    }
+
+    /* Textos en blanco */
+    .product-card .card-body .h3            { color: #fff !important; font-size: 16px; line-height: 1.2; }
+    .product-card-big .card-body .h3        { font-size: 20px !important; }
+    .product-card .card-body .caption       { color: rgba(255,255,255,.70) !important; margin-top: 3px; }
+    .product-card .card-body .price-serif   { color: rgba(255,255,255,.95) !important; font-size: 14px; }
+    .product-card-big .card-body .price-serif { font-size: 17px !important; }
+    .product-card .card-row                 { margin-top: 5px; }
+
+    /* Ocultar botón "Ver detalles" — toda la card es el CTA */
+    .product-card .card-row > span:last-child { display: none !important; }
+
+    /* En cards pequeñas ocultar descripción (poco espacio) */
+    .product-card:not(.product-card-big) .card-body .caption { display: none !important; }
+
+    /* Badge queda encima del degradado */
+    .product-card .card-img .chip-tag { z-index: 3; }
   </style>
 </head>
 <body class="has-mag-hero">
@@ -302,7 +446,7 @@
     </div>
     <hr class="rule-soft" style="margin:0 20px"/>
     <div class="side-menu-body">
-      <a href="#catalogo" class="menu-item" onclick="closeMenu()">
+      <a href="#" class="menu-item" onclick="switchView('catalogo');closeMenu();return false;">
         <span class="eyebrow num">01</span>
         <div>
           <div class="menu-item-title">Catálogo</div>
@@ -375,21 +519,43 @@
       <div class="hero-eyebrow">Pastelería artesanal · La Plata</div>
       <h1 class="hero-title">Hecho con<br>amor<br><em>de verdad</em></h1>
       <div class="hero-ctas">
-        <a href="#catalogo" class="hero-btn-primary">Ver carta →</a>
+        <a href="#" onclick="switchView('catalogo');return false;" class="hero-btn-primary">Ver carta →</a>
         <a href="configurar.html" class="hero-btn-secondary">Personalizar torta →</a>
+      </div>
+    </div>
+
+    <!-- Banner "seguir personalizando": posición absoluta, no sigue al scrollear -->
+    <div id="draft-banner">
+      <div class="draft-banner-inner">
+        <div class="draft-icon">
+          <svg width="18" height="18" viewBox="0 0 22 20" fill="none" stroke="#7A2836" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 14c0-4 18-4 18 0l-1.5 5H3.5L2 14z"/>
+            <path d="M7 14 Q11 9 15 14"/>
+            <line x1="2" y1="14" x2="20" y2="14"/>
+            <path d="M8 9 Q11 5.5 14 9"/>
+          </svg>
+        </div>
+        <div class="draft-info">
+          <div class="draft-title">Torta en progreso</div>
+          <div class="draft-desc" id="draft-desc">—</div>
+        </div>
+        <a href="configurar.html" class="draft-continue">Seguir →</a>
+        <button class="draft-dismiss" onclick="dismissDraft()" aria-label="Descartar borrador">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1.5 1.5l10 10M11.5 1.5l-10 10"/></svg>
+        </button>
       </div>
     </div>
 
   </section>
 
-  <!-- ░░ TOP BAR (mobile) — aparece al hacer scroll ░░ -->
-  <header class="topbar">
+  <!-- ░░ TOP BAR (mobile) ░░ -->
+  <header class="topbar topbar-in-hero">
     <button class="topbar-btn topbar-hamburger" onclick="openMenu()" aria-label="Abrir menú">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
         <path d="M3 6h14M3 10h14M3 14h14"/>
       </svg>
     </button>
-    <a href="#inicio" class="logo">FELIRECETAS</a>
+    <a href="#" onclick="switchView('main');return false;" class="logo">FELIRECETAS</a>
     <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido" target="_blank" class="topbar-btn topbar-hamburger" aria-label="WhatsApp">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
     </a>
@@ -397,10 +563,10 @@
 
   <!-- ░░ HEADER EDITORIAL (desktop sticky) ░░ -->
   <header class="split-header">
-    <a href="#inicio" class="split-logo">FELIRECETAS</a>
+    <a href="#" onclick="switchView('main');return false;" class="split-logo">FELIRECETAS</a>
     <nav class="split-nav">
-      <a href="#catalogo">Catálogo</a>
-      <a href="#personalizar" data-section="personalizar">Personalizar</a>
+      <a href="#" onclick="switchView('catalogo');return false;">Catálogo</a>
+      <a href="configurar.html">Personalizar</a>
       <a href="#como-pedir">Cómo pedir</a>
       <a href="#historia">Nosotros</a>
       <a href="#faq">FAQ</a>
@@ -449,9 +615,23 @@
     <!-- Grid -->
     <div class="products-grid" id="productsGrid">
 
+      <!-- Pavlova como card regular (solo visible en filtro "Tortas") -->
+      <div id="pavlova-grid" class="card product-card" data-cat="tortas" data-product="pavlova" onclick="openProduct('pavlova')" style="cursor:pointer;display:none">
+        <div class="card-img img-placeholder wine" style="height:130px;position:relative;background-image:url('pavlova.jpg');background-size:cover;background-position:center">
+          <span class="chip-tag">Destacada</span>
+        </div>
+        <div class="card-body">
+          <div class="h3" style="font-size:17px">Pavlova <span class="serif-i">de la casa</span></div>
+          <div class="caption" style="margin-top:2px">Merengue · crema chantilly · frutos rojos</div>
+          <div class="card-row">
+            <span class="price-serif">$ 18.500</span>
+          </div>
+        </div>
+      </div>
+
       <div class="card product-card" data-cat="chocolates" data-product="macarons" onclick="openProduct('macarons')" style="cursor:pointer">
         <div class="card-img img-placeholder cream" data-bg="macarons.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
-          <span class="chip-tag">Clásico</span>
+
         </div>
         <div class="card-body">
           <div class="h3" style="font-size:17px">Macarons</div>
@@ -465,7 +645,6 @@
 
       <div class="card product-card" data-cat="cheesecakes" data-product="cheesecake-ny" onclick="openProduct('cheesecake-ny')" style="cursor:pointer">
         <div class="card-img img-placeholder gold" data-bg="cheesecake.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
-          <span class="chip-tag sage">Nuevo</span>
         </div>
         <div class="card-body">
           <div class="h3" style="font-size:17px">Cheesecake estilo NY</div>
@@ -479,7 +658,7 @@
 
       <div class="card product-card" data-cat="tortas" data-product="red-velvet" onclick="openProduct('red-velvet')" style="cursor:pointer">
         <div class="card-img img-placeholder wine" data-bg="red-velvet.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
-          <span class="chip-tag gold">Popular</span>
+
         </div>
         <div class="card-body">
           <div class="h3" style="font-size:17px">Red Velvet</div>
@@ -507,7 +686,6 @@
 
       <div class="card product-card" data-cat="tortas" data-product="key-lime-pie" onclick="openProduct('key-lime-pie')" style="cursor:pointer">
         <div class="card-img img-placeholder gold" data-bg="lemon-pie.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
-          <span class="chip-tag sage">Temporada</span>
         </div>
         <div class="card-body">
           <div class="h3" style="font-size:17px">Key lime pie</div>
@@ -521,7 +699,7 @@
 
       <div class="card product-card" data-cat="chocolates" data-product="marquise" onclick="openProduct('marquise')" style="cursor:pointer">
         <div class="card-img img-placeholder choc" data-bg="brownie.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
-          <span class="chip-tag">Clásico</span>
+
         </div>
         <div class="card-body">
           <div class="h3" style="font-size:17px">Marquise de chocolate</div>
@@ -534,8 +712,8 @@
       </div>
 
       <div class="card product-card" data-cat="tortas" data-product="tarta-tofee" onclick="openProduct('tarta-tofee')" style="cursor:pointer">
-        <div class="card-img img-placeholder cream" data-bg="alfajores.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
-          <span class="chip-tag gold">Popular</span>
+        <div class="card-img img-placeholder cream" data-bg="tarta-tofee.jpg" style="height:130px;position:relative;background-size:cover;background-position:center;background-image:url('tarta-tofee.jpg')">
+
         </div>
         <div class="card-body">
           <div class="h3" style="font-size:17px">Tarta tipo toffee</div>
@@ -597,7 +775,7 @@
   </section>
 
   <!-- CTA consulta libre -->
-  <div style="padding:20px 22px 8px;text-align:center">
+  <div class="cta-libre" style="padding:20px 22px 8px;text-align:center">
     <p style="font-size:13px;color:var(--ink-3);margin-bottom:10px">¿No encontrás lo que buscás?</p>
     <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Tengo%20una%20consulta" target="_blank" class="btn btn-ghost" style="font-size:13px">Contame tu idea por WhatsApp →</a>
   </div>
@@ -606,7 +784,7 @@
   <section id="como-pedir">
     <hr class="rule-soft" style="margin:8px 22px"/>
     <div style="padding:20px 22px 0">
-      <div class="eyebrow">— 03 · El proceso</div>
+      <div class="eyebrow">— 02 · El proceso</div>
       <div class="h1" style="margin-top:6px">¿Cómo <span class="serif-i">pedir</span>?</div>
       <p style="font-size:14px;line-height:1.55;color:var(--ink-2);margin-top:8px">
         Trabajamos sólo por encargo, así horneamos cada pieza el día anterior a la entrega.
@@ -683,9 +861,9 @@
   </section>
 
   <!-- ░░ HISTORIA ░░ -->
-  <section id="historia" class="about-section">
-    <div style="padding:20px 22px 0">
-      <div class="eyebrow" style="color:var(--rose)">— 05 · La historia</div>
+  <section id="historia" class="about-section" style="padding-top:64px">
+    <div style="padding:0 22px 0">
+      <div class="eyebrow" style="color:var(--rose)">— 01 · La historia</div>
       <div class="display" style="margin-top:10px;color:var(--paper)">
         Una receta <span class="serif-i" style="color:var(--rose)">de familia</span>, hecha en casa.
       </div>
@@ -695,14 +873,8 @@
     <div class="about-img" data-bg="nosotros.jpg" style="background-size:cover;background-position:center"></div>
 
     <div class="about-content">
-      <p style="font-size:15px;line-height:1.65;color:rgba(255,255,255,.8)">
-        <strong style="color:var(--paper)">FELIRECETAS</strong> nació en 2019, con 12 años, entre la cocina de casa y la meta de aprender, crear y disfrutar de la pastelería.
-      </p>
-      <p style="font-size:15px;line-height:1.65;color:rgba(255,255,255,.8);margin-top:14px">
-        Hoy, con la carrera de pastelería profesional encima, cada pieza sigue hecha a mano — desde pesar los ingredientes hasta cerrar la caja, todo pasa por las mismas manos.
-      </p>
-      <p style="font-size:15px;line-height:1.65;color:rgba(255,255,255,.8);margin-top:14px">
-        Cocinar es lo que más amamos hacer. Cada pedido se hornea solo para vos.
+      <p style="font-size:15px;line-height:1.7;color:rgba(255,255,255,.8)">
+        <strong style="color:var(--paper)">FELIRECETAS</strong> nació en 2019, con 12 años, entre la cocina de casa. Hoy, con la carrera de pastelería profesional encima, cada pieza sigue hecha a mano — horneada solo para vos.
       </p>
 
       <div class="founder-row">
@@ -752,7 +924,7 @@
   <!-- ░░ TESTIMONIOS ░░ -->
   <section id="testimonios">
     <div style="padding:20px 22px 0">
-      <div class="eyebrow">— 05 · Clientes</div>
+      <div class="eyebrow">— 03 · Clientes</div>
       <div class="h1" style="margin-top:6px">Lo que <span class="serif-i">nos cuentan</span></div>
     </div>
 
@@ -830,7 +1002,7 @@
   <section id="faq">
     <hr class="rule-soft" style="margin:8px 22px"/>
     <div style="padding:20px 22px 0">
-      <div class="eyebrow">— 06 · Dudas</div>
+      <div class="eyebrow">— 04 · Dudas</div>
       <div class="h1" style="margin-top:6px">Preguntas <span class="serif-i">frecuentes</span></div>
     </div>
 
@@ -913,7 +1085,7 @@
          class="btn" style="background:#fff;color:var(--wine);font-weight:600;justify-content:center;height:52px;font-size:15px;border-radius:8px;border:none">
         Hacer mi pedido →
       </a>
-      <a href="#catalogo"
+      <a href="#" onclick="switchView('catalogo');return false;"
          class="btn" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);justify-content:center;height:52px;font-size:15px;border-radius:8px">
         Ver catálogo
       </a>
@@ -929,7 +1101,7 @@
       <div>
         <div class="footer-col-head">Carta</div>
         <div class="footer-col-list">
-          <a href="#catalogo">Catálogo</a>
+          <a href="#" onclick="switchView('catalogo');return false;">Catálogo</a>
           <a href="configurar.html">Personalizar</a>
           <a href="configurar.html#calculadora">Calculadora</a>
         </div>
@@ -979,27 +1151,6 @@
   </svg>
 </a>
 
-<!-- Draft resume banner -->
-<div id="draft-banner">
-  <div class="draft-banner-inner">
-    <div class="draft-icon">
-      <svg width="18" height="18" viewBox="0 0 22 20" fill="none" stroke="#7A2836" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 14c0-4 18-4 18 0l-1.5 5H3.5L2 14z"/>
-        <path d="M7 14 Q11 9 15 14"/>
-        <line x1="2" y1="14" x2="20" y2="14"/>
-        <path d="M8 9 Q11 5.5 14 9"/>
-      </svg>
-    </div>
-    <div class="draft-info">
-      <div class="draft-title">Torta en progreso</div>
-      <div class="draft-desc" id="draft-desc">—</div>
-    </div>
-    <a href="configurar.html" class="draft-continue">Seguir →</a>
-    <button class="draft-dismiss" onclick="dismissDraft()" aria-label="Descartar borrador">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1.5 1.5l10 10M11.5 1.5l-10 10"/></svg>
-    </button>
-  </div>
-</div>
 
 <!-- Tab bar -->
 <nav class="tabbar" aria-label="Navegación principal">
@@ -1008,11 +1159,11 @@
     <span>Inicio</span>
     <div class="dot"></div>
   </button>
-  <button class="tab" id="tab-catalogo" onclick="goTo('catalogo','tab-catalogo')">
+  <button class="tab" id="tab-catalogo" onclick="switchView('catalogo')">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="11" y="4" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg>
     <span>Catálogo</span>
   </button>
-  <button class="tab" id="tab-personalizar" onclick="goTo('personalizar','tab-personalizar')">
+  <button class="tab" id="tab-personalizar" onclick="window.location.href='configurar.html'">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="2"/><path d="M10 3v2M10 15v2M3 10h2M15 10h2M5.22 5.22l1.42 1.42M13.36 13.36l1.42 1.42M5.22 14.78l1.42-1.42M13.36 6.64l1.42-1.42"/></svg>
     <span>Personalizar</span>
   </button>
@@ -1029,7 +1180,7 @@
     <!-- Image -->
     <div id="pmImg" class="img-placeholder wine" style="height:200px;border-radius:18px 18px 0 0;position:relative;flex-shrink:0">
       <span id="pmImgLabel" class="img-label"></span>
-      <button onclick="closeProduct()" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,.35);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff">
+      <button onclick="closeProduct()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1a0f0a;box-shadow:0 2px 12px rgba(0,0,0,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l12 12M16 4L4 16"/></svg>
       </button>
     </div>
@@ -1187,21 +1338,22 @@
     // Intercept desktop nav clicks
     navLinks.forEach(function(a) {
       a.addEventListener('click', function(e) {
-        var id = a.dataset.section || (a.getAttribute('href').startsWith('#') ? a.getAttribute('href').slice(1) : null);
-        if (!id) return;
+        var href = a.getAttribute('href') || '';
+        var id = a.dataset.section || (href.startsWith('#') && href.length > 1 ? href.slice(1) : null);
+        if (!id) return; // href="#" con onclick propio — se maneja solo
+        e.preventDefault();
+        // Si estamos en catálogo, volvemos a inicio primero
+        if (document.body.classList.contains('showing-catalogo')) {
+          if (typeof switchView === 'function') switchView('main');
+          setTimeout(function() {
+            var el = document.getElementById(id);
+            if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' });
+          }, 100);
+          return;
+        }
         var el = document.getElementById(id);
         if (!el) return;
-        e.preventDefault();
-        var elTop = el.getBoundingClientRect().top + window.scrollY;
-        var y;
-        if (id === 'personalizar') {
-          // Center the section in the viewport
-          y = elTop + el.offsetHeight / 2 - window.innerHeight / 2;
-        } else {
-          // Scroll to top with header offset
-          y = elTop - 88;
-        }
-        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' });
       });
     });
   })();
@@ -1221,13 +1373,44 @@
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
+  // ── Cambio de vista: inicio ↔ catálogo ──
+  function switchView(view) {
+    const topbar      = document.querySelector('.topbar');
+    const splitHeader = document.querySelector('.split-header');
+    const tabbar      = document.querySelector('.tabbar');
+    const fab         = document.querySelector('.whatsapp-fab');
+
+    if (view === 'catalogo') {
+      document.body.classList.add('showing-catalogo');
+      setActiveTab('tab-catalogo');
+      if (topbar)      topbar.classList.remove('topbar-in-hero');
+      if (splitHeader) splitHeader.classList.add('nav-visible');
+      if (tabbar)      tabbar.classList.remove('nav-hidden');
+      if (fab)         fab.classList.remove('hero-visible');
+      window.scrollTo(0, 0);
+    } else {
+      document.body.classList.remove('showing-catalogo');
+      setActiveTab('tab-home');
+      window.scrollTo(0, 0);
+      // Re-dispara el handler del hero para que topbar/tabbar reaccionen
+      setTimeout(() => window.dispatchEvent(new Event('scroll')), 50);
+    }
+  }
+
   // ── Smooth scroll + tab highlight ──
   function goTo(sectionId, tabId) {
-    const el = document.getElementById(sectionId);
-    if (el) {
-      const offset = 80;
-      const y = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+    if (sectionId === 'catalogo')     { switchView('catalogo'); return; }
+    if (sectionId === 'personalizar') { window.location.href = 'configurar.html'; return; }
+    // Si estamos en catálogo, volvemos primero a inicio
+    if (document.body.classList.contains('showing-catalogo')) {
+      switchView('main');
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
     }
     setActiveTab(tabId);
   }
@@ -1245,9 +1428,9 @@
     }
   }
 
-  // Scroll spy
-  const sections = ['inicio','catalogo','personalizar','como-pedir'];
-  const tabMap = { inicio:'tab-home', catalogo:'tab-catalogo', personalizar:'tab-personalizar', 'como-pedir':'tab-pedir' };
+  // Scroll spy — solo rastrear secciones del inicio
+  const sections = ['inicio'];
+  const tabMap = { inicio: 'tab-home' };
   function updateTabFromScroll() {
     const wH = window.innerHeight;
     let active = null;
@@ -1276,18 +1459,39 @@
   window.addEventListener('scroll', updateTabFromScroll, { passive: true });
   updateTabFromScroll();
 
-  // ── FAB: ocultar cuando el hero está visible (solo mobile) ──
+  // ── Hero-aware nav: topbar, split-header, tabbar y FAB ──
   (function() {
-    if (window.innerWidth >= 768) return;
-    const fab  = document.querySelector('.whatsapp-fab');
-    const hero = document.getElementById('inicio');
-    if (!fab || !hero) return;
-    function updateFab() {
-      fab.classList.toggle('hero-visible', hero.getBoundingClientRect().bottom > 80);
+    const hero        = document.getElementById('inicio');
+    const topbar      = document.querySelector('.topbar');
+    const tabbar      = document.querySelector('.tabbar');
+    const splitHeader = document.querySelector('.split-header');
+    const fab         = document.querySelector('.whatsapp-fab');
+    if (!hero) return;
+
+    function update() {
+      const rect        = hero.getBoundingClientRect();
+      const heroPassed  = rect.bottom <= 0;
+      const heroVisible = rect.bottom > 80;
+      const inCatalogo  = document.body.classList.contains('showing-catalogo');
+
+      // Topbar: negro en hero, crema cuando sale
+      if (topbar)
+        topbar.classList.toggle('topbar-in-hero', !heroPassed && !inCatalogo);
+
+      // Split-header (desktop): aparece solo tras el hero
+      if (splitHeader) splitHeader.classList.toggle('nav-visible', heroPassed || inCatalogo);
+
+      // Tabbar: se oculta durante el hero
+      if (tabbar) tabbar.classList.toggle('nav-hidden', heroVisible && !inCatalogo);
+
+      // FAB WA: solo aparece tras el hero
+      if (fab && window.innerWidth < 768)
+        fab.classList.toggle('hero-visible', heroVisible && !inCatalogo);
     }
-    (document.scrollingElement || document.body).addEventListener('scroll', updateFab, { passive: true });
-    window.addEventListener('scroll', updateFab, { passive: true });
-    updateFab();
+
+    window.addEventListener('scroll', update, { passive: true });
+    (document.scrollingElement || document.body).addEventListener('scroll', update, { passive: true });
+    update();
   })();
 
   // ── Product filters ──
@@ -1296,13 +1500,31 @@
       document.querySelectorAll('[data-filter]').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       const filter = chip.dataset.filter;
-      const cards = document.querySelectorAll('#productsGrid [data-cat]');
+
+      // Featured wrap: visible solo en "todos"; en "tortas" se muestra Pavlova como card regular
+      const featuredWrap = document.querySelector('.featured-wrap');
+      const pavlovaGrid  = document.getElementById('pavlova-grid');
+      if (filter === 'todos') {
+        if (featuredWrap) featuredWrap.style.display = '';
+        if (pavlovaGrid)  pavlovaGrid.style.display  = 'none';
+      } else if (filter === 'tortas') {
+        if (featuredWrap) featuredWrap.style.display = 'none';
+        if (pavlovaGrid)  pavlovaGrid.style.display  = '';
+      } else {
+        if (featuredWrap) featuredWrap.style.display = 'none';
+        if (pavlovaGrid)  pavlovaGrid.style.display  = 'none';
+      }
+
+      // Cards del grid
+      const cards = document.querySelectorAll('#productsGrid [data-cat]:not(#pavlova-grid)');
       let count = 0;
       cards.forEach(card => {
         const show = filter === 'todos' || card.dataset.cat === filter;
         card.style.display = show ? '' : 'none';
         if (show) count++;
       });
+      // Contar Pavlova si está visible
+      if (pavlovaGrid && pavlovaGrid.style.display !== 'none') count++;
       const rc = document.getElementById('resultsCount');
       if (rc) rc.textContent = count + ' productos';
     });
@@ -1311,7 +1533,7 @@
   // ── Product data ──
   const PRODUCTS = {
     'pavlova': {
-      name: 'Pavlova de la casa', cat: 'Torta · destacada', tone: 'wine', img: 'pavlova.jpg',
+      name: 'Pavlova de la casa', cat: 'Torta · destacada', tone: 'wine', img: 'pm-pavlova.jpg',
       desc: 'Merengue crujiente por fuera y suave por dentro, cubierto con crema chantilly batida a mano y frutos rojos de estación. El postre favorito de la casa.',
       tags: ['Merengue casero', 'Frutos rojos', 'Hecho el día anterior'],
       sizes: [
@@ -1321,7 +1543,7 @@
       ],
     },
     'macarons': {
-      name: 'Macarons', cat: 'Dulces · clásico', tone: 'cream', img: 'macarons.jpg',
+      name: 'Macarons', cat: 'Dulces · clásico', tone: 'cream', img: 'pm-macarons.jpg',
       desc: 'Macarons artesanales con coquille de almendra — crocantes por fuera, tiernos por dentro. Sabores de temporada: chocolate, vainilla, frambuesa, pistacho y café. Cada unidad hecha a mano.',
       tags: ['Almendra', 'Sin conservantes', 'Sabores rotativos'],
       sizes: [
@@ -1331,7 +1553,7 @@
       ],
     },
     'cheesecake-ny': {
-      name: 'Cheesecake estilo NY', cat: 'Cheesecake · nuevo', tone: 'gold', img: 'cheesecake.jpg',
+      name: 'Cheesecake estilo NY', cat: 'Cheesecake · nuevo', tone: 'gold', img: 'pm-cheesecake.jpg',
       desc: 'Base crocante de galletita mantecosa, relleno cremoso de queso crema horneado en baño maría y coulis de frutos rojos. Textura densa y sedosa — el cheesecake que hace llorar de felicidad.',
       tags: ['Estilo Nueva York', 'Baño maría', 'Servir frío'],
       sizes: [
@@ -1341,7 +1563,7 @@
       ],
     },
     'red-velvet': {
-      name: 'Red Velvet', cat: 'Torta · popular', tone: 'wine', img: 'red-velvet.jpg',
+      name: 'Red Velvet', cat: 'Torta · popular', tone: 'wine', img: 'pm-red-velvet.jpg',
       desc: 'Bizcocho aterciopelado, húmedo y con un toque de cacao, cubierto con frosting de queso crema batido a mano. El equilibrio perfecto entre lo dulce y lo ácido.',
       tags: ['Queso crema', 'Bizcocho húmedo', 'Hecho el día anterior'],
       sizes: [
@@ -1351,7 +1573,7 @@
       ],
     },
     'cookies': {
-      name: 'Cookies con chips de chocolate', cat: 'Dulces · clásico', tone: 'choc', img: 'insta-cookies.jpg',
+      name: 'Cookies con chips de chocolate', cat: 'Dulces · clásico', tone: 'choc', img: 'pm-cookies.jpg',
       desc: 'Cookies crujientes por fuera, tiernas por dentro, con chips de chocolate de cobertura. Mínimo por 6 unidades. Se hornean el día anterior a la entrega para que lleguen en su punto justo.',
       tags: ['Chips de chocolate', 'Horno fresco', 'Desde x 6'],
       sizes: [
@@ -1361,7 +1583,7 @@
       ],
     },
     'key-lime-pie': {
-      name: 'Key lime pie', cat: 'Torta · temporada', tone: 'gold', img: 'lemon-pie.jpg',
+      name: 'Key lime pie', cat: 'Torta · temporada', tone: 'gold', img: 'pm-lemon-pie.jpg',
       desc: 'Base de galletita mantecosa, relleno cremoso de lima y merengue suizo tostado. Cítrica, fresca y perfectamente equilibrada. Producto de temporada — edición actual.',
       tags: ['Lima fresca', 'Merengue suizo', 'Sin conservantes'],
       sizes: [
@@ -1371,7 +1593,7 @@
       ],
     },
     'marquise': {
-      name: 'Marquise de chocolate', cat: 'Chocolate · clásico', tone: 'choc', img: 'brownie.jpg',
+      name: 'Marquise de chocolate', cat: 'Chocolate · clásico', tone: 'choc', img: 'pm-marquise.jpg',
       desc: 'Torta de chocolate semi-amargo sin harina, de textura sedosa y densa — entre mousse y fondant. Solo cuatro ingredientes: chocolate, manteca, azúcar y huevos. Se sirve a temperatura ambiente.',
       tags: ['Sin harina', 'Chocolate semi-amargo', 'Tipo brownie'],
       sizes: [
@@ -1381,7 +1603,7 @@
       ],
     },
     'tarta-tofee': {
-      name: 'Tarta tipo toffee', cat: 'Torta · popular', tone: 'cream', img: 'alfajores.jpg',
+      name: 'Tarta tipo toffee', cat: 'Torta · popular', tone: 'cream', img: 'tarta-tofee.jpg',
       desc: 'Base de masa sablée mantecosa, relleno de caramelo toffee casero y cobertura de crema. Dulce, cremosa y con ese toque crocante en la base que no podés dejar de comer.',
       tags: ['Caramelo toffee', 'Base crocante', 'Artesanal'],
       sizes: [
@@ -1491,6 +1713,26 @@
     }
   }
 
+  // ── Swipe down para cerrar el modal de producto ──
+  (function() {
+    const inner = document.getElementById('productModalInner');
+    let startY = 0;
+    let startScrollTop = 0;
+
+    inner.addEventListener('touchstart', function(e) {
+      startY = e.touches[0].clientY;
+      startScrollTop = inner.scrollTop;
+    }, { passive: true });
+
+    inner.addEventListener('touchend', function(e) {
+      const deltaY = e.changedTouches[0].clientY - startY;
+      // Cerrar solo si desliza hacia abajo y el modal está en el tope (sin scroll)
+      if (deltaY > 80 && startScrollTop < 5) {
+        closeProduct();
+      }
+    }, { passive: true });
+  })();
+
   // ── Ejemplos modal ──
   let _ejemplosHistoryPushed = false;
 
@@ -1569,9 +1811,6 @@
       descEl.textContent = parts.join(' · ') || '—';
       banner.style.display = 'block';
 
-      // Levantar el FAB de WhatsApp para que no se superponga
-      const fab = document.querySelector('.whatsapp-fab');
-      if (fab) fab.classList.add('draft-lifted');
     } catch(e) {}
   }
 
@@ -1584,12 +1823,10 @@
     if (e.persisted) showDraftBannerIfExists();
   });
 
+
   function dismissDraft() {
     localStorage.removeItem('felirecetas_draft');
     const banner = document.getElementById('draft-banner');
-    const fab = document.querySelector('.whatsapp-fab');
-    // Bajar el FAB con animación fluida
-    if (fab) fab.classList.remove('draft-lifted');
     if (banner) {
       banner.style.transition = 'opacity .2s, transform .2s';
       banner.style.opacity = '0';
@@ -1597,6 +1834,30 @@
       setTimeout(() => { banner.style.display = 'none'; }, 210);
     }
   }
+
+  // ── Reordenar secciones: historia primero, luego eventos ──
+  // (En el DOM estaban después de catálogo; las movemos justo debajo del hero)
+  (function reorderSections() {
+    var hero      = document.getElementById('inicio');
+    var historia  = document.getElementById('historia');
+    var eventos   = document.getElementById('eventos');
+    if (!hero || !historia || !eventos) return;
+
+    // Referencia al nodo que está inmediatamente después del hero
+    var afterHero = hero.nextElementSibling;
+
+    // Insertar historia justo después del hero (si no está ya ahí)
+    if (afterHero !== historia) {
+      hero.parentNode.insertBefore(historia, afterHero);
+    }
+
+    // Insertar eventos justo después de historia
+    var afterHistoria = historia.nextElementSibling;
+    if (afterHistoria !== eventos) {
+      historia.parentNode.insertBefore(eventos, afterHistoria);
+    }
+  })();
+
 </script>
 </body>
 </html>
