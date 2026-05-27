@@ -1542,6 +1542,8 @@
     const fab         = document.querySelector('.whatsapp-fab');
 
     if (view === 'catalogo') {
+      // Guardar posición de scroll antes de entrar al catálogo
+      sessionStorage.setItem('preCartScrollY', String(Math.round(window.scrollY)));
       document.body.classList.add('showing-catalogo');
       setActiveTab('tab-catalogo');
       if (topbar)      topbar.classList.remove('topbar-in-hero');
@@ -1552,11 +1554,25 @@
     } else {
       document.body.classList.remove('showing-catalogo');
       setActiveTab('tab-home');
-      window.scrollTo(0, 0);
+      // Restaurar posición de scroll al salir del catálogo
+      var savedY = sessionStorage.getItem('preCartScrollY');
+      sessionStorage.removeItem('preCartScrollY');
+      window.scrollTo(0, savedY ? parseInt(savedY) : 0);
       // Re-dispara el handler del hero para que topbar/tabbar reaccionen
       setTimeout(() => window.dispatchEvent(new Event('scroll')), 50);
     }
   }
+
+  // ── Interceptar links a configurar.html para recordar si venían del catálogo ──
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a[href="configurar.html"]');
+    if (!link) return;
+    if (document.body.classList.contains('showing-catalogo')) {
+      sessionStorage.setItem('returnFromPersonalizar', 'catalogo');
+    } else {
+      sessionStorage.removeItem('returnFromPersonalizar');
+    }
+  });
 
   // ── Smooth scroll + tab highlight ──
   function goTo(sectionId, tabId) {
@@ -2014,6 +2030,15 @@
     document.getElementById('lightbox-img').src = '';
     document.body.style.overflow = '';
   }
+
+  // ── Al volver de configurar.html: restaurar catálogo si correspondía ──
+  (function() {
+    var ret = sessionStorage.getItem('returnFromPersonalizar');
+    if (ret === 'catalogo') {
+      sessionStorage.removeItem('returnFromPersonalizar');
+      switchView('catalogo');
+    }
+  })();
 
   // ── Cómo pedir: toggle desplegable ──
   function toggleComoPedir(btn) {
