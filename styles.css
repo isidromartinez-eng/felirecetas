@@ -476,8 +476,9 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 
 /* ─── Final CTA + Footer ──────────────────────── */
 .final-cta {
-  background: var(--wine); color: #fff; padding: 60px 22px 50px; position: relative; overflow: hidden;
-  border-radius: 24px 24px 0 0;
+  background: var(--wine); color: #fff; padding: 60px 22px 72px; position: relative; overflow: hidden;
+  border-radius: 24px;
+  margin: 0 0 32px;
 }
 .final-cta .decor-letter {
   position: absolute; right: -50px; top: -30px;
