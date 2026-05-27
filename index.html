@@ -431,6 +431,41 @@
     /* Badge queda encima del degradado */
     .product-card .card-img .chip-tag { z-index: 3; }
 
+    /* ── Cómo pedir: toggle desplegable ── */
+    .howto-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 22px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      gap: 12px;
+    }
+    .howto-toggle:focus-visible {
+      outline: 2px solid var(--wine);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+    .howto-chevron {
+      flex-shrink: 0;
+      color: var(--ink-2);
+      transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .howto-toggle[aria-expanded="true"] .howto-chevron {
+      transform: rotate(180deg);
+    }
+    .howto-body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .4s cubic-bezier(.4,0,.2,1);
+    }
+    .howto-body.open {
+      max-height: 1200px;
+    }
+
     /* ── Historia (nueva) ── */
     #historia { margin: 0; padding: 0; }
     .hist-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
@@ -628,81 +663,94 @@
 
   <!-- ░░ CÓMO PEDIR ░░ -->
   <section id="como-pedir" style="padding-top:60px">
-    <div style="padding:0 22px 0">
-      <div class="eyebrow">— 02 · El proceso</div>
-      <div class="h1" style="margin-top:6px">¿Cómo <span class="serif-i">pedir</span>?</div>
-      <p style="font-size:14px;line-height:1.55;color:var(--ink-2);margin-top:8px">
-        Trabajamos sólo por encargo, así horneamos cada pieza el día anterior a la entrega.
-      </p>
-    </div>
 
-    <div class="howto-grid">
-      <div class="howto-steps">
-        <div class="step-row">
-          <div class="step-icon-col">
-            <div class="step-icon first">01</div>
-            <div class="step-line"></div>
-          </div>
-          <div class="step-body">
-            <div class="h3 serif">Elegí tu pedido</div>
-            <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Explorá el catálogo o contame tu idea para un pedido personalizado.</p>
-          </div>
-        </div>
-        <div class="step-row">
-          <div class="step-icon-col">
-            <div class="step-icon rest">02</div>
-            <div class="step-line"></div>
-          </div>
-          <div class="step-body">
-            <div class="h3 serif">Coordinemos</div>
-            <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Escribime por WhatsApp o Instagram y definimos juntos los detalles de tu pedido. Atención personalizada.</p>
-          </div>
-        </div>
-        <div class="step-row">
-          <div class="step-icon-col">
-            <div class="step-icon rest">03</div>
-            <div class="step-line"></div>
-          </div>
-          <div class="step-body">
-            <div class="h3 serif">Reservá</div>
-            <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Los pedidos se reservan con una seña del 50% y un mínimo de 48 hs de anticipación.</p>
-            <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Para eventos grandes, más de una semana de anticipación.</p>
-          </div>
-        </div>
-        <div class="step-row" style="padding-bottom:0">
-          <div class="step-icon-col">
-            <div class="step-icon rest">04</div>
-          </div>
-          <div class="step-body">
-            <div class="h3 serif">Entrega o retiro</div>
-            <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Retirá en zona centro (La Plata) o coordinamos envío a City Bell, Gonnet, Villa Elisa y alrededores.</p>
-          </div>
-        </div>
-      </div>
-
+    <!-- Encabezado siempre visible — toca para desplegar -->
+    <button class="howto-toggle" onclick="toggleComoPedir(this)" aria-expanded="false" aria-controls="como-pedir-body">
       <div>
-        <div class="ornament" style="margin:24px 22px 0">Medios de pago</div>
-        <div class="info-cards" style="margin-top:14px">
-          <div class="info-card bg-soft">
-            <span class="icon">💳</span>
-            <span style="color:var(--ink-2)">Transferencia bancaria</span>
+        <div class="eyebrow" style="margin-bottom:4px">— 02 · El proceso</div>
+        <div class="h1">¿Cómo <span class="serif-i">pedir</span>?</div>
+      </div>
+      <svg class="howto-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+
+    <!-- Contenido desplegable -->
+    <div id="como-pedir-body" class="howto-body">
+      <div style="padding:0 22px;margin-top:8px">
+        <p style="font-size:14px;line-height:1.55;color:var(--ink-2)">
+          Trabajamos sólo por encargo, así horneamos cada pieza el día anterior a la entrega.
+        </p>
+      </div>
+      <div class="howto-grid">
+        <div class="howto-steps">
+          <div class="step-row">
+            <div class="step-icon-col">
+              <div class="step-icon first">01</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <div class="h3 serif">Elegí tu pedido</div>
+              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Explorá el catálogo o contame tu idea para un pedido personalizado.</p>
+            </div>
           </div>
-          <div class="info-card bg-paper">
-            <span class="icon">💵</span>
-            <span style="color:var(--ink-2)">Efectivo</span>
+          <div class="step-row">
+            <div class="step-icon-col">
+              <div class="step-icon rest">02</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <div class="h3 serif">Coordinemos</div>
+              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Escribime por WhatsApp o Instagram y definimos juntos los detalles de tu pedido. Atención personalizada.</p>
+            </div>
           </div>
-          <div class="info-card bg-paper">
-            <span class="icon">📱</span>
-            <span style="color:var(--ink-2)">Mercado Pago</span>
+          <div class="step-row">
+            <div class="step-icon-col">
+              <div class="step-icon rest">03</div>
+              <div class="step-line"></div>
+            </div>
+            <div class="step-body">
+              <div class="h3 serif">Reservá</div>
+              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Los pedidos se reservan con una seña del 50% y un mínimo de 48 hs de anticipación.</p>
+              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Para eventos grandes, más de una semana de anticipación.</p>
+            </div>
+          </div>
+          <div class="step-row" style="padding-bottom:0">
+            <div class="step-icon-col">
+              <div class="step-icon rest">04</div>
+            </div>
+            <div class="step-body">
+              <div class="h3 serif">Entrega o retiro</div>
+              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Retirá en zona centro (La Plata) o coordinamos envío a City Bell, Gonnet, Villa Elisa y alrededores.</p>
+            </div>
           </div>
         </div>
-        <div class="howto-cta" style="padding:0 22px 32px">
-          <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido" target="_blank" class="btn btn-wine btn-block" style="margin-top:16px">
-            Empezar mi pedido por WhatsApp
-          </a>
+
+        <div>
+          <div class="ornament" style="margin:24px 22px 0">Medios de pago</div>
+          <div class="info-cards" style="margin-top:14px">
+            <div class="info-card bg-soft">
+              <span class="icon">💳</span>
+              <span style="color:var(--ink-2)">Transferencia bancaria</span>
+            </div>
+            <div class="info-card bg-paper">
+              <span class="icon">💵</span>
+              <span style="color:var(--ink-2)">Efectivo</span>
+            </div>
+            <div class="info-card bg-paper">
+              <span class="icon">📱</span>
+              <span style="color:var(--ink-2)">Mercado Pago</span>
+            </div>
+          </div>
+          <div class="howto-cta" style="padding:0 22px 32px">
+            <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido" target="_blank" class="btn btn-wine btn-block" style="margin-top:16px">
+              Empezar mi pedido por WhatsApp
+            </a>
+          </div>
         </div>
       </div>
     </div>
+
   </section>
 
   <!-- ░░ EVENTOS POR WHATSAPP ░░ -->
@@ -1838,6 +1886,18 @@
     }
   }
 
+  // ── Cómo pedir: toggle desplegable ──
+  function toggleComoPedir(btn) {
+    var body = document.getElementById('como-pedir-body');
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
+    if (isOpen) {
+      btn.setAttribute('aria-expanded', 'false');
+      body.classList.remove('open');
+    } else {
+      btn.setAttribute('aria-expanded', 'true');
+      body.classList.add('open');
+    }
+  }
 
 </script>
 </body>
