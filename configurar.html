@@ -188,6 +188,42 @@
       font-feature-settings: 'tnum';
     }
   }
+
+  /* ── Float bar: oculta hasta que el usuario elija base ── */
+  .float-bar { display: none !important; }
+  @media (max-width: 767px) {
+    .float-bar.fb-active:not(.fb-step4) { display: block !important; }
+  }
+
+  /* ── Botón Siguiente deshabilitado en paso 1 ── */
+  .btn-step-disabled {
+    opacity: 0.42 !important;
+    cursor: not-allowed !important;
+  }
+
+  /* ── Mensaje de error paso 1 ── */
+  #step1Error {
+    display: none;
+    background: rgba(122,40,54,.07);
+    border: 1px solid rgba(122,40,54,.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #7A2836;
+    font-family: var(--sans);
+    line-height: 1.4;
+  }
+  #step1Error.visible {
+    display: block;
+    animation: step1Shake .35s ease;
+  }
+  @keyframes step1Shake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-6px); }
+    40%     { transform: translateX(6px); }
+    60%     { transform: translateX(-4px); }
+    80%     { transform: translateX(4px); }
+  }
   </style>
 </head>
 <body>
@@ -223,13 +259,15 @@
       </div>
 
       <div class="config-body" style="display:flex;flex-direction:column;gap:10px;padding-bottom:100px">
-        <div class="option-row selected" data-base="Red Velvet" onclick="selectBase(this)">
+        <div id="step1Error">⚠ Elegí una base para continuar al siguiente paso.</div>
+
+        <div class="option-row" data-base="Red Velvet" onclick="selectBase(this)">
           <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('red-velvet-pers.jpg') center/cover"></div>
           <div style="flex:1">
             <div class="serif" style="font-size:19px;line-height:1.1">Red Velvet</div>
             <div class="caption" style="margin-top:2px">Aterciopelada · clásica</div>
           </div>
-          <div class="option-radio">✓</div>
+          <div class="option-radio"></div>
         </div>
         <div class="option-row" data-base="Chocolate intenso" onclick="selectBase(this)">
           <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('chocolate-intenso-pers.jpg') center/cover"></div>
@@ -274,9 +312,9 @@
 
         <!-- Nav mobile paso 1 -->
         <div class="mobile-step-nav" style="flex-direction:column;gap:8px;">
-          <div class="mobile-step-selection" id="navLabel1">(<span id="navBase">Red Velvet</span>)</div>
+          <div class="mobile-step-selection" id="navLabel1">(<span id="navBase">—</span>)</div>
           <div class="mobile-step-nav-row">
-            <button class="btn btn-wine" onclick="goStep(2)">Siguiente: Sabores →</button>
+            <button id="step1NextMobile" class="btn btn-wine btn-step-disabled" onclick="tryGoStep(2)">Siguiente: Sabores →</button>
           </div>
           <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost" style="height:44px;display:flex;align-items:center;justify-content:center;text-decoration:none">← Ver catálogo</a>
         </div>
@@ -285,9 +323,9 @@
       <div class="sticky-cta">
         <div class="label">
           <div style="font-size:10px;opacity:.65;letter-spacing:.1em;text-transform:uppercase">Paso 1/4 · Base</div>
-          <div style="font-family:var(--serif);font-size:13px" id="step1Label">Red Velvet seleccionada</div>
+          <div style="font-family:var(--serif);font-size:13px" id="step1Label">Ninguna seleccionada</div>
         </div>
-        <button class="btn btn-wine btn-sm" style="height:40px;padding:0 18px" onclick="goStep(2)">Siguiente →</button>
+        <button id="step1NextDesktop" class="btn btn-wine btn-sm btn-step-disabled" style="height:40px;padding:0 18px" onclick="tryGoStep(2)">Siguiente →</button>
       </div>
     </div><!-- /step1 -->
 
@@ -618,14 +656,15 @@
 const state = {
   currentStep: 1,
   maxStep: 1,
-  base: 'Red Velvet',
-  fills: ['Queso crema'],
-  cobertura: 'Buttercream',
+  base: null,
+  fills: [],
+  cobertura: null,
   porciones: 16,
-  forma: 'Redonda',
+  forma: null,
   pisos: 1,
-  decoracion: 'Minimalista',
+  decoracion: null,
   mensaje: '',
+  _touched: false,
 };
 
 // ── URL param pre-load ──
@@ -695,6 +734,9 @@ function goStep(n) {
   document.getElementById('step' + n).classList.add('active');
   renderStepper();
   updateDesktopNav();
+  // Float bar: ocultar en paso 4 (ya hay resumen), mostrar en otros si base elegida
+  const fb = document.getElementById('floatBar');
+  if (fb) fb.classList.toggle('fb-step4', n === 4);
   window.scrollTo({ top: 0, behavior: 'smooth' });
   renderSummary();
 }
@@ -704,7 +746,31 @@ function goStep(n) {
 // ═══════════════════════════════════════════
 function updateNavLabel1() {
   const el = document.getElementById('navBase');
-  if (el) el.textContent = state.base;
+  if (el) el.textContent = state.base || '—';
+}
+
+function updateStep1Btn() {
+  const disabled = !state.base;
+  ['step1NextMobile','step1NextDesktop'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.classList.toggle('btn-step-disabled', disabled);
+  });
+}
+
+function tryGoStep(n) {
+  if (n === 2 && !state.base) {
+    const err = document.getElementById('step1Error');
+    if (err) {
+      err.classList.remove('visible');
+      err.offsetHeight; // reflow para re-lanzar animación
+      err.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => err.classList.remove('visible'), 3500);
+    }
+    return;
+  }
+  goStep(n);
 }
 function updateNavLabel2() {
   const el = document.getElementById('navLabel2');
@@ -712,14 +778,15 @@ function updateNavLabel2() {
   const fillsLabel = state.fills.length === 2
     ? state.fills[0] + ' + ' + state.fills[1]
     : (state.fills[0] || '—');
-  el.textContent = '(' + fillsLabel + ' · ' + state.cobertura.split(' ').slice(0, 2).join(' ') + ')';
+  el.textContent = '(' + fillsLabel + (state.cobertura ? ' · ' + state.cobertura.split(' ').slice(0, 2).join(' ') : '') + ')';
 }
 function updateNavLabel3() {
   const el = document.getElementById('navLabel3');
-  if (el) el.textContent = '(' + state.porciones + ' porc. · ' + state.forma + ' · ' + state.pisos + ' piso' + (state.pisos > 1 ? 's' : '') + ')';
+  if (el) el.textContent = '(' + state.porciones + ' porc.' + (state.forma ? ' · ' + state.forma : '') + ' · ' + state.pisos + ' piso' + (state.pisos > 1 ? 's' : '') + ')';
 }
 
 function selectBase(el) {
+  state._touched = true;
   document.querySelectorAll('[data-base]').forEach(r => {
     r.classList.remove('selected');
     r.querySelector('.option-radio').textContent = '';
@@ -728,6 +795,9 @@ function selectBase(el) {
   el.querySelector('.option-radio').textContent = '✓';
   state.base = el.dataset.base;
   document.getElementById('step1Label').textContent = state.base + ' seleccionada';
+  // Mostrar float bar la primera vez que el usuario elige algo
+  document.getElementById('floatBar').classList.add('fb-active');
+  updateStep1Btn();
   updateNavLabel1();
   renderSummary();
 }
@@ -760,6 +830,7 @@ function renderCoberturas() {
 }
 
 function toggleFill(el) {
+  state._touched = true;
   const fill = el.dataset.fill;
   if (state.fills.includes(fill)) {
     state.fills = state.fills.filter(f => f !== fill);
@@ -774,6 +845,7 @@ function toggleFill(el) {
 }
 
 function selectCobertura(el) {
+  state._touched = true;
   document.querySelectorAll('[data-cob]').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
   state.cobertura = el.dataset.cob;
@@ -801,6 +873,7 @@ function setSizeHighlight(items, selectedEl) {
 }
 
 function selectSize(el) {
+  state._touched = true;
   const items = document.querySelectorAll('.size-preview-item');
   setSizeHighlight(items, el);
   const size = parseInt(el.dataset.size);
@@ -813,6 +886,7 @@ function selectSize(el) {
 }
 
 function changePorciones(d) {
+  state._touched = true;
   const options = [8, 10, 12, 14, 16, 18, 20, 24, 28, 32];
   const idx = options.indexOf(state.porciones);
   const newIdx = Math.max(0, Math.min(options.length - 1, idx + d));
@@ -855,6 +929,7 @@ function updateShapePreview(forma) {
 }
 
 function selectForma(el) {
+  state._touched = true;
   document.querySelectorAll('[data-forma]').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   state.forma = el.dataset.forma;
@@ -865,6 +940,7 @@ function selectForma(el) {
 
 document.querySelectorAll('[data-pisos]').forEach(chip => {
   chip.addEventListener('click', () => {
+    state._touched = true;
     document.querySelectorAll('[data-pisos]').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
     state.pisos = parseInt(chip.dataset.pisos);
@@ -882,6 +958,7 @@ function updateStep3Label() {
 //  STEP 4 — DECORACIÓN + RESUMEN
 // ═══════════════════════════════════════════
 function selectDeco(el) {
+  state._touched = true;
   document.querySelectorAll('[data-deco]').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
   state.decoracion = el.dataset.deco;
@@ -889,12 +966,14 @@ function selectDeco(el) {
 }
 
 function updateMsg() {
+  state._touched = true;
   state.mensaje = document.getElementById('mensajeInput').value;
   document.getElementById('msgCount').textContent = state.mensaje.length + '/30';
   renderSummary();
 }
 
 function calcPrice() {
+  if (!state.base) return 0;
   const base = state.porciones <= 12 ? 18500 : state.porciones <= 16 ? 23800 : state.porciones <= 24 ? 33500 : 33500 + (state.porciones - 24) * 800;
   const piso   = PISO_EXTRA[state.pisos] || 0;
   const deco   = DECO_EXTRA[state.decoracion] || 0;
@@ -908,13 +987,13 @@ function renderSummary() {
   const v2 = state.maxStep >= 2;
   const v3 = state.maxStep >= 3;
   const v4 = state.maxStep >= 4;
-  const title = `${state.base}${v3 ? ' · ' + state.porciones + ' porciones' : ''}`;
+  const title = state.base ? `${state.base}${v3 ? ' · ' + state.porciones + ' porciones' : ''}` : 'Tu torta';
   const rows = [
-    ['Base', state.base],
+    ['Base', state.base || '—'],
     ['Relleno', v2 ? (state.fills.join(' + ') || '—') : '—'],
-    ['Cobertura', v2 ? state.cobertura : '—'],
-    ['Forma', v3 ? `${state.forma} · ${state.porciones} porc. · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}` : '—'],
-    ['Decoración', v4 ? state.decoracion : '—'],
+    ['Cobertura', v2 ? (state.cobertura || '—') : '—'],
+    ['Forma', v3 ? `${state.forma || '—'} · ${state.porciones} porc. · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}` : '—'],
+    ['Decoración', v4 ? (state.decoracion || '—') : '—'],
     ...(v4 && state.mensaje ? [['Mensaje', `"${state.mensaje}"`]] : []),
   ];
   const rowsHtml = rows.map(([k, v]) =>
@@ -934,8 +1013,8 @@ function renderSummary() {
     document.getElementById('asideRows').innerHTML = rowsHtml;
   }
 
-  // Auto-guardar borrador en cada cambio (cubre swipe-back nativo del celular)
-  localStorage.setItem('felirecetas_draft', JSON.stringify(state));
+  // Auto-guardar borrador en cada cambio (solo si el usuario tocó algo)
+  if (state._touched) localStorage.setItem('felirecetas_draft', JSON.stringify(state));
 
   // Barra flotante (mobile)
   const floatAmt   = document.getElementById('floatBarAmount');
@@ -966,8 +1045,10 @@ function toggleFloatBar() {
 }
 
 function saveDraftAndGoToCatalog() {
-  localStorage.setItem('felirecetas_draft', JSON.stringify(state));
-  window.location.href = 'index.html#catalogo';
+  if (state._touched) {
+    localStorage.setItem('felirecetas_draft', JSON.stringify(state));
+  }
+  window.location.href = 'index.html';
 }
 
 function sendWhatsApp() {
@@ -1015,6 +1096,20 @@ updateDesktopNav();
 updateNavLabel1();
 updateNavLabel2();
 updateNavLabel3();
+updateStep1Btn();
+
+// Si hay base (por draft o URL), activar la float bar y el step1 btn
+if (state.base) {
+  document.getElementById('floatBar').classList.add('fb-active');
+  // Sincronizar la selección visual de base
+  document.querySelectorAll('[data-base]').forEach(r => {
+    const sel = r.dataset.base === state.base;
+    r.classList.toggle('selected', sel);
+    r.querySelector('.option-radio').textContent = sel ? '✓' : '';
+  });
+  if (document.getElementById('step1Label'))
+    document.getElementById('step1Label').textContent = state.base + ' seleccionada';
+}
 
 // Saltar al paso guardado del borrador
 if (state._draftStep && state._draftStep > 1) {
