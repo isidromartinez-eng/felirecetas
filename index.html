@@ -302,21 +302,22 @@
     body .topbar.topbar-in-hero .topbar-btn { color: rgba(255,255,255,.9); }
     /* La topbar del hero (logo+WA original) sigue oculta */
     .hero-topbar { display: none !important; }
-    /* Side menu: siempre oscuro y semi-transparente */
+    /* Side menu: glassmorphism — adapta al fondo que haya detrás */
     .side-menu {
-      background: rgba(10,4,6,.88) !important;
-      backdrop-filter: blur(14px) !important;
-      -webkit-backdrop-filter: blur(14px) !important;
+      background: rgba(0,0,0,.32) !important;
+      backdrop-filter: blur(24px) saturate(160%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+      box-shadow: 0 0 40px rgba(0,0,0,.25) !important;
     }
     .side-menu .logo,
     .side-menu .topbar-btn { color: rgba(255,255,255,.9) !important; }
-    .side-menu .menu-item-title { color: rgba(255,255,255,.9) !important; }
+    .side-menu .menu-item-title { color: rgba(255,255,255,.92) !important; }
     .side-menu .caption,
-    .side-menu .num { color: rgba(255,255,255,.42) !important; }
-    .side-menu .menu-item { border-bottom-color: rgba(255,255,255,.07) !important; }
-    .side-menu .menu-item:hover { background: rgba(255,255,255,.06) !important; }
-    .side-menu hr.rule-soft { border-color: rgba(255,255,255,.07) !important; }
-    .side-menu .side-menu-footer { border-top-color: rgba(255,255,255,.07) !important; }
+    .side-menu .num { color: rgba(255,255,255,.45) !important; }
+    .side-menu .menu-item { border-bottom-color: rgba(255,255,255,.1) !important; }
+    .side-menu .menu-item:hover { background: rgba(255,255,255,.07) !important; }
+    .side-menu hr.rule-soft { border-color: rgba(255,255,255,.1) !important; }
+    .side-menu .side-menu-footer { border-top-color: rgba(255,255,255,.1) !important; }
     /* Banner "seguir personalizando": vive dentro del hero, no sigue al scrollear */
     #draft-banner {
       position: absolute !important;
