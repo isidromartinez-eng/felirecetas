@@ -431,6 +431,51 @@
     /* Badge queda encima del degradado */
     .product-card .card-img .chip-tag { z-index: 3; }
 
+    /* ── Lightbox de galería ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.88);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 100%;
+      max-height: 82vh;
+      border-radius: 12px;
+      object-fit: contain;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5);
+      animation: lb-in .18s ease;
+    }
+    @keyframes lb-in {
+      from { opacity: 0; transform: scale(.94); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 18px; right: 18px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .instagram-grid .cell {
+      cursor: pointer;
+      transition: opacity .18s;
+    }
+    .instagram-grid .cell:active { opacity: .75; }
+
     /* ── Card compartida: Cómo pedir + Eventos ── */
     .section-card {
       background: #f5ede6;
@@ -564,6 +609,12 @@
 
   <!-- ░░ SIDE MENU ░░ -->
   <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+  <!-- ░░ LIGHTBOX ░░ -->
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Foto de Feli Recetas">
+    <button class="lightbox-close" onclick="closeLightbox();event.stopPropagation()" aria-label="Cerrar">✕</button>
+  </div>
   <nav class="side-menu" id="sideMenu" aria-hidden="true">
     <div class="side-menu-head">
       <span class="logo">FELIRECETAS</span>
@@ -1046,37 +1097,48 @@
       </div>
     </div>
 
-    <!-- Burbujas WhatsApp -->
-    <div class="wa-chat">
-      <div class="wa-msg">
-        <div class="wa-name">Faustina Roatta</div>
-        <div class="wa-bubble">
-          <p class="wa-text">Todo estuvo increíble!! el montaje y la torta, nada podría haber sido mejor! fue todo lo que esperaba y más ♥</p>
-          <div class="wa-footer">
-            <span class="wa-time">10:34</span>
-            <span class="wa-ticks">✓✓</span>
-          </div>
+    <!-- Featured quote -->
+    <div class="quote-card">
+      <span class="quote-mark">"</span>
+      <p class="serif" style="font-size:22px;line-height:1.25;color:var(--ink);position:relative;margin:0">
+        Todo estuvo <span class="serif-i" style="color:var(--wine)">increíble</span>!! el montaje y la torta, nada podría haber sido mejor! fue todo lo que esperaba y más ♥
+      </p>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:18px">
+        <div class="review-avatar" style="background:var(--rose);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff;font-family:var(--sans)">F</div>
+        <div>
+          <div class="caption" style="color:var(--ink);font-weight:600;font-size:12px">Faustina Roatta</div>
+          <div class="caption" style="font-size:11px">Cliente · vía WhatsApp</div>
         </div>
       </div>
-      <div class="wa-msg">
-        <div class="wa-name">Victoria Tur</div>
-        <div class="wa-bubble">
-          <p class="wa-text">Hola! qué rico todo!! el pastel y los macarons estuvieron perfectos! muchas gracias todo impecable 🙌</p>
-          <div class="wa-footer">
-            <span class="wa-time">15:21</span>
-            <span class="wa-ticks">✓✓</span>
+    </div>
+
+    <!-- Review list -->
+    <div class="review-list">
+      <div class="review-item">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="review-avatar" style="background:var(--wine);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff;font-family:var(--sans)">V</div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between">
+              <span style="font-weight:600;font-size:13.5px">Victoria Tur</span>
+              <span style="color:var(--gold);font-size:12px">★★★★★</span>
+            </div>
+            <div class="caption" style="font-size:11px">Cliente · vía WhatsApp</div>
           </div>
         </div>
+        <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:10px">Hola! qué rico todo!! el pastel y los macarons estuvieron perfectos! muchas gracias todo impecable</p>
       </div>
-      <div class="wa-msg">
-        <div class="wa-name">Ana Senosiain</div>
-        <div class="wa-bubble">
-          <p class="wa-text">Hola! todo estaba delicioso. Las tartas espectaculares, el cheesecake divino. muchas gracias 😍</p>
-          <div class="wa-footer">
-            <span class="wa-time">18:05</span>
-            <span class="wa-ticks">✓✓</span>
+      <div class="review-item" style="border-bottom:none">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="review-avatar" style="background:var(--sage);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff;font-family:var(--sans)">A</div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between">
+              <span style="font-weight:600;font-size:13.5px">Ana Senosiain</span>
+              <span style="color:var(--gold);font-size:12px">★★★★★</span>
+            </div>
+            <div class="caption" style="font-size:11px">Cliente · vía WhatsApp</div>
           </div>
         </div>
+        <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:10px">Hola! todo estaba delicioso. Las tartas espectaculares, el cheesecake divino. muchas gracias</p>
       </div>
     </div>
 
@@ -1931,6 +1993,25 @@
       banner.style.transform = 'translateY(10px)';
       setTimeout(() => { banner.style.display = 'none'; }, 210);
     }
+  }
+
+  // ── Lightbox de galería ──
+  document.querySelectorAll('.instagram-grid .cell').forEach(function(cell) {
+    cell.addEventListener('click', function() {
+      openLightbox(cell.dataset.bg || cell.style.backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/, '$1'));
+    });
+  });
+  function openLightbox(url) {
+    var lb  = document.getElementById('lightbox');
+    var img = document.getElementById('lightbox-img');
+    img.src = url;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox-img').src = '';
+    document.body.style.overflow = '';
   }
 
   // ── Cómo pedir: toggle desplegable ──
