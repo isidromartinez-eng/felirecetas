@@ -16,8 +16,8 @@
       --cream:      #FBF7F0;
       --cream-warm: #F3EAD7;
       --cream-soft: #EFE6D3;
-      --bordo:      #5C1A1B;
-      --bordo-deep: #3E1112;
+      --bordo:      #7F2626;
+      --bordo-deep: #364459;
       --brown:      #4A2E1D;
       --ink:        #1A1410;
       --muted:      #8B7355;
@@ -446,12 +446,53 @@
     }
     .callout strong { font-weight: 600; }
 
-    /* ─── Address input ──────────────────────────────── */
+    /* ─── Collapsible section ────────────────────────── */
+    .section--collapsible { padding: 0; overflow: hidden; }
+    .section-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 20px 22px;
+      text-align: left;
+    }
+    .section-chevron {
+      flex-shrink: 0;
+      color: var(--muted);
+      transition: transform 0.3s ease;
+    }
+    .section--collapsible.open .section-chevron { transform: rotate(180deg); }
+    .section-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+      padding: 0 22px;
+    }
+    .section--collapsible.open .section-body {
+      max-height: 900px;
+      padding-bottom: 20px;
+    }
+
+    /* ─── Delivery form ──────────────────────────────── */
     .address-block {
       margin-top: 18px;
       display: none;
     }
     .address-block.visible { display: block; }
+    .delivery-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .delivery-field-card {
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
     .field-label {
       font-family: var(--sans);
       font-size: 11px;
@@ -464,8 +505,9 @@
     }
     .field-input {
       width: 100%;
-      border: 1px solid var(--rule);
+      border: none;
       border-radius: 4px;
+      background: transparent;
       padding: 12px 14px;
       font-family: var(--sans);
       font-size: 14px;
@@ -814,45 +856,72 @@
       </div>
 
       <div class="callout">
-        Los pedidos se reservan con <strong>48 hs</strong> mínimo de anticipación.
+        Los pedidos se reservan con <strong>1 semana</strong> mínimo de anticipación.
       </div>
 
       <div class="address-block" id="address-block">
-        <label class="field-label" for="address-input">Dirección de envío</label>
-        <input
-          class="field-input"
-          id="address-input"
-          type="text"
-          placeholder="Calle, número, piso / depto, localidad"
-          autocomplete="street-address"
-          oninput="onAddressInput()"
-        />
-        <p class="field-error" id="address-error">Necesitamos una dirección para el envío</p>
+        <div class="delivery-fields">
+
+          <div class="delivery-field-card">
+            <label class="field-label" for="addr-calle">Calle y número *</label>
+            <input class="field-input" id="addr-calle" type="text"
+              placeholder="Ej: Calle 7 N° 1234"
+              autocomplete="address-line1" oninput="onAddressInput()"/>
+          </div>
+
+          <div class="delivery-field-card">
+            <label class="field-label" for="addr-piso">Piso / Departamento</label>
+            <input class="field-input" id="addr-piso" type="text"
+              placeholder="Ej: 3° B  (opcional)"
+              autocomplete="address-line2" oninput="onAddressInput()"/>
+          </div>
+
+          <div class="delivery-field-card">
+            <label class="field-label" for="addr-barrio">Barrio / Localidad *</label>
+            <input class="field-input" id="addr-barrio" type="text"
+              placeholder="Ej: La Plata, City Bell, Gonnet…"
+              autocomplete="address-level2" oninput="onAddressInput()"/>
+          </div>
+
+          <div class="delivery-field-card">
+            <label class="field-label" for="addr-ref">Referencia</label>
+            <input class="field-input" id="addr-ref" type="text"
+              placeholder="Ej: timbre 3B, portón azul  (opcional)"
+              oninput="onAddressInput()"/>
+          </div>
+
+        </div>
+        <p class="field-error" id="address-error">Completá calle y localidad para continuar</p>
       </div>
     </section>
 
-    <!-- § 03 Notas + vista previa (unificado) -->
-    <section class="section">
-      <p class="section-label"><span>03</span>NOTAS Y CONFIRMACIÓN</p>
-      <textarea
-        class="notes-textarea"
-        id="notes-textarea"
-        rows="3"
-        placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
-        oninput="onNotesInput()"
-      ></textarea>
-      <div class="preview-divider">
-        <hr/><span>Vista previa del mensaje</span><hr/>
-      </div>
-      <div class="chat-container">
-        <div class="chat-bubble">
-          <pre id="preview-text"></pre>
-          <p class="chat-timestamp">10:24 ✓</p>
+    <!-- § 03 Notas + vista previa (colapsable) -->
+    <section class="section section--collapsible" id="section-notas">
+      <button class="section-toggle" onclick="toggleSection('section-notas')" aria-expanded="false">
+        <p class="section-label" style="margin:0"><span>03</span>NOTAS Y CONFIRMACIÓN</p>
+        <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="section-body">
+        <textarea
+          class="notes-textarea"
+          id="notes-textarea"
+          rows="3"
+          placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
+          oninput="onNotesInput()"
+        ></textarea>
+        <div class="preview-divider">
+          <hr/><span>Vista previa del mensaje</span><hr/>
         </div>
+        <div class="chat-container">
+          <div class="chat-bubble">
+            <pre id="preview-text"></pre>
+            <p class="chat-timestamp">10:24 ✓</p>
+          </div>
+        </div>
+        <p class="preview-helper">
+          Podés editarlo después de abrir el chat.
+        </p>
       </div>
-      <p class="preview-helper">
-        Podés editarlo después de abrir el chat.
-      </p>
     </section>
 
     <!-- Order summary -->
@@ -1010,7 +1079,7 @@
     const dates = [];
     const base = new Date();
     base.setHours(0, 0, 0, 0);
-    for (let i = 2; i <= 8; i++) {
+    for (let i = 7; i <= 14; i++) {
       const d = new Date(base);
       d.setDate(base.getDate() + i);
       dates.push(d);
@@ -1223,13 +1292,19 @@
 
   function sendWhatsApp() {
     // Validate address if envio
-    if (mode === 'envio' && !address.trim()) {
-      const inp = document.getElementById('address-input');
-      const err = document.getElementById('address-error');
-      inp.classList.add('error');
-      err.classList.add('visible');
-      inp.focus();
-      return;
+    if (mode === 'envio') {
+      const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
+      const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
+      if (!calle || !barrio) {
+        document.getElementById('address-error').classList.add('visible');
+        document.getElementById('addr-calle').focus();
+        // Abrir sección si estaba cerrada
+        const sec = document.getElementById('section-notas');
+        if (sec && !document.getElementById('address-block').classList.contains('visible')) {
+          document.getElementById('address-block').scrollIntoView({ behavior: 'smooth' });
+        }
+        return;
+      }
     }
     const msg = buildMessage();
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
@@ -1247,11 +1322,26 @@
   }
 
   function onAddressInput() {
-    address = document.getElementById('address-input').value;
-    // Clear error
-    document.getElementById('address-input').classList.remove('error');
+    const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
+    const piso   = (document.getElementById('addr-piso')?.value   || '').trim();
+    const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
+    const ref    = (document.getElementById('addr-ref')?.value    || '').trim();
+    address = [calle, piso, barrio, ref].filter(Boolean).join(', ');
     document.getElementById('address-error').classList.remove('visible');
     updatePreview();
+  }
+
+  function toggleSection(id) {
+    const sec = document.getElementById(id);
+    const isOpen = sec.classList.contains('open');
+    const btn = sec.querySelector('.section-toggle');
+    if (isOpen) {
+      sec.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    } else {
+      sec.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
   }
 
   /* ─────────────────────────────────────────────────────── */
