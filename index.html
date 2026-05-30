@@ -2114,7 +2114,8 @@
           meta: metaStr,
           price: s.price,
           qty: 1,
-          tone: toneMap[p.tone] || 'warm'
+          tone: toneMap[p.tone] || 'warm',
+          img: p.img || ''
         });
       }
       localStorage.setItem(CART_KEY, JSON.stringify(items));

@@ -162,9 +162,11 @@
     .item-thumb {
       width: 68px;
       height: 68px;
-      border-radius: 4px;
+      border-radius: 10px;
       flex-shrink: 0;
       overflow: hidden;
+      background-size: cover;
+      background-position: center;
     }
     .item-body {
       flex: 1;
@@ -365,6 +367,72 @@
       line-height: 1;
     }
 
+    /* ─── Date picker (arrow nav) ───────────────────── */
+    .date-picker {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--cream-soft);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .date-nav {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--cream);
+      border: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .date-nav:disabled { opacity: 0.22; cursor: default; }
+    .date-nav:not(:disabled):active { background: var(--cream-warm); }
+    .date-center { text-align: center; flex: 1; min-width: 0; }
+    .date-day-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      display: block;
+      line-height: 1.1;
+    }
+    .date-day-num {
+      font-family: var(--sans);
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      display: block;
+    }
+
+    /* ─── Preview divider ────────────────────────────── */
+    .preview-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 22px 0 16px;
+    }
+    .preview-divider hr {
+      flex: 1;
+      border: none;
+      border-top: 1px solid var(--rule);
+    }
+    .preview-divider span {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
     /* ─── Anticipation callout ───────────────────────── */
     .callout {
       background: var(--cream-soft);
@@ -533,11 +601,12 @@
       bottom: 0;
       z-index: 20;
       background: var(--bordo-deep);
-      padding: 18px 22px 22px;
+      padding: 12px 20px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
+      box-shadow: 0 -8px 24px rgba(0,0,0,.18);
     }
     .sticky-cta__left { display: flex; flex-direction: column; gap: 2px; }
     .sticky-cta__eyebrow {
@@ -550,7 +619,7 @@
     }
     .sticky-cta__total {
       font-family: var(--serif);
-      font-size: 26px;
+      font-size: 22px;
       font-weight: 500;
       color: var(--cream);
       letter-spacing: -0.01em;
@@ -731,8 +800,17 @@
 
       <p class="helper" id="delivery-helper">¿Cuándo lo retirás?</p>
 
-      <div class="dates-scroll-wrapper">
-        <div class="dates-row" id="dates-row"></div>
+      <div class="date-picker">
+        <button class="date-nav" id="date-prev" onclick="navigateDate(-1)" aria-label="Día anterior">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
+        </button>
+        <div class="date-center">
+          <span class="date-day-name" id="date-day-name">—</span>
+          <span class="date-day-num" id="date-day-num">—</span>
+        </div>
+        <button class="date-nav" id="date-next" onclick="navigateDate(+1)" aria-label="Día siguiente">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+        </button>
       </div>
 
       <div class="callout">
@@ -753,21 +831,19 @@
       </div>
     </section>
 
-    <!-- § 03 Notas para Feli -->
+    <!-- § 03 Notas + vista previa (unificado) -->
     <section class="section">
-      <p class="section-label"><span>03</span>NOTAS PARA FELI</p>
+      <p class="section-label"><span>03</span>NOTAS Y CONFIRMACIÓN</p>
       <textarea
         class="notes-textarea"
         id="notes-textarea"
-        rows="4"
+        rows="3"
         placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
         oninput="onNotesInput()"
       ></textarea>
-    </section>
-
-    <!-- § 04 Vista previa del mensaje -->
-    <section class="section">
-      <p class="section-label"><span>04</span>VISTA PREVIA DEL MENSAJE</p>
+      <div class="preview-divider">
+        <hr/><span>Vista previa del mensaje</span><hr/>
+      </div>
       <div class="chat-container">
         <div class="chat-bubble">
           <pre id="preview-text"></pre>
@@ -775,7 +851,7 @@
         </div>
       </div>
       <p class="preview-helper">
-        Este es el mensaje que se enviará por WhatsApp. Podés editarlo después de abrir el chat.
+        Podés editarlo después de abrir el chat.
       </p>
     </section>
 
@@ -828,14 +904,17 @@
     dark:  'linear-gradient(135deg, #3D2B1A, #1A0F07)',
   };
 
-  const DAYS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const MONTHS_ES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const DAYS_ES_SHORT  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const DAYS_ES_FULL   = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  const MONTHS_ES      = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const MONTHS_ES_FULL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-  let cart   = [];
-  let notes  = '';
-  let mode   = 'retiro';   // 'retiro' | 'envio'
-  let selDate = null;      // Date object
-  let address = '';
+  let cart      = [];
+  let notes     = '';
+  let mode      = 'retiro';   // 'retiro' | 'envio'
+  let selDate   = null;       // Date object
+  let address   = '';
+  let dateIndex = 0;          // índice dentro de buildDates()
 
   /* ─────────────────────────────────────────────────────── */
   /*  Persistence                                            */
@@ -943,25 +1022,25 @@
     return d.getDate() + ' ' + MONTHS_ES[d.getMonth()];
   }
 
-  function renderDates() {
-    const row = document.getElementById('dates-row');
-    row.innerHTML = '';
+  function renderDatePicker() {
     const dates = buildDates();
-    dates.forEach((d, idx) => {
-      const pill = document.createElement('button');
-      pill.className = 'date-pill' + (selDate && selDate.toDateString() === d.toDateString() ? ' active' : '');
-      pill.innerHTML = `
-        <span class="date-pill__day">${DAYS_ES[d.getDay()]}</span>
-        <span class="date-pill__date">${formatDateLabel(d)}</span>
-      `;
-      pill.addEventListener('click', () => {
-        selDate = d;
-        renderDates();
-        updatePreview();
-        updateCTA();
-      });
-      row.appendChild(pill);
-    });
+    const d = dates[dateIndex];
+    selDate = d;
+
+    document.getElementById('date-day-name').textContent = DAYS_ES_FULL[d.getDay()];
+    document.getElementById('date-day-num').textContent  = d.getDate() + ' de ' + MONTHS_ES_FULL[d.getMonth()];
+
+    document.getElementById('date-prev').disabled = dateIndex === 0;
+    document.getElementById('date-next').disabled = dateIndex === dates.length - 1;
+
+    updatePreview();
+    updateCTA();
+  }
+
+  function navigateDate(delta) {
+    const max = buildDates().length - 1;
+    dateIndex = Math.max(0, Math.min(max, dateIndex + delta));
+    renderDatePicker();
   }
 
   /* ─────────────────────────────────────────────────────── */
@@ -1002,9 +1081,12 @@
       card.dataset.id = item.id;
 
       const bg = TONES[item.tone] || TONES.warm;
+      const thumbStyle = item.img
+        ? `background-image:url('${escHtml(item.img)}');background-color:${bg.split(',')[1] || '#e8c4a0'}`
+        : `background:${bg}`;
 
       card.innerHTML = `
-        <div class="item-thumb" style="background: ${bg};"></div>
+        <div class="item-thumb" style="${thumbStyle}"></div>
         <div class="item-body">
           <div class="item-header">
             <span class="item-name">${escHtml(item.name)}</span>
@@ -1134,9 +1216,9 @@
   /* ─────────────────────────────────────────────────────── */
 
   function updateCTA() {
+    // selDate siempre está seteado con el date picker — botón siempre activo
     const btn = document.getElementById('whatsapp-btn');
-    const hasDate = selDate !== null;
-    btn.disabled = !hasDate;
+    btn.disabled = false;
   }
 
   function sendWhatsApp() {
@@ -1206,7 +1288,7 @@
     document.getElementById('notes-textarea').value = notes;
 
     renderItems();
-    renderDates();
+    renderDatePicker();
     updateSummary();
     updateEyebrow();
     updatePreview();
