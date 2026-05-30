@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
+  <script>try{document.documentElement.dataset.palette=localStorage.getItem('feli-palette')||'v2';}catch(e){document.documentElement.dataset.palette='v2';}</script>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Feli Recetas · Pastelería artesanal en La Plata</title>
   <meta name="description" content="Pastelería artesanal en La Plata. Macarons, croissants, tortas personalizadas y más. Pedidos por WhatsApp con 48hs de anticipación."/>
@@ -40,7 +41,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 4px 18px rgba(42,31,23,.13);
+      box-shadow: 0 4px 18px rgba(54,68,89,.13);
       pointer-events: auto;
       max-width: 430px;
       margin: 0 auto;
@@ -48,7 +49,7 @@
     .draft-icon {
       flex-shrink: 0;
       width: 34px; height: 34px;
-      background: rgba(122,40,54,.08);
+      background: rgba(127,38,38,.08);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
     }
@@ -60,11 +61,11 @@
       font-family: 'DM Sans', sans-serif;
       font-size: 10px; font-weight: 600;
       letter-spacing: 0.8px; text-transform: uppercase;
-      color: #7A2836; margin-bottom: 2px;
+      color: #7F2626; margin-bottom: 2px;
     }
     .draft-desc {
       font-family: 'DM Sans', sans-serif;
-      font-size: 12px; color: rgba(42,31,23,.65);
+      font-size: 12px; color: rgba(54,68,89,.65);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .draft-continue {
@@ -80,11 +81,11 @@
     .draft-continue:hover { opacity: .85; }
     .draft-dismiss {
       background: none; border: none; cursor: pointer;
-      padding: 5px; color: rgba(42,31,23,.32);
+      padding: 5px; color: rgba(54,68,89,.32);
       flex-shrink: 0; display: flex; align-items: center;
       transition: color .15s;
     }
-    .draft-dismiss:hover { color: rgba(42,31,23,.65); }
+    .draft-dismiss:hover { color: rgba(54,68,89,.65); }
 
 
     /* Ejemplos modal → bottom sheet en mobile */
@@ -151,7 +152,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      background: #0c0306 !important;
+      background: #1c0f14 !important;
     }
     @supports (height: 100svh) {
       .hero-fullbleed { height: 100svh !important; }
@@ -237,14 +238,14 @@
       font-weight: 600;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: #C4748A;
+      color: var(--surface-dark-accent);
       margin-bottom: 12px;
     }
     .hero-eyebrow::before {
       content: '';
       display: block;
       width: 20px; height: 1px;
-      background: #C4748A;
+      background: var(--surface-dark-accent);
       flex-shrink: 0;
     }
     .hero-title {
@@ -252,12 +253,12 @@
       font-weight: 600;
       font-size: clamp(38px, 11vw, 54px);
       line-height: 1.05;
-      color: #FAF7F2;
+      color: #FFFFFF;
       margin: 0 0 22px;
     }
     .hero-title em {
       font-style: italic;
-      color: #C4748A;
+      color: var(--surface-dark-accent);
     }
     .hero-ctas {
       display: flex;
@@ -268,8 +269,8 @@
       display: flex; align-items: center; justify-content: center;
       font-family: 'DM Sans', sans-serif;
       font-size: 14px; font-weight: 600;
-      color: #7A2836;
-      background: #FAF7F2;
+      color: #7F2626;
+      background: #FFFFFF;
       border-radius: 999px;
       padding: 14px 24px;
       text-decoration: none;
@@ -369,14 +370,14 @@
     #inicio .draft-banner-inner {
       background: rgba(10,4,6,.52);
       border: 1px solid rgba(255,255,255,.15);
-      border-left: 3px solid #c06070;
+      border-left: 3px solid var(--surface-dark-accent);
       box-shadow: none;
       margin: 0;
     }
-    #inicio .draft-title   { color: #e8a0ac; }
+    #inicio .draft-title   { color: var(--surface-dark-accent); }
     #inicio .draft-desc    { color: rgba(255,255,255,.65); }
     #inicio .draft-icon    { background: rgba(255,255,255,.10); }
-    #inicio .draft-icon svg { stroke: #e8a0ac; }
+    #inicio .draft-icon svg { stroke: var(--surface-dark-accent); }
     #inicio .draft-dismiss { color: rgba(255,255,255,.4); }
     #inicio .draft-continue { background: rgba(255,255,255,.18); color: #fff; }
     /* ── Split-header (desktop): fixed, oculto durante el hero ── */
@@ -476,7 +477,7 @@
       }
       .product-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 12px 36px rgba(42,31,24,.22), 0 3px 10px rgba(42,31,24,.10);
+        box-shadow: 0 12px 36px rgba(54,68,89,.22), 0 3px 10px rgba(54,68,89,.10);
       }
       .product-card:hover .card-img {
         filter: brightness(1.04);
@@ -531,7 +532,7 @@
 
     /* ── Card compartida: Cómo pedir + Eventos ── */
     .section-card {
-      background: #f5ede6;
+      background: var(--surface-soft);
       border-radius: 16px;
       border-left: 4px solid var(--wine);
       overflow: hidden;
@@ -612,7 +613,7 @@
     .hist-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
     .hist-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
     .hist-content {
-      background: #2a221d;
+      background: var(--surface-dark);
       padding: 36px 24px 44px;
     }
     .hist-eyebrow {
@@ -621,7 +622,7 @@
       font-weight: 600;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: #c9b7a4;
+      color: var(--surface-dark-ink-2);
       margin-bottom: 20px;
     }
     .hist-title {
@@ -629,30 +630,30 @@
       font-size: 42px;
       font-weight: 400;
       line-height: 1.08;
-      color: #f3e4d4;
+      color: var(--surface-dark-ink);
       margin: 0 0 24px;
       letter-spacing: -.02em;
     }
-    .hist-title em { color: #e8c8b5; font-style: italic; }
+    .hist-title em { color: var(--surface-dark-accent); font-style: italic; }
     .hist-body {
       font-family: var(--sans);
       font-size: 14.5px;
       line-height: 1.72;
-      color: #c9b7a4;
+      color: var(--surface-dark-ink-2);
       margin: 0 0 34px;
     }
     .hist-author { display: flex; align-items: center; gap: 14px; }
     .hist-avatar {
       width: 46px; height: 46px; border-radius: 50%;
-      background: #e8c8b5; color: #2a221d;
+      background: var(--surface-dark-accent); color: var(--surface-dark);
       font-family: var(--serif); font-size: 14px; font-weight: 500;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; letter-spacing: .04em;
     }
-    .hist-author-name { font-family: var(--serif); font-size: 18px; color: #f3e4d4; line-height: 1.2; }
+    .hist-author-name { font-family: var(--serif); font-size: 18px; color: var(--surface-dark-ink); line-height: 1.2; }
     .hist-author-role {
       font-family: var(--sans); font-size: 10px; font-weight: 600;
-      letter-spacing: .12em; text-transform: uppercase; color: #c9b7a4; margin-top: 4px;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--surface-dark-ink-2); margin-top: 4px;
     }
   </style>
 </head>
@@ -665,7 +666,7 @@
 
   <!-- ░░ LIGHTBOX ░░ -->
   <div id="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Foto de Feli Recetas">
+    <img id="lightbox-img" alt="Foto de Feli Recetas">
     <button class="lightbox-close" onclick="closeLightbox();event.stopPropagation()" aria-label="Cerrar">✕</button>
   </div>
   <nav class="side-menu" id="sideMenu" aria-hidden="true">
@@ -769,7 +770,7 @@
     <div id="draft-banner">
       <div class="draft-banner-inner">
         <div class="draft-icon">
-          <svg width="18" height="18" viewBox="0 0 22 20" fill="none" stroke="#7A2836" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="18" height="18" viewBox="0 0 22 20" fill="none" stroke="#7F2626" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 14c0-4 18-4 18 0l-1.5 5H3.5L2 14z"/>
             <path d="M7 14 Q11 9 15 14"/>
             <line x1="2" y1="14" x2="20" y2="14"/>
@@ -936,9 +937,9 @@
 
     <!-- Separador de transición -->
     <div style="display:flex;align-items:center;gap:14px;padding:0 22px 28px">
-      <hr style="flex:1;border:none;border-top:1px solid #d9c9bc">
-      <span style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#b5a090;white-space:nowrap">Nuestra historia</span>
-      <hr style="flex:1;border:none;border-top:1px solid #d9c9bc">
+      <hr style="flex:1;border:none;border-top:1px solid var(--rule)">
+      <span style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap">Nuestra historia</span>
+      <hr style="flex:1;border:none;border-top:1px solid var(--rule)">
     </div>
 
     <!-- Bloque unificado: foto + contenido -->
@@ -1288,9 +1289,9 @@
 
   <!-- ░░ FINAL CTA ░░ -->
   <div style="display:flex;align-items:center;gap:14px;padding:40px 22px 20px">
-    <hr style="flex:1;border:none;border-top:1px solid #d9c9bc">
-    <span style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#b5a090;white-space:nowrap">Tu pedido</span>
-    <hr style="flex:1;border:none;border-top:1px solid #d9c9bc">
+    <hr style="flex:1;border:none;border-top:1px solid var(--rule)">
+    <span style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap">Tu pedido</span>
+    <hr style="flex:1;border:none;border-top:1px solid var(--rule)">
   </div>
   <section class="final-cta">
     <span class="decor-letter">F</span>
@@ -2327,6 +2328,33 @@
     if (e.persisted) updateCartBadge();
   });
 
+</script>
+
+<!-- ░░ SELECTOR DE PALETA ░░ -->
+<div id="palette-switch" role="group" aria-label="Cambiar paleta de colores">
+  <span class="ps-label">Paleta</span>
+  <div class="ps-dots">
+    <button type="button" data-p="v1" title="Bordó protagonista" aria-label="Bordó protagonista"><span></span></button>
+    <button type="button" data-p="v2" title="Azul + bordó" aria-label="Azul más bordó"><span></span></button>
+    <button type="button" data-p="v3" title="Editorial claro" aria-label="Editorial claro"><span></span></button>
+  </div>
+</div>
+<script>
+(function(){
+  var root = document.documentElement;
+  function apply(p){
+    root.dataset.palette = p;
+    try { localStorage.setItem('feli-palette', p); } catch(e){}
+    document.querySelectorAll('#palette-switch button').forEach(function(b){
+      b.classList.toggle('active', b.dataset.p === p);
+    });
+  }
+  apply(root.dataset.palette || 'v1');
+  document.getElementById('palette-switch').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-p]'); if(!b) return;
+    apply(b.dataset.p);
+  });
+})();
 </script>
 </body>
 </html>

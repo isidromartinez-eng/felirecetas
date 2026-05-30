@@ -21,8 +21,8 @@
     align-items: center;
     padding: 0 40px;
     height: 72px;
-    border-bottom: 1px solid rgba(42,31,23,.10);
-    background: rgba(244, 237, 226, 0.82);
+    border-bottom: 1px solid rgba(54,68,89,.10);
+    background: rgba(255, 255, 255, 0.82);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     gap: 32px;
@@ -37,7 +37,7 @@
   font-family: 'Instrument Serif', 'Cormorant Garamond', serif;
   font-size: 23px;
   font-weight: 400;
-  color: rgb(42,31,23);
+  color: var(--ink);
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
@@ -45,7 +45,7 @@
 }
 .split-logo em {
   font-style: italic;
-  color: #7A2836;
+  color: #7F2626;
 }
 
 /* Nav — links agrupados a la derecha junto al botón */
@@ -59,20 +59,20 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 400;
-  color: rgb(42,31,23);
+  color: var(--ink);
   text-decoration: none;
   letter-spacing: 0;
   transition: opacity .15s;
 }
 .split-nav a:hover { opacity: .5; }
 .split-nav a.active {
-  color: #7A2836;
+  color: #7F2626;
   font-weight: 600;
   opacity: 1 !important;
   text-decoration: underline;
   text-underline-offset: 5px;
   text-decoration-thickness: 1.5px;
-  text-decoration-color: #7A2836;
+  text-decoration-color: #7F2626;
 }
 
 /* Botón WA — bordeaux pill redondeado */
@@ -141,7 +141,7 @@ section#inicio {
 @media (min-width: 768px) {
   .split-left {
     padding: 0 64px;
-    border-right: 1px solid rgba(42,31,23,.08);
+    border-right: 1px solid rgba(54,68,89,.08);
     overflow-y: visible;
   }
 }
@@ -159,12 +159,12 @@ section#inicio {
   font-weight: 400;
   letter-spacing: 1.32px;
   text-transform: uppercase;
-  color: rgba(42,31,23,.6);
+  color: rgba(54,68,89,.6);
 }
 .split-vol-sep {
   width: 22px;
   height: 1px;
-  background: #7A2836;
+  background: #7F2626;
   flex-shrink: 0;
   opacity: .5;
 }
@@ -177,12 +177,12 @@ section#inicio {
   font-style: normal;
   line-height: 0.92;
   letter-spacing: -0.03em;
-  color: rgb(42,31,23);
+  color: var(--ink);
   margin: 0 0 22px;
 }
 .split-headline em {
   font-style: italic;
-  color: #7A2836;
+  color: #7F2626;
 }
 
 /* Descripción */
@@ -190,7 +190,7 @@ section#inicio {
   font-family: 'DM Sans', sans-serif;
   font-size: 17px;
   line-height: 1.55;
-  color: rgba(42,31,23,.78);
+  color: rgba(54,68,89,.78);
   margin: 0 0 28px;
   max-width: 420px;
 }
@@ -209,8 +209,8 @@ section#inicio {
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: rgb(251,247,240);
-  background: #7A2836;
+  color: rgb(255,255,255);
+  background: #7F2626;
   text-decoration: none;
   padding: 0 20px;
   height: 48px;
@@ -227,17 +227,17 @@ section#inicio {
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: rgb(42,31,23);
+  color: var(--ink);
   background: transparent;
   text-decoration: none;
   padding: 0 20px;
   height: 48px;
   border-radius: 6px;
-  border: 1px solid rgba(42,31,23,.25);
+  border: 1px solid rgba(54,68,89,.25);
   white-space: nowrap;
   transition: background .15s;
 }
-.split-cta-secondary:hover { background: rgba(42,31,23,.05); }
+.split-cta-secondary:hover { background: rgba(54,68,89,.05); }
 
 /* Info tags */
 .split-tags {
@@ -245,14 +245,14 @@ section#inicio {
   flex-direction: column;
   gap: 4px;
   padding-top: 20px;
-  border-top: 1px solid rgba(42,31,23,.08);
+  border-top: 1px solid rgba(54,68,89,.08);
 }
 .split-tag {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.66px;
-  color: rgba(42,31,23,.55);
+  color: rgba(54,68,89,.55);
 }
 
 /* ── Columna derecha: foto ── */
@@ -288,8 +288,8 @@ section#inicio {
   font-weight: 400;
   letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: rgb(251,247,240);
-  background: rgba(42,31,23,.4);
+  color: rgb(255,255,255);
+  background: rgba(54,68,89,.4);
   height: 29.6px;
   padding: 0 10px;
   margin-bottom: 10px;
@@ -301,7 +301,7 @@ section#inicio {
   font-style: italic;
   font-size: 28px;
   line-height: 1;
-  color: rgb(251,247,240);
+  color: rgb(255,255,255);
 }
 
 /* ============================================
@@ -336,7 +336,7 @@ section#inicio {
 
   /* Tags */
   .split-tags { padding-top: 8px; gap: 2px; }
-  .split-tag  { font-size: 11px; letter-spacing: 0.8px; color: rgba(42,31,23,.65); }
+  .split-tag  { font-size: 11px; letter-spacing: 0.8px; color: rgba(54,68,89,.65); }
   .split-tag:nth-child(3) { display: none; }
 
   /* Foto overlay — subido para no quedar tapado por la barra del browser */

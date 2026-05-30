@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
+  <script>try{document.documentElement.dataset.palette=localStorage.getItem('feli-palette')||'v2';}catch(e){document.documentElement.dataset.palette='v2';}</script>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Tu pedido · Feli Recetas</title>
   <meta name="theme-color" content="#364459"/>
@@ -25,6 +26,48 @@
       --serif:      "Cormorant Garamond", "Cormorant", Georgia, serif;
       --sans:       "DM Sans", -apple-system, "Helvetica Neue", system-ui, sans-serif;
       --mono:       "DM Mono", "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    /* ── Variantes de paleta: cambian el fondo (la tarjeta queda blanca) ── */
+    [data-palette="v1"] body { background: #7F2626; }
+    [data-palette="v2"] body { background: #364459; }
+    [data-palette="v3"] body { background: #EFEFEF; }
+
+    /* ── Selector de paleta ── */
+    #palette-switch {
+      position: fixed; left: 16px; bottom: 24px; z-index: 60;
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 12px 8px 14px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(54,68,89,.2);
+      border-radius: 999px;
+      box-shadow: 0 6px 24px rgba(54,68,89,.18);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      font-family: var(--sans); opacity: .55; transition: opacity .2s;
+    }
+    #palette-switch:hover { opacity: 1; }
+    #palette-switch .ps-label {
+      font-size: 9.5px; font-weight: 600; letter-spacing: .14em;
+      text-transform: uppercase; color: #5A6878; white-space: nowrap;
+    }
+    #palette-switch .ps-dots { display: flex; gap: 7px; }
+    #palette-switch button {
+      width: 22px; height: 22px; border-radius: 999px;
+      border: 2px solid transparent; padding: 0; cursor: pointer;
+      background: none; transition: transform .15s;
+    }
+    #palette-switch button:hover { transform: scale(1.12); }
+    #palette-switch button > span {
+      display: block; width: 100%; height: 100%; border-radius: 999px;
+      border: 1px solid rgba(54,68,89,.18);
+    }
+    #palette-switch button[data-p="v1"] > span { background: #7F2626; }
+    #palette-switch button[data-p="v2"] > span { background: #364459; }
+    #palette-switch button[data-p="v3"] > span { background: linear-gradient(135deg,#EFEFEF 0 50%,#7F2626 50% 100%); }
+    #palette-switch button.active { border-color: #364459; }
+    @media (max-width: 767px) {
+      #palette-switch { bottom: 84px; left: 12px; padding: 7px 11px 7px 12px; }
+      #palette-switch .ps-label { display: none; }
     }
 
     /* ─── Reset ─────────────────────────────────────── */
@@ -61,7 +104,7 @@
       position: sticky;
       top: 0;
       z-index: 30;
-      background: rgba(251,247,240,0.95);
+      background: rgba(255,255,255,0.95);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--rule);
@@ -403,7 +446,7 @@
       color: var(--muted);
       line-height: 1;
     }
-    .date-chip.active .date-chip__day { color: rgba(251,247,240,.65); }
+    .date-chip.active .date-chip__day { color: rgba(255,255,255,.65); }
     .date-chip__num {
       font-family: var(--serif);
       font-size: 28px;
@@ -420,7 +463,7 @@
       color: var(--muted);
       line-height: 1;
     }
-    .date-chip.active .date-chip__month { color: rgba(251,247,240,.65); }
+    .date-chip.active .date-chip__month { color: rgba(255,255,255,.65); }
 
     /* ─── Preview divider ────────────────────────────── */
     .preview-divider {
@@ -662,7 +705,7 @@
     .sticky-cta__disclaimer {
       font-family: var(--sans);
       font-size: 10px;
-      color: rgba(251,247,240,0.45);
+      color: rgba(255,255,255,0.45);
       letter-spacing: 0.01em;
     }
     .sticky-cta__eyebrow {
@@ -671,7 +714,7 @@
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(251,247,240,0.55);
+      color: rgba(255,255,255,0.55);
     }
     .sticky-cta__total {
       font-family: var(--serif);
@@ -1493,6 +1536,33 @@
   }
 
   document.addEventListener('DOMContentLoaded', init);
+</script>
+
+<!-- ░░ SELECTOR DE PALETA ░░ -->
+<div id="palette-switch" role="group" aria-label="Cambiar paleta de colores">
+  <span class="ps-label">Paleta</span>
+  <div class="ps-dots">
+    <button type="button" data-p="v1" title="Bordó protagonista" aria-label="Bordó protagonista"><span></span></button>
+    <button type="button" data-p="v2" title="Azul + bordó" aria-label="Azul más bordó"><span></span></button>
+    <button type="button" data-p="v3" title="Editorial claro" aria-label="Editorial claro"><span></span></button>
+  </div>
+</div>
+<script>
+(function(){
+  var root = document.documentElement;
+  function apply(p){
+    root.dataset.palette = p;
+    try { localStorage.setItem('feli-palette', p); } catch(e){}
+    document.querySelectorAll('#palette-switch button').forEach(function(b){
+      b.classList.toggle('active', b.dataset.p === p);
+    });
+  }
+  apply(root.dataset.palette || 'v1');
+  document.getElementById('palette-switch').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-p]'); if(!b) return;
+    apply(b.dataset.p);
+  });
+})();
 </script>
 </body>
 </html>

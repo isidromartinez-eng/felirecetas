@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
+  <script>try{document.documentElement.dataset.palette=localStorage.getItem('feli-palette')||'v2';}catch(e){document.documentElement.dataset.palette='v2';}</script>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Personalizar torta · Feli Recetas</title>
   <meta name="description" content="Armá tu torta personalizada paso a paso y enviá el pedido por WhatsApp."/>
@@ -52,7 +53,7 @@
       font-family: var(--serif, serif);
       font-size: 15px;
       font-style: italic;
-      color: #7A2836;
+      color: #7F2626;
       font-weight: 500;
       margin-bottom: 10px;
       min-height: 20px;
@@ -113,7 +114,7 @@
       bottom: 0; left: 0; right: 0;
       background: var(--paper);
       border-top: 1px solid var(--rule-soft);
-      box-shadow: 0 -4px 20px rgba(42,31,23,.10);
+      box-shadow: 0 -4px 20px rgba(54,68,89,.10);
       z-index: 150;
       border-radius: 16px 16px 0 0;
     }
@@ -163,7 +164,7 @@
       justify-content: space-between;
       align-items: baseline;
       padding: 7px 0;
-      border-bottom: 1px solid rgba(42,31,23,.05);
+      border-bottom: 1px solid rgba(54,68,89,.05);
     }
     .float-bar-row-label { color: var(--ink-3); font-size: 12px; font-family: var(--sans); }
     .float-bar-row-value { color: var(--ink); font-size: 13px; font-weight: 500; text-align: right; max-width: 65%; }
@@ -204,12 +205,12 @@
   /* ── Mensaje de error paso 1 ── */
   #step1Error {
     display: none;
-    background: rgba(122,40,54,.07);
-    border: 1px solid rgba(122,40,54,.25);
+    background: rgba(127,38,38,.07);
+    border: 1px solid rgba(127,38,38,.25);
     border-radius: 8px;
     padding: 10px 14px;
     font-size: 13px;
-    color: #7A2836;
+    color: #7F2626;
     font-family: var(--sans);
     line-height: 1.4;
   }
@@ -390,15 +391,15 @@
       <!-- Visual preview -->
       <div class="size-preview" id="sizePreview">
         <div class="size-preview-item" data-size="12" onclick="selectSize(this)" style="opacity:.35">
-          <svg id="shapePrev12" class="size-preview-cake" width="70" height="60" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 4px 8px rgba(122,40,54,.15))"><circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/></svg>
+          <svg id="shapePrev12" class="size-preview-cake" width="70" height="60" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 4px 8px rgba(127,38,38,.15))"><circle cx="50" cy="50" r="44" fill="#7F2626" opacity="0.85"/></svg>
           <div class="serif" style="font-size:15px;color:var(--ink-3)">12p</div>
         </div>
         <div class="size-preview-item active" data-size="16" onclick="selectSize(this)">
-          <svg id="shapePrev16" class="size-preview-cake" width="100" height="90" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 8px 20px rgba(122,40,54,.3))"><circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/></svg>
+          <svg id="shapePrev16" class="size-preview-cake" width="100" height="90" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 8px 20px rgba(127,38,38,.3))"><circle cx="50" cy="50" r="44" fill="#7F2626" opacity="0.85"/></svg>
           <div class="serif" style="font-size:15px;color:var(--wine)">16p</div>
         </div>
         <div class="size-preview-item" data-size="24" onclick="selectSize(this)" style="opacity:.35">
-          <svg id="shapePrev24" class="size-preview-cake" width="130" height="120" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 4px 8px rgba(122,40,54,.15))"><circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/></svg>
+          <svg id="shapePrev24" class="size-preview-cake" width="130" height="120" viewBox="0 0 100 100" style="display:block;filter:drop-shadow(0 4px 8px rgba(127,38,38,.15))"><circle cx="50" cy="50" r="44" fill="#7F2626" opacity="0.85"/></svg>
           <div class="serif" style="font-size:15px;color:var(--ink-3)">24p</div>
         </div>
       </div>
@@ -872,7 +873,7 @@ function setSizeHighlight(items, selectedEl) {
     const sel = i === selectedEl;
     i.style.opacity = sel ? '1' : '.35';
     const cake = i.querySelector('.size-preview-cake');
-    if (cake) cake.style.filter = sel ? 'drop-shadow(0 8px 20px rgba(122,40,54,.4))' : 'drop-shadow(0 4px 8px rgba(122,40,54,.15))';
+    if (cake) cake.style.filter = sel ? 'drop-shadow(0 8px 20px rgba(127,38,38,.4))' : 'drop-shadow(0 4px 8px rgba(127,38,38,.15))';
     i.querySelector('.serif').style.color = sel ? 'var(--wine)' : 'var(--ink-3)';
   });
 }
@@ -920,9 +921,9 @@ function updatePorcionesHint() {
 }
 
 const SHAPE_SVG = {
-  'Redonda':  '<circle cx="50" cy="50" r="44" fill="#7A2836" opacity="0.85"/>',
-  'Cuadrada': '<rect x="8" y="8" width="84" height="84" rx="5" fill="#7A2836" opacity="0.85"/>',
-  'Corazón':  '<path d="M50 82C18 62,8 42,8 30C8 18,18 10,30 10C38 10,45 14,50 20C55 14,62 10,70 10C82 10,92 18,92 30C92 42,82 62,50 82Z" fill="#7A2836" opacity="0.85"/>'
+  'Redonda':  '<circle cx="50" cy="50" r="44" fill="#7F2626" opacity="0.85"/>',
+  'Cuadrada': '<rect x="8" y="8" width="84" height="84" rx="5" fill="#7F2626" opacity="0.85"/>',
+  'Corazón':  '<path d="M50 82C18 62,8 42,8 30C8 18,18 10,30 10C38 10,45 14,50 20C55 14,62 10,70 10C82 10,92 18,92 30C92 42,82 62,50 82Z" fill="#7F2626" opacity="0.85"/>'
 };
 
 function updateShapePreview(forma) {
@@ -1197,6 +1198,33 @@ if (state._draftStep && state._draftStep > 1) {
   // Saltar al paso 4 con todo pre-cargado
   state.maxStep = 4;
   goStep(4);
+})();
+</script>
+
+<!-- ░░ SELECTOR DE PALETA ░░ -->
+<div id="palette-switch" role="group" aria-label="Cambiar paleta de colores">
+  <span class="ps-label">Paleta</span>
+  <div class="ps-dots">
+    <button type="button" data-p="v1" title="Bordó protagonista" aria-label="Bordó protagonista"><span></span></button>
+    <button type="button" data-p="v2" title="Azul + bordó" aria-label="Azul más bordó"><span></span></button>
+    <button type="button" data-p="v3" title="Editorial claro" aria-label="Editorial claro"><span></span></button>
+  </div>
+</div>
+<script>
+(function(){
+  var root = document.documentElement;
+  function apply(p){
+    root.dataset.palette = p;
+    try { localStorage.setItem('feli-palette', p); } catch(e){}
+    document.querySelectorAll('#palette-switch button').forEach(function(b){
+      b.classList.toggle('active', b.dataset.p === p);
+    });
+  }
+  apply(root.dataset.palette || 'v1');
+  document.getElementById('palette-switch').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-p]'); if(!b) return;
+    apply(b.dataset.p);
+  });
 })();
 </script>
 </body>
