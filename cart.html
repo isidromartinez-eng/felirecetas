@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Tu pedido · Feli Recetas</title>
-  <meta name="theme-color" content="#FBF7F0"/>
+  <meta name="theme-color" content="#364459"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,15 +13,15 @@
   <style>
     /* ─── Design tokens ─────────────────────────────── */
     :root {
-      --cream:      #FBF7F0;
-      --cream-warm: #F3EAD7;
-      --cream-soft: #EFE6D3;
+      --cream:      #FFFFFF;
+      --cream-warm: #EFEFEF;
+      --cream-soft: #E6E6E6;
       --bordo:      #7F2626;
       --bordo-deep: #364459;
-      --brown:      #4A2E1D;
-      --ink:        #1A1410;
-      --muted:      #8B7355;
-      --rule:       rgba(26,20,16,0.12);
+      --brown:      #364459;
+      --ink:        #364459;
+      --muted:      #5A6878;
+      --rule:       rgba(54,68,89,0.12);
       --serif:      "Cormorant Garamond", "Cormorant", Georgia, serif;
       --sans:       "DM Sans", -apple-system, "Helvetica Neue", system-ui, sans-serif;
       --mono:       "DM Mono", "JetBrains Mono", ui-monospace, monospace;
@@ -707,84 +707,121 @@
     #empty-state {
       display: none;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px 30px 100px;
-      text-align: center;
+      align-items: stretch;
       flex: 1;
+      background: var(--cream);
     }
     #empty-state.visible { display: flex; }
-    .empty-back {
-      align-self: flex-start;
-      font-family: var(--sans);
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 48px;
-      cursor: pointer;
+
+    .empty-topbar {
       display: flex;
       align-items: center;
-      gap: 4px;
-      transition: color 0.15s;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      border-bottom: 1px solid var(--rule);
+      flex-shrink: 0;
     }
-    .empty-back:hover { color: var(--ink); }
-    .empty-glyph {
-      width: 90px;
-      height: 90px;
-      background: var(--cream-soft);
-      border-radius: 50%;
+    .empty-topbar-nav {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.15s;
+      min-width: 52px;
+    }
+    .empty-topbar-nav:hover { color: var(--ink); }
+    .empty-topbar-brand {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: .06em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .empty-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 32px 72px;
+      text-align: center;
+    }
+
+    .empty-illustration {
+      margin-bottom: 28px;
+    }
+
+    .empty-title {
+      font-family: var(--serif);
+      font-size: 34px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .empty-title em { font-style: italic; }
+
+    .empty-sub {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 240px;
+      margin-bottom: 36px;
+    }
+
+    .empty-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .empty-btn-primary {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 24px;
-    }
-    .empty-glyph span {
-      font-family: var(--serif);
-      font-size: 44px;
-      font-style: italic;
-      color: var(--bordo);
-      line-height: 1;
-    }
-    .empty-title {
-      font-family: var(--serif);
-      font-size: 36px;
-      font-weight: 400;
-      color: var(--ink);
-      margin-bottom: 12px;
-      line-height: 1.1;
-    }
-    .empty-title em { font-style: italic; }
-    .empty-para {
-      font-family: var(--sans);
-      font-size: 14px;
-      color: var(--muted);
-      max-width: 280px;
-      line-height: 1.55;
-      margin-bottom: 28px;
-    }
-    .empty-cta {
-      display: inline-block;
+      height: 50px;
       background: var(--bordo);
-      color: var(--cream);
-      border-radius: 999px;
-      padding: 14px 28px;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
       font-family: var(--sans);
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
       text-decoration: none;
-      margin-bottom: 16px;
-      transition: background 0.15s;
-    }
-    .empty-cta:hover { background: var(--bordo-deep); }
-    .empty-link {
-      font-family: var(--sans);
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: underline;
-      text-underline-offset: 3px;
       cursor: pointer;
-      transition: color 0.15s;
+      transition: opacity 0.15s, transform 0.12s;
     }
-    .empty-link:hover { color: var(--ink); }
+    .empty-btn-primary:hover  { opacity: .88; }
+    .empty-btn-primary:active { transform: scale(.98); }
+
+    .empty-btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--rule);
+      border-radius: 12px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.12s;
+    }
+    .empty-btn-secondary:hover  { border-color: var(--ink); }
+    .empty-btn-secondary:active { transform: scale(.98); }
 
     /* ─── Filled cart ────────────────────────────────── */
     #cart-content { display: none; flex-direction: column; flex: 1; }
@@ -816,12 +853,52 @@
 
   <!-- ── Empty state ── -->
   <div id="empty-state">
-    <button class="empty-back" onclick="goBack()">← Volver</button>
-    <div class="empty-glyph"><span>∅</span></div>
-    <h2 class="empty-title">Tu pedido está <em>vacío</em></h2>
-    <p class="empty-para">Aún no agregaste nada. Explorá nuestra carta y encontrá algo que te guste.</p>
-    <a href="index.html" class="empty-cta">Ver carta →</a>
-    <a href="configurar.html" class="empty-link">Personalizar torta</a>
+
+    <!-- Topbar consistente con el carrito lleno -->
+    <header class="empty-topbar">
+      <button class="empty-topbar-nav" onclick="goBack()">← Volver</button>
+      <a href="index.html" class="empty-topbar-brand">FELIRECETAS</a>
+      <span style="min-width:52px"></span>
+    </header>
+
+    <!-- Cuerpo centrado -->
+    <div class="empty-body">
+
+      <!-- Ilustración torta artesanal -->
+      <div class="empty-illustration">
+        <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Capa inferior -->
+          <rect x="8" y="58" width="84" height="30" rx="8" fill="rgba(127,38,38,.07)" stroke="#7F2626" stroke-width="1.8"/>
+          <!-- Crema capa inferior (olas) -->
+          <path d="M8 64 Q19 52 30 64 Q41 52 52 64 Q63 52 74 64 Q85 52 92 58" fill="rgba(127,38,38,.05)" stroke="#7F2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Capa superior -->
+          <rect x="20" y="33" width="60" height="26" rx="7" fill="rgba(127,38,38,.07)" stroke="#7F2626" stroke-width="1.8"/>
+          <!-- Crema capa superior -->
+          <path d="M20 39 Q30 27 40 39 Q50 27 60 39 Q70 27 80 33" fill="rgba(127,38,38,.05)" stroke="#7F2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Vela -->
+          <rect x="46" y="18" width="8" height="17" rx="4" fill="rgba(127,38,38,.12)" stroke="#7F2626" stroke-width="1.5"/>
+          <!-- Llama -->
+          <path d="M50 18 C47 12 47.5 7 50 5 C52.5 7 53 12 50 18Z" fill="#7F2626"/>
+          <ellipse cx="50" cy="14" rx="1.5" ry="2.5" fill="#A55656" opacity="0.45"/>
+          <!-- Puntitos decorativos capa inferior -->
+          <circle cx="30" cy="73" r="2.5" fill="#7F2626" opacity="0.28"/>
+          <circle cx="50" cy="73" r="2.5" fill="#7F2626" opacity="0.28"/>
+          <circle cx="70" cy="73" r="2.5" fill="#7F2626" opacity="0.28"/>
+          <!-- Puntitos decorativos capa superior -->
+          <circle cx="38" cy="46" r="2" fill="#7F2626" opacity="0.22"/>
+          <circle cx="62" cy="46" r="2" fill="#7F2626" opacity="0.22"/>
+        </svg>
+      </div>
+
+      <h2 class="empty-title">Tu pedido está<br><em>vacío</em></h2>
+      <p class="empty-sub">Explorá la carta o personalizá una torta para empezar tu encargo.</p>
+
+      <div class="empty-actions">
+        <a href="index.html" class="empty-btn-primary">Ver carta →</a>
+        <a href="configurar.html" class="empty-btn-secondary">Personalizar torta</a>
+      </div>
+
+    </div>
   </div>
 
   <!-- ── Filled cart ── -->
@@ -954,7 +1031,7 @@
   const TONES = {
     warm:  'linear-gradient(135deg, #E8C4A0, #C4956A)',
     deep:  'linear-gradient(135deg, #8B3A3A, #5C1A1B)',
-    cream: 'linear-gradient(135deg, #F3EAD7, #E8D5B0)',
+    cream: 'linear-gradient(135deg, #EFEFEF, #DDE1E8)',
     dark:  'linear-gradient(135deg, #3D2B1A, #1A0F07)',
   };
 

@@ -83,8 +83,8 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
   font-weight: 500;
-  color: #FBF7F0;
-  background: #7A2836;
+  color: #FFFFFF;
+  background: #7F2626;
   text-decoration: none;
   padding: 0 22px;
   height: 44px;
@@ -103,7 +103,7 @@ section#inicio {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #FBF7F0;
+  background: #FFFFFF;
 }
 @media (min-width: 768px) {
   section#inicio {
@@ -134,7 +134,7 @@ section#inicio {
   flex-direction: column;
   justify-content: center;
   padding: 28px 24px 24px;
-  background: #FBF7F0;
+  background: #FFFFFF;
   overflow-y: auto;
 }
 
