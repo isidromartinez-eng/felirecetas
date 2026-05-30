@@ -2054,6 +2054,12 @@
     if (ret === 'catalogo') {
       sessionStorage.removeItem('returnFromPersonalizar');
       switchView('catalogo');
+      return;
+    }
+    // Al volver de cart.html con "Agregar otra pieza"
+    if (sessionStorage.getItem('openCatalog') === '1') {
+      sessionStorage.removeItem('openCatalog');
+      switchView('catalogo');
     }
   })();
 

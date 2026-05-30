@@ -132,13 +132,14 @@
     .section-label {
       font-family: var(--sans);
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 18px;
     }
-    .section-label span { opacity: 0.45; margin-right: 8px; }
+    .section-label::before { content: "— "; opacity: 0.45; }
+    .section-label span { opacity: 0.45; margin-right: 6px; }
 
     /* ─── Section ────────────────────────────────────── */
     .section {
@@ -161,9 +162,9 @@
     }
     .item-card:last-child { border-bottom: none; }
     .item-thumb {
-      width: 68px;
-      height: 68px;
-      border-radius: 10px;
+      width: 88px;
+      height: 88px;
+      border-radius: 12px;
       flex-shrink: 0;
       overflow: hidden;
       background-size: cover;
@@ -844,7 +845,7 @@
     <section class="section section--items">
       <p class="section-label"><span>01</span>TU SELECCIÓN</p>
       <div class="item-list" id="item-list"></div>
-      <a href="index.html#catalogo" class="add-item-btn">
+      <a href="index.html" class="add-item-btn" onclick="sessionStorage.setItem('openCatalog','1')">
         <span>+</span> Agregar otra pieza
       </a>
     </section>
@@ -913,24 +914,19 @@
       </div>
     </section>
 
-    <!-- § 03 Notas + vista previa (colapsable) -->
-    <section class="section section--collapsible" id="section-notas">
-      <button class="section-toggle" onclick="toggleSection('section-notas')" aria-expanded="false">
-        <p class="section-label" style="margin:0"><span>03</span>NOTAS PARA FELI</p>
-        <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="section-body">
-        <textarea
-          class="notes-textarea"
-          id="notes-textarea"
-          rows="4"
-          placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
-          oninput="onNotesInput()"
-        ></textarea>
-        <p class="preview-helper" style="margin-top:10px">
-          Podés agregar cualquier aclaración — se lo enviamos a Feli junto con tu pedido.
-        </p>
-      </div>
+    <!-- § 03 Notas para Feli -->
+    <section class="section">
+      <p class="section-label"><span>03</span>NOTAS PARA FELI</p>
+      <textarea
+        class="notes-textarea"
+        id="notes-textarea"
+        rows="4"
+        placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
+        oninput="onNotesInput()"
+      ></textarea>
+      <p class="preview-helper" style="margin-top:10px">
+        Podés agregar cualquier aclaración — se la enviamos a Feli con tu pedido.
+      </p>
     </section>
 
     <!-- Sticky CTA -->
