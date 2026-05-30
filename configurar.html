@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <script>try{document.documentElement.dataset.palette=localStorage.getItem('feli-palette')||'v2';}catch(e){document.documentElement.dataset.palette='v2';}</script>
+  <script>document.documentElement.dataset.palette='v2';</script>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Personalizar torta · Feli Recetas</title>
   <meta name="description" content="Armá tu torta personalizada paso a paso y enviá el pedido por WhatsApp."/>
@@ -91,6 +91,51 @@
   @media (min-width: 768px) {
     /* En paso 4, el único resumen es el aside — ocultar el duplicado */
     #step4 .summary-box { display: none; }
+  }
+
+  /* ─── Success state ─── */
+  #config-success {
+    position: fixed; inset: 0; z-index: 500;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 24px 60px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .28s ease;
+  }
+  #config-success.visible { opacity: 1; pointer-events: auto; }
+
+  .sc-circle {
+    width: 76px; height: 76px; border-radius: 50%;
+    background: #F2DADA;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 22px;
+  }
+  .sc-check { stroke-dasharray: 32; stroke-dashoffset: 32; transition: stroke-dashoffset .42s .18s ease; }
+  #config-success.visible .sc-check { stroke-dashoffset: 0; }
+
+  .sc-title {
+    font-family: var(--serif); font-size: 30px; font-style: italic;
+    color: var(--ink); text-align: center; margin-bottom: 6px;
+  }
+  .sc-sub {
+    font-family: var(--sans); font-size: 14px; color: var(--ink-2);
+    text-align: center; margin-bottom: 28px;
+  }
+  .sc-card {
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: 14px; padding: 16px 20px;
+    width: 100%; max-width: 340px; margin-bottom: 28px;
+  }
+  .sc-card-name {
+    font-family: var(--serif); font-size: 18px; font-style: italic;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .sc-card-meta { font-family: var(--sans); font-size: 13px; color: var(--ink-2); margin-bottom: 10px; }
+  .sc-card-price { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--wine); }
+  .sc-actions {
+    display: flex; flex-direction: column; gap: 10px;
+    width: 100%; max-width: 340px;
   }
 
   /* ─── Badge de precio en fill-cards ─── */
@@ -448,8 +493,8 @@
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
           <span class="chip active" data-pisos="1">1 piso</span>
-          <span class="chip" data-pisos="2">2 pisos · +$8.500</span>
-          <span class="chip" data-pisos="3">3 pisos · +$18.000</span>
+          <span class="chip" data-pisos="2">2 pisos</span>
+          <span class="chip" data-pisos="3">3 pisos</span>
         </div>
 
         <!-- Nav mobile paso 3 -->
@@ -501,7 +546,6 @@
             <div style="height:80px;background:url('deco-macarons.jpg') center/cover;border-radius:8px 8px 0 0"></div>
             <div class="deco-body">
               <div class="serif" style="font-size:14px;line-height:1.1">Macarons arriba</div>
-              <div class="caption" style="font-size:10.5px;margin-top:2px">+ $3.500</div>
             </div>
           </div>
           <div class="deco-card" data-deco="Frutas frescas" onclick="selectDeco(this)">
@@ -515,7 +559,6 @@
             <div style="height:80px;background:url('deco-drip.jpg') center/cover;border-radius:8px 8px 0 0"></div>
             <div class="deco-body">
               <div class="serif" style="font-size:14px;line-height:1.1">Drip de chocolate</div>
-              <div class="caption" style="font-size:10.5px;margin-top:2px">+ $2.500</div>
             </div>
           </div>
         </div>
@@ -543,10 +586,9 @@
           <hr class="rule-soft" style="margin:14px 0"/>
           <div style="display:flex;justify-content:space-between;align-items:baseline">
             <div>
-              <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Desde</div>
-              <div class="serif" style="font-size:26px;color:var(--ink);margin-top:2px;font-feature-settings:'tnum'" id="summaryPrice">$ 18.500</div>
+              <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Precio</div>
+              <div class="serif" style="font-size:26px;color:var(--ink);margin-top:2px" id="summaryPrice">Consultar</div>
             </div>
-            <span class="caption" style="color:var(--ink-3)">Reserva con seña</span>
           </div>
         </div>
 
@@ -600,9 +642,8 @@
       </div>
 
       <div style="padding-top:16px;border-top:1px solid var(--rule-soft)">
-        <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Desde</div>
-        <div class="serif" style="font-size:30px;color:var(--ink);margin-top:4px;font-feature-settings:'tnum'" id="asidePrice">$ 18.500</div>
-        <div class="caption" style="margin-top:4px;color:var(--ink-3)">Reserva con seña del 50%</div>
+        <div class="caption" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.1em">Precio</div>
+        <div class="serif" style="font-size:30px;color:var(--ink);margin-top:4px" id="asidePrice">Consultar</div>
       </div>
 
       <div style="font-size:12px;color:var(--ink-3);line-height:1.55;padding:11px 13px;background:var(--bg-soft);border-radius:10px">
@@ -632,16 +673,16 @@
   <div class="float-bar" id="floatBar">
     <div class="float-bar-top" onclick="toggleFloatBar()">
       <div class="float-bar-left">
-        <span class="float-bar-label">Desde</span>
-        <span class="float-bar-amount" id="floatBarAmount">$ 18.500</span>
+        <span class="float-bar-label">Precio</span>
+        <span class="float-bar-amount" id="floatBarAmount">Consultar</span>
       </div>
       <button class="float-bar-btn" id="floatBarToggle">Ver resumen ↑</button>
     </div>
     <div class="float-bar-summary" id="floatBarSummary">
       <div id="floatBarRows"></div>
       <div class="float-bar-total-row">
-        <span class="float-bar-total-label">Desde</span>
-        <span class="float-bar-total-amount" id="floatBarTotal">$ 18.500</span>
+        <span class="float-bar-total-label">Precio</span>
+        <span class="float-bar-total-amount" id="floatBarTotal">Consultar</span>
       </div>
     </div>
   </div>
@@ -817,7 +858,7 @@ function renderFills() {
   document.getElementById('fillGrid').innerHTML = fills.map(f => {
     const sel   = state.fills.includes(f);
     const extra = FILL_EXTRA[f] || 0;
-    const badge = extra > 0 ? `<div class="fill-extra-badge">+$${extra.toLocaleString('es-AR')}</div>` : '';
+    const badge = '';
     return `<div class="fill-card ${sel ? 'selected' : ''}" data-fill="${f}" onclick="toggleFill(this)">
       <div class="fill-check">✓</div>
       <div class="serif" style="font-size:15.5px;line-height:1.15">${f}</div>
@@ -830,7 +871,7 @@ function renderCoberturas() {
   document.getElementById('coberturaGrid').innerHTML = coberturas.map(c => {
     const sel   = state.cobertura === c;
     const extra = COB_EXTRA[c] || 0;
-    const badge = extra > 0 ? ` · +$${extra.toLocaleString('es-AR')}` : '';
+    const badge = '';
     return `<span class="chip ${sel ? 'active' : ''}" onclick="selectCobertura(this)" data-cob="${c}">${c}${badge}</span>`;
   }).join('');
 }
@@ -1005,7 +1046,7 @@ function renderSummary() {
   const rowsHtml = rows.map(([k, v]) =>
     `<div class="summary-row"><span style="color:var(--ink-3)">${k}</span><span style="color:var(--ink);font-weight:500;text-align:right;max-width:60%">${v}</span></div>`
   ).join('');
-  const priceStr = '$ ' + price.toLocaleString('es-AR');
+  const priceStr = 'Consultar precio';
 
   // Step 4 summary panel
   document.getElementById('summaryTitle').textContent = title;
@@ -1068,11 +1109,12 @@ function addToCartFromConfig() {
     if (state.porciones) metaParts.push(state.porciones + ' porciones');
     if (state.pisos && state.pisos > 1) metaParts.push(state.pisos + ' pisos');
 
+    var price = calcPrice();
     var item = {
       id: 'config-' + Date.now(),
       name: 'Torta ' + state.base,
       meta: metaParts.join(' · ') || 'Torta personalizada',
-      price: calcPrice(),
+      price: price,
       qty: 1,
       tone: 'deep',
       img: ''
@@ -1082,8 +1124,24 @@ function addToCartFromConfig() {
     items.push(item);
     localStorage.setItem(CART_KEY, JSON.stringify(items));
     localStorage.removeItem('felirecetas_draft');
-    window.location.href = 'cart.html';
+
+    // Poblar success state
+    document.getElementById('scName').textContent  = item.name;
+    document.getElementById('scMeta').textContent  = item.meta;
+    document.getElementById('scPrice').textContent = 'Precio a consultar';
+
+    // Mostrar pantalla de éxito
+    var sc = document.getElementById('config-success');
+    sc.classList.add('visible');
+    // Scroll al tope para que no quede cortado
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch(e) {}
+}
+
+function resetConfig() {
+  // Ocultar success state y recargar la página (limpia todo el estado)
+  document.getElementById('config-success').classList.remove('visible');
+  window.location.href = 'configurar.html';
 }
 
 function sendWhatsApp() {
@@ -1097,7 +1155,7 @@ function sendWhatsApp() {
   msg += `• Porciones: ${state.porciones}\n`;
   msg += `• Decoración: ${state.decoracion}\n`;
   if (state.mensaje) msg += `• Mensaje: "${state.mensaje}"\n`;
-  msg += `\nPrecio base desde: $${price.toLocaleString('es-AR')}\n`;
+  msg += `\n¿Me podés dar el precio?\n`;
   msg += `\n¿Podemos coordinar fecha y entrega?`;
 
   window.open('https://wa.me/5492216023377?text=' + encodeURIComponent(msg), '_blank');
@@ -1201,31 +1259,32 @@ if (state._draftStep && state._draftStep > 1) {
 })();
 </script>
 
-<!-- ░░ SELECTOR DE PALETA ░░ -->
-<div id="palette-switch" role="group" aria-label="Cambiar paleta de colores">
-  <span class="ps-label">Paleta</span>
-  <div class="ps-dots">
-    <button type="button" data-p="v1" title="Bordó protagonista" aria-label="Bordó protagonista"><span></span></button>
-    <button type="button" data-p="v2" title="Azul + bordó" aria-label="Azul más bordó"><span></span></button>
-    <button type="button" data-p="v3" title="Editorial claro" aria-label="Editorial claro"><span></span></button>
+<!-- ░░ SUCCESS STATE ░░ -->
+<div id="config-success" role="status" aria-live="polite">
+  <div class="sc-circle">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none"
+         stroke="#7F2626" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+      <path class="sc-check" d="M4 12.5l5 5L20 7"/>
+    </svg>
+  </div>
+  <h2 class="sc-title">¡Lista para el horno!</h2>
+  <p class="sc-sub">Tu torta fue agregada al carrito.</p>
+  <div class="sc-card">
+    <div class="sc-card-name" id="scName"></div>
+    <div class="sc-card-meta" id="scMeta"></div>
+    <div class="sc-card-price" id="scPrice"></div>
+  </div>
+  <div class="sc-actions">
+    <a href="cart.html"
+       style="height:52px;background:var(--wine);color:#fff;border:none;border-radius:12px;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none">
+      Ver carrito →
+    </a>
+    <button onclick="resetConfig()"
+            style="height:48px;background:transparent;color:var(--ink);border:1.5px solid var(--rule);border-radius:12px;font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer">
+      Configurar otra torta
+    </button>
   </div>
 </div>
-<script>
-(function(){
-  var root = document.documentElement;
-  function apply(p){
-    root.dataset.palette = p;
-    try { localStorage.setItem('feli-palette', p); } catch(e){}
-    document.querySelectorAll('#palette-switch button').forEach(function(b){
-      b.classList.toggle('active', b.dataset.p === p);
-    });
-  }
-  apply(root.dataset.palette || 'v1');
-  document.getElementById('palette-switch').addEventListener('click', function(e){
-    var b = e.target.closest('button[data-p]'); if(!b) return;
-    apply(b.dataset.p);
-  });
-})();
-</script>
+
 </body>
 </html>

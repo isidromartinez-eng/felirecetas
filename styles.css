@@ -87,6 +87,17 @@
   --surface-soft:        var(--c-white);
 }
 
+/* ── Overrides fijos por sección ── */
+#como-pedir,
+#eventos {
+  --surface-soft: var(--c-white);
+}
+
+#historia {
+  --surface-dark-accent: var(--c-navy-tint);
+}
+
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; overflow-x: hidden; }
@@ -443,7 +454,7 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
   display: flex; align-items: center; justify-content: center;
   font-family: var(--serif); font-style: italic; font-size: 18px;
 }
-.step-icon.first { background: var(--wine); color: #fff; }
+.step-icon.first,
 .step-icon.rest  { background: var(--paper-2); border: 1px solid var(--rule); color: var(--ink); }
 .step-line { flex: 1; width: 1px; background: var(--rule); margin-top: 4px; }
 .step-body { flex: 1; padding-top: 6px; }
@@ -957,45 +968,3 @@ section { scroll-margin-top: 60px; }
   }
 }
 
-/* ════════════════════════════════════════════════════
-   SELECTOR DE PALETA  (control de comparación)
-   ════════════════════════════════════════════════════ */
-#palette-switch {
-  position: fixed; left: 16px; bottom: 24px; z-index: 60;
-  display: flex; align-items: center; gap: 9px;
-  padding: 8px 12px 8px 14px;
-  background: rgba(255,255,255,.92);
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  box-shadow: 0 6px 24px rgba(54,68,89,.16);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  font-family: var(--sans);
-  opacity: .55; transition: opacity .2s;
-}
-#palette-switch:hover { opacity: 1; }
-#palette-switch .ps-label {
-  font-size: 9.5px; font-weight: 600; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--ink-2); white-space: nowrap;
-}
-#palette-switch .ps-dots { display: flex; gap: 7px; }
-#palette-switch button {
-  width: 22px; height: 22px; border-radius: 999px;
-  border: 2px solid transparent; padding: 0; cursor: pointer;
-  background: none; position: relative; transition: transform .15s;
-}
-#palette-switch button:hover { transform: scale(1.12); }
-#palette-switch button > span {
-  display: block; width: 100%; height: 100%; border-radius: 999px;
-  border: 1px solid rgba(54,68,89,.18);
-}
-#palette-switch button[data-p="v1"] > span { background: #7F2626; }
-#palette-switch button[data-p="v2"] > span { background: #364459; }
-#palette-switch button[data-p="v3"] > span {
-  background: linear-gradient(135deg,#EFEFEF 0 50%,#7F2626 50% 100%);
-}
-#palette-switch button.active { border-color: var(--ink); }
-
-@media (max-width: 767px) {
-  #palette-switch { bottom: 84px; left: 12px; padding: 7px 11px 7px 12px; }
-  #palette-switch .ps-label { display: none; }
-}

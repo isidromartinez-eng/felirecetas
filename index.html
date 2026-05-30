@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <script>try{document.documentElement.dataset.palette=localStorage.getItem('feli-palette')||'v2';}catch(e){document.documentElement.dataset.palette='v2';}</script>
+  <script>document.documentElement.dataset.palette='v2';</script>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Feli Recetas · Pastelería artesanal en La Plata</title>
   <meta name="description" content="Pastelería artesanal en La Plata. Macarons, croissants, tortas personalizadas y más. Pedidos por WhatsApp con 48hs de anticipación."/>
@@ -538,6 +538,8 @@
       overflow: hidden;
       margin: 0 22px;
     }
+    #como-pedir,
+    #eventos { --surface-soft: var(--c-white); }
     .eventos-badge {
       display: inline-block;
       background: var(--wine);
@@ -759,7 +761,7 @@
     <!-- Contenido alineado al fondo -->
     <div class="hero-content">
       <div class="hero-eyebrow">Pastelería artesanal · La Plata</div>
-      <h1 class="hero-title">Hecho con<br>amor<br><em>de verdad</em></h1>
+      <h1 class="hero-title">Pastelería artesanal,<br>hecha <em>para vos</em></h1>
       <div class="hero-ctas">
         <a href="#" onclick="switchView('catalogo');return false;" class="hero-btn-primary">Ver carta →</a>
         <a href="configurar.html" class="hero-btn-secondary">Personalizar torta →</a>
@@ -920,7 +922,6 @@
     <div class="section-card" style="padding:20px 20px 24px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div class="eyebrow">— 02 · Eventos</div>
-        <span class="eventos-badge">Mesa dulce</span>
       </div>
       <div style="font-family:var(--serif);font-size:28px;line-height:1.1;margin-bottom:10px;color:var(--ink)">Eventos <em>a medida</em></div>
       <p style="font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--ink-2);margin-bottom:20px">Mesas dulces completas para tu evento especial — coordinamos todo por WhatsApp. Consultá con más de una semana de anticipación.</p>
@@ -945,7 +946,7 @@
     <!-- Bloque unificado: foto + contenido -->
     <div style="margin:0 22px;border-radius:16px;overflow:hidden">
       <div class="hist-img">
-        <img src="pm-macarons.jpg" alt="Macarons artesanales de Feli Recetas">
+        <img src="nosotros.jpg" alt="Feli Recetas · equipo">
       </div>
       <div class="hist-content">
         <div class="hist-eyebrow">— 03 · La historia</div>
@@ -990,7 +991,7 @@
           <div class="h3">Pavlova <span class="serif-i">de la casa</span></div>
           <div class="caption" style="margin-top:2px">Merengue crujiente · crema chantilly · frutos rojos · 12/16/24 porciones</div>
           <div class="card-row">
-            <span class="price-serif" style="font-feature-settings:'tnum'">$ 18.500</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1009,20 +1010,20 @@
           <div class="h3" style="font-size:17px">Pavlova <span class="serif-i">de la casa</span></div>
           <div class="caption" style="margin-top:2px">Merengue · crema chantilly · frutos rojos</div>
           <div class="card-row">
-            <span class="price-serif">$ 18.500</span>
+            <span class="price-serif">Consultar precio</span>
           </div>
         </div>
       </div>
 
       <div class="card product-card" data-cat="chocolates" data-product="macarons" onclick="openProduct('macarons')" style="cursor:pointer">
-        <div class="card-img img-placeholder cream" data-bg="macarons.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
+        <div class="card-img img-placeholder cream" data-bg="nosotros.jpg" style="height:130px;position:relative;background-size:cover;background-position:center">
 
         </div>
         <div class="card-body">
           <div class="h3" style="font-size:17px">Macarons</div>
           <div class="caption" style="margin-top:2px">Caja x 6 · sabores variados</div>
           <div class="card-row">
-            <span class="price-serif">$ 5.500</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1035,7 +1036,7 @@
           <div class="h3" style="font-size:17px">Cheesecake estilo NY</div>
           <div class="caption" style="margin-top:2px">Base crocante · queso crema · frío</div>
           <div class="card-row">
-            <span class="price-serif">$ 9.500</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1049,7 +1050,7 @@
           <div class="h3" style="font-size:17px">Red Velvet</div>
           <div class="caption" style="margin-top:2px">Bizcocho aterciopelado · queso crema</div>
           <div class="card-row">
-            <span class="price-serif">$ 18.500</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1063,7 +1064,7 @@
           <div class="h3" style="font-size:17px">Cookies</div>
           <div class="caption" style="margin-top:2px">Chips de chocolate · base crujiente</div>
           <div class="card-row">
-            <span class="price-serif">$ 4.800</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1076,7 +1077,7 @@
           <div class="h3" style="font-size:17px">Key lime pie</div>
           <div class="caption" style="margin-top:2px">Lima · merengue · base crujiente</div>
           <div class="card-row">
-            <span class="price-serif">$ 10.500</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1090,7 +1091,7 @@
           <div class="h3" style="font-size:17px">Marquise de chocolate</div>
           <div class="caption" style="margin-top:2px">Semi-amargo · sin harina · tipo brownie</div>
           <div class="card-row">
-            <span class="price-serif">$ 5.400</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1104,7 +1105,7 @@
           <div class="h3" style="font-size:17px">Tarta tipo toffee</div>
           <div class="caption" style="margin-top:2px">Caramelo · crema · base crujiente</div>
           <div class="card-row">
-            <span class="price-serif">$ 5.000</span>
+            <span class="price-serif">Consultar precio</span>
             <span style="background:var(--wine);color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;font-family:var(--sans);white-space:nowrap">Ver detalles</span>
           </div>
         </div>
@@ -1132,8 +1133,8 @@
             <div style="margin-top:8px;font-size:13px;font-weight:500">Red Velvet · 16 porc.</div>
             <div style="font-size:12.5px;color:var(--ink-3);margin-top:2px">Queso crema · redonda</div>
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;border-top:1px solid var(--rule-soft);padding-top:8px">
-              <span class="caption" style="font-size:10.5px">Estimado</span>
-              <span class="serif" style="font-size:17px;color:var(--wine)">$ 26.300</span>
+              <span class="caption" style="font-size:10.5px">Precio</span>
+              <span class="serif" style="font-size:17px;color:var(--wine)">Consultar</span>
             </div>
           </div>
         </div>
@@ -1287,36 +1288,7 @@
     </div><!-- /faq-layout -->
   </section>
 
-  <!-- ░░ FINAL CTA ░░ -->
-  <div style="display:flex;align-items:center;gap:14px;padding:40px 22px 20px">
-    <hr style="flex:1;border:none;border-top:1px solid var(--rule)">
-    <span style="font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap">Tu pedido</span>
-    <hr style="flex:1;border:none;border-top:1px solid var(--rule)">
-  </div>
-  <section class="final-cta">
-    <span class="decor-letter">F</span>
-    <div class="eyebrow" style="margin-bottom:14px">Pastelería artesanal · La Plata</div>
-    <h2 style="font-family:var(--serif);font-weight:400;font-style:normal;font-size:clamp(32px,8vw,56px);line-height:1;margin:0 0 14px;color:#fff">
-      ¿Listo para hacer<br><em style="font-style:italic;color:var(--rose)">tu pedido?</em>
-    </h2>
-    <p style="font-size:15px;line-height:1.55;color:rgba(255,255,255,.72);max-width:340px;margin:0">
-      Escribime por WhatsApp y coordinamos juntos. Respondo en menos de 24 hs.
-    </p>
-    <div class="final-cta-btns">
-      <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido" target="_blank"
-         class="btn" style="background:#fff;color:var(--wine);font-weight:600;justify-content:center;height:52px;font-size:15px;border-radius:8px;border:none">
-        Hacer mi pedido →
-      </a>
-      <a href="configurar.html"
-         class="btn" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);justify-content:center;height:52px;font-size:15px;border-radius:8px">
-        Personalizar torta →
-      </a>
-      <a href="#" onclick="switchView('catalogo');return false;"
-         class="btn" style="background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);justify-content:center;height:52px;font-size:15px;border-radius:8px">
-        Ver catálogo
-      </a>
-    </div>
-  </section>
+  <div style="height:56px"></div>
 
   <!-- ░░ FOOTER ░░ -->
   <footer class="site-footer">
@@ -1325,16 +1297,10 @@
 
     <div class="footer-cols">
       <div>
-        <div class="footer-col-head">Carta</div>
+        <div class="footer-col-head">Menú</div>
         <div class="footer-col-list">
           <a href="#" onclick="switchView('catalogo');return false;">Catálogo</a>
-          <a href="configurar.html">Personalizar</a>
-          <a href="configurar.html#calculadora">Calculadora</a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-col-head">Marca</div>
-        <div class="footer-col-list">
+          <a href="configurar.html">Personalizar torta</a>
           <a href="#historia">Nosotros</a>
           <a href="#como-pedir">Cómo pedir</a>
           <a href="#faq">FAQ</a>
@@ -1412,8 +1378,8 @@
       </div>
 
       <!-- Gradiente + nombre del producto -->
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 20px 18px;background:linear-gradient(to top,rgba(20,10,5,.75) 0%,rgba(20,10,5,0) 100%);pointer-events:none;z-index:2">
-        <div id="pmImgEyebrow" style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 20px 18px;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.44) 42%,transparent 72%);pointer-events:none;z-index:2">
+        <div id="pmImgEyebrow" style="display:none"></div>
         <div id="pmImgTitle" style="font-family:var(--serif);font-style:italic;font-size:26px;color:#fff;line-height:1.1"></div>
       </div>
 
@@ -1442,8 +1408,8 @@
     <!-- Footer sticky: precio + CTAs — siempre visible -->
     <div style="flex-shrink:0;padding:14px 22px 28px;border-top:1px solid var(--rule-soft);background:var(--paper)">
       <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
-        <div class="caption" style="font-size:11px">Precio estimado</div>
-        <div id="pmPrice" class="serif" style="font-size:26px;color:var(--wine);font-feature-settings:'tnum'">$ —</div>
+        <div class="caption" style="font-size:11px">Precio</div>
+        <div id="pmPrice" class="serif" style="font-size:22px;color:var(--wine)">Consultar precio</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:9px">
         <button id="pmAddCart" onclick="addToCart()" class="btn btn-wine" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;font-size:14px;width:100%;border-radius:10px;border:none;cursor:pointer">
@@ -1485,7 +1451,7 @@
           <div style="font-family:var(--serif);font-size:18px;font-weight:500">La del cumple clásico</div>
           <div class="caption" style="margin-top:4px;color:var(--ink-2)">Red Velvet · Redonda · 12 porc. · Relleno: queso crema · Buttercream · Frutas frescas</div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:12px">
-            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Desde $ 18.500</span>
+            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Consultar precio</span>
             <a href="configurar?base=Red+Velvet&relleno=Queso+crema&cobertura=Buttercream&porciones=12&deco=Frutas+frescas" class="btn btn-wine" style="font-size:12.5px;padding:8px 14px">Usar esta base →</a>
           </div>
         </div>
@@ -1500,7 +1466,7 @@
           <div style="font-family:var(--serif);font-size:18px;font-weight:500">La de evento grande</div>
           <div class="caption" style="margin-top:4px;color:var(--ink-2)">Chocolate intenso · Redonda · 24 porc. · Relleno: ganache chocolate · Ganache semi-amargo · Drip</div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:12px">
-            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Desde $ 39.000</span>
+            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Consultar precio</span>
             <a href="configurar?base=Chocolate+intenso&relleno=Ganache+chocolate&cobertura=Ganache+semi-amargo&porciones=24&deco=Drip+de+chocolate" class="btn btn-wine" style="font-size:12.5px;padding:8px 14px">Usar esta base →</a>
           </div>
         </div>
@@ -1515,7 +1481,7 @@
           <div style="font-family:var(--serif);font-size:18px;font-weight:500">La primaveral</div>
           <div class="caption" style="margin-top:4px;color:var(--ink-2)">Vainilla bourbon · Redonda · 12 porc. · Relleno: frutos rojos · Ganache choc. blanco · Frutas frescas</div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:12px">
-            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Desde $ 20.500</span>
+            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Consultar precio</span>
             <a href="configurar?base=Vainilla+bourbon&relleno=Frutos+rojos&cobertura=Ganache+choc.+blanco&porciones=12&deco=Frutas+frescas" class="btn btn-wine" style="font-size:12.5px;padding:8px 14px">Usar esta base →</a>
           </div>
         </div>
@@ -1530,7 +1496,7 @@
           <div style="font-family:var(--serif);font-size:18px;font-weight:500">La cítrica fresca</div>
           <div class="caption" style="margin-top:4px;color:var(--ink-2)">Lemon poppy · Redonda · 12 porc. · Relleno: lemon curd · Buttercream · Frutas frescas</div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:12px">
-            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Desde $ 19.700</span>
+            <span style="font-family:var(--serif);font-style:italic;font-size:20px;color:var(--wine)">Consultar precio</span>
             <a href="configurar?base=Lemon+poppy&relleno=Lemon+curd&cobertura=Buttercream&porciones=12&deco=Frutas+frescas" class="btn btn-wine" style="font-size:12.5px;padding:8px 14px">Usar esta base →</a>
           </div>
         </div>
@@ -1797,7 +1763,7 @@
       ],
     },
     'macarons': {
-      name: 'Macarons', cat: 'Dulces · clásico', tone: 'cream', img: 'pm-macarons.jpg',
+      name: 'Macarons', cat: 'Dulces · clásico', tone: 'cream', img: 'nosotros.jpg',
       desc: 'Macarons artesanales con coquille de almendra — crocantes por fuera, tiernos por dentro. Sabores de temporada: chocolate, vainilla, frambuesa, pistacho y café. Cada unidad hecha a mano.',
       tags: ['Almendra', 'Sin conservantes', 'Sabores rotativos'],
       sizes: [
@@ -1942,10 +1908,9 @@
       ">
         <div style="font-weight:600;font-size:13.5px;color:${i === pmSelected ? 'var(--wine-deep)' : 'var(--ink)'}">${s.label}</div>
         <div style="font-size:11px;color:var(--ink-3);margin-top:3px;line-height:1.3">${s.persons}</div>
-        <div style="font-family:var(--serif);font-style:italic;font-size:15px;color:var(--wine);margin-top:5px">$ ${s.price.toLocaleString('es-AR')}</div>
       </button>
     `).join('');
-    document.getElementById('pmPrice').textContent = '$ ' + p.sizes[pmSelected].price.toLocaleString('es-AR');
+    document.getElementById('pmPrice').textContent = 'Consultar precio';
     updatePmCta();
   }
 
@@ -1957,7 +1922,7 @@
   function updatePmCta() {
     const p = pmCurrent;
     const s = p.sizes[pmSelected];
-    let msg = `Hola Feli! 👋\nQuiero encargar: *${p.name}*\nTamaño: ${s.label} (${s.persons})\nPrecio estimado: $${s.price.toLocaleString('es-AR')}`;
+    let msg = `Hola Feli! 👋\nMe interesa: *${p.name}*\nTamaño: ${s.label} (${s.persons})\n¿Me podés dar el precio?`;
     document.getElementById('pmCta').href = 'https://wa.me/5492216023377?text=' + encodeURIComponent(msg);
   }
 
@@ -2330,31 +2295,5 @@
 
 </script>
 
-<!-- ░░ SELECTOR DE PALETA ░░ -->
-<div id="palette-switch" role="group" aria-label="Cambiar paleta de colores">
-  <span class="ps-label">Paleta</span>
-  <div class="ps-dots">
-    <button type="button" data-p="v1" title="Bordó protagonista" aria-label="Bordó protagonista"><span></span></button>
-    <button type="button" data-p="v2" title="Azul + bordó" aria-label="Azul más bordó"><span></span></button>
-    <button type="button" data-p="v3" title="Editorial claro" aria-label="Editorial claro"><span></span></button>
-  </div>
-</div>
-<script>
-(function(){
-  var root = document.documentElement;
-  function apply(p){
-    root.dataset.palette = p;
-    try { localStorage.setItem('feli-palette', p); } catch(e){}
-    document.querySelectorAll('#palette-switch button').forEach(function(b){
-      b.classList.toggle('active', b.dataset.p === p);
-    });
-  }
-  apply(root.dataset.palette || 'v1');
-  document.getElementById('palette-switch').addEventListener('click', function(e){
-    var b = e.target.closest('button[data-p]'); if(!b) return;
-    apply(b.dataset.p);
-  });
-})();
-</script>
 </body>
 </html>
