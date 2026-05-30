@@ -795,6 +795,10 @@
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    @keyframes sheetIn {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
     .item-card { animation: fadeIn 0.2s ease; }
 
     /* ─── Desktop outer ──────────────────────────────── */
@@ -826,7 +830,7 @@
     <!-- Top bar -->
     <header class="top-bar">
       <button class="top-bar__nav" onclick="goBack()">← Volver</button>
-      <span class="top-bar__brand">FELIRECETAS</span>
+      <a href="index.html" class="top-bar__brand" style="text-decoration:none">FELIRECETAS</a>
       <span class="top-bar__nav" style="opacity:0;pointer-events:none"></span>
     </header>
 
@@ -919,21 +923,12 @@
         <textarea
           class="notes-textarea"
           id="notes-textarea"
-          rows="3"
+          rows="4"
           placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
           oninput="onNotesInput()"
         ></textarea>
-        <div class="preview-divider">
-          <hr/><span>Vista previa del mensaje</span><hr/>
-        </div>
-        <div class="chat-container">
-          <div class="chat-bubble">
-            <pre id="preview-text"></pre>
-            <p class="chat-timestamp">10:24 ✓</p>
-          </div>
-        </div>
-        <p class="preview-helper">
-          Podés editarlo después de abrir el chat.
+        <p class="preview-helper" style="margin-top:10px">
+          Podés agregar cualquier aclaración — se lo enviamos a Feli junto con tu pedido.
         </p>
       </div>
     </section>
@@ -953,6 +948,22 @@
   </div><!-- /cart-content -->
 
 </div><!-- /app -->
+
+<!-- Preview text oculto — solo para buildMessage() -->
+<pre id="preview-text" style="display:none"></pre>
+
+<!-- Confirm remove modal -->
+<div id="confirm-overlay" onclick="closeConfirm()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(26,20,16,.55);align-items:flex-end;justify-content:center;padding:0">
+  <div id="confirm-sheet" onclick="event.stopPropagation()" style="background:var(--cream);border-radius:20px 20px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;animation:sheetIn .22s ease">
+    <div style="width:36px;height:4px;border-radius:99px;background:var(--rule);margin:0 auto 24px"></div>
+    <p style="font-family:var(--serif);font-size:22px;font-weight:400;color:var(--ink);line-height:1.2;margin-bottom:6px">¿Quitás este producto?</p>
+    <p id="confirm-name" style="font-family:var(--sans);font-size:14px;color:var(--muted);margin-bottom:26px"></p>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="confirmRemove()" style="width:100%;padding:14px;background:var(--bordo);color:#fff;border:none;border-radius:12px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer">Sí, quitar</button>
+      <button onclick="closeConfirm()" style="width:100%;padding:14px;background:transparent;color:var(--ink);border:1.5px solid var(--rule);border-radius:12px;font-family:var(--sans);font-size:14px;cursor:pointer">No, mantenerlo</button>
+    </div>
+  </div>
+</div>
 
 <script>
   /* ─────────────────────────────────────────────────────── */
@@ -1213,19 +1224,38 @@
     updateCTA();
   }
 
-  function removeItem(id) {
-    cart = cart.filter(i => i.id !== id);
-    saveCart();
+  let pendingRemoveId = null;
 
+  function removeItem(id) {
+    const item = cart.find(i => i.id === id);
+    if (!item) return;
+    pendingRemoveId = id;
+    document.getElementById('confirm-name').textContent = item.name + (item.meta ? ' · ' + item.meta : '');
+    const overlay = document.getElementById('confirm-overlay');
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function confirmRemove() {
+    if (!pendingRemoveId) return;
+    cart = cart.filter(i => i.id !== pendingRemoveId);
+    pendingRemoveId = null;
+    saveCart();
+    closeConfirm();
     if (cart.length === 0) {
       showEmptyState();
     } else {
       renderItems();
       updateSummary();
       updateEyebrow();
-      updatePreview();
       updateCTA();
     }
+  }
+
+  function closeConfirm() {
+    pendingRemoveId = null;
+    document.getElementById('confirm-overlay').style.display = 'none';
+    document.body.style.overflow = '';
   }
 
   /* ─────────────────────────────────────────────────────── */
