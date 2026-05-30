@@ -1391,7 +1391,7 @@
     </div>
 
     <!-- Body (scrollable) -->
-    <div id="pmBody" style="padding:16px 22px 16px;flex:1;overflow-y:auto;min-height:0">
+    <div id="pmBody" style="padding:16px 22px 16px;flex:1;overflow-y:auto;min-height:0;overscroll-behavior:contain">
       <p id="pmDesc" class="pm-desc-clamp" style="font-size:14px;line-height:1.6;color:var(--ink-2)"></p>
       <button id="pmDescToggle" onclick="togglePmDesc()" style="font-family:var(--sans);font-size:12px;color:var(--wine);background:none;border:none;cursor:pointer;padding:3px 0 0;display:block">Leer más ↓</button>
 
@@ -1946,6 +1946,14 @@
       history.back(); // consume the pushed state so back doesn't linger
     }
   }
+
+  // ── Evitar scroll leak al fondo cuando el modal está abierto (iOS Safari) ──
+  document.getElementById('productModal').addEventListener('touchmove', function(e) {
+    // Permitir scroll solo si el toque está dentro de pmBody
+    if (!e.composedPath().some(function(el) { return el.id === 'pmBody'; })) {
+      e.preventDefault();
+    }
+  }, { passive: false });
 
   // ── Swipe down para cerrar el modal de producto ──
   (function() {
