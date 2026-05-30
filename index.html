@@ -1368,7 +1368,7 @@
 
 <!-- ░░ PRODUCT MODAL ░░ -->
 <div id="productModal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(30,20,15,.65);backdrop-filter:blur(4px);align-items:flex-end;justify-content:center;padding:0" onclick="if(event.target===this)closeProduct()">
-  <div id="productModalInner" style="background:var(--paper);border-radius:18px 18px 0 0;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 -8px 60px rgba(0,0,0,.25);display:flex;flex-direction:column">
+  <div id="productModalInner" style="background:var(--paper);border-radius:18px 18px 0 0;max-width:560px;width:100%;max-height:92vh;overflow-y:hidden;box-shadow:0 -8px 60px rgba(0,0,0,.25);display:flex;flex-direction:column">
 
     <!-- Image -->
     <div id="pmImg" class="img-placeholder wine" style="height:240px;border-radius:18px 18px 0 0;position:relative;flex-shrink:0;overflow:hidden">
@@ -1404,11 +1404,6 @@
         <div id="pmSizes" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"></div>
       </div>
 
-      <!-- Aclaración -->
-      <div style="margin-top:20px">
-        <label style="font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-3);font-weight:500;display:block;margin-bottom:8px">Aclaración (opcional)</label>
-        <textarea id="pmNota" rows="2" placeholder="Ej: sin maní, mensaje en la caja, fecha de entrega…" style="width:100%;box-sizing:border-box;border:1px solid var(--rule-soft);border-radius:8px;padding:10px 12px;font-family:var(--sans);font-size:13.5px;color:var(--ink);background:var(--bg-soft);resize:none;outline:none;line-height:1.5"></textarea>
-      </div>
     </div>
 
     <!-- Footer sticky: precio + CTAs — siempre visible -->
@@ -1874,9 +1869,6 @@
     // Sizes
     renderPmSizes();
 
-    // Clear nota
-    document.getElementById('pmNota').value = '';
-
     // Show — push history entry so mobile back gesture closes modal
     _productHistoryPushed = true;
     history.pushState({ modal: 'product' }, '');
@@ -1932,13 +1924,9 @@
   function updatePmCta() {
     const p = pmCurrent;
     const s = p.sizes[pmSelected];
-    const nota = document.getElementById('pmNota').value.trim();
     let msg = `Hola Feli! 👋\nQuiero encargar: *${p.name}*\nTamaño: ${s.label} (${s.persons})\nPrecio estimado: $${s.price.toLocaleString('es-AR')}`;
-    if (nota) msg += `\nAclaración: ${nota}`;
     document.getElementById('pmCta').href = 'https://wa.me/5492216023377?text=' + encodeURIComponent(msg);
   }
-
-  document.getElementById('pmNota').addEventListener('input', updatePmCta);
 
   function togglePmDesc() {
     var desc = document.getElementById('pmDesc');
@@ -2156,12 +2144,11 @@
     if (!pmCurrent) return;
     var p = pmCurrent;
     var s = p.sizes[pmSelected];
-    var nota = document.getElementById('pmNota').value.trim();
     var toneMap = { wine: 'deep', cream: 'cream', gold: 'warm', choc: 'deep' };
 
     try {
       var items = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      var metaStr = s.label + (nota ? ' · ' + nota.substring(0, 40) : '');
+      var metaStr = s.label;
       var existingIdx = items.findIndex(function(i) { return i.name === p.name && i.meta === metaStr; });
       if (existingIdx >= 0) {
         items[existingIdx].qty += 1;
