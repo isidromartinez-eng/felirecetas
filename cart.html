@@ -329,71 +329,41 @@
       margin-bottom: 12px;
     }
 
-    /* ─── Date pills ─────────────────────────────────── */
-    .dates-scroll-wrapper {
-      margin: 0 -22px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 4px 0 8px;
-    }
-    .dates-scroll-wrapper::-webkit-scrollbar { display: none; }
-    .dates-row {
-      display: flex;
-      gap: 8px;
-      padding: 0 22px;
-      width: max-content;
-    }
-    .date-pill {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2px;
-      padding: 8px 14px;
-      border-radius: 999px;
+    /* ─── Mini calendario ───────────────────────────── */
+    .cal-widget {
       border: 1px solid var(--rule);
-      background: transparent;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-      min-width: 54px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 4px;
+      background: var(--cream);
     }
-    .date-pill.active {
-      background: var(--ink);
-      border-color: var(--ink);
-      color: var(--cream);
+    @keyframes calPulse {
+      0%   { box-shadow: 0 0 0 0   rgba(127,38,38,.4); }
+      65%  { box-shadow: 0 0 0 9px rgba(127,38,38,0); }
+      100% { box-shadow: 0 0 0 0   rgba(127,38,38,0); }
     }
-    .date-pill__day {
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1;
-    }
-    .date-pill__date {
-      font-family: var(--sans);
-      font-size: 10px;
-      opacity: 0.65;
-      line-height: 1;
-    }
-
-    /* ─── Date picker (arrow nav) ───────────────────── */
-    .date-picker {
+    .cal-widget.highlight { animation: calPulse 0.55s ease; }
+    .cal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--cream-soft);
-      border: 1px solid var(--rule);
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      gap: 12px;
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--rule);
     }
-    .date-nav {
-      width: 40px;
-      height: 40px;
+    .cal-month-label {
+      font-family: var(--serif);
+      font-size: 19px;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .cal-nav {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: var(--cream);
       border: 1px solid var(--rule);
+      background: var(--cream-soft);
+      color: var(--ink);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -401,24 +371,56 @@
       flex-shrink: 0;
       transition: background 0.15s, opacity 0.15s;
     }
-    .date-nav:disabled { opacity: 0.22; cursor: default; }
-    .date-nav:not(:disabled):active { background: var(--cream-warm); }
-    .date-center { text-align: center; flex: 1; min-width: 0; }
-    .date-day-name {
-      font-family: var(--serif);
-      font-size: 22px;
+    .cal-nav:disabled { opacity: 0.2; cursor: default; }
+    .cal-nav:not(:disabled):hover { background: var(--cream-warm); }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      padding: 6px 8px 12px;
+      gap: 1px;
+    }
+    .cal-day-header {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      padding: 6px 0 8px;
+    }
+    .cal-day {
+      aspect-ratio: 1;
+      border: none;
+      background: transparent;
+      border-radius: 50%;
+      font-family: var(--sans);
+      font-size: 13px;
       font-weight: 500;
       color: var(--ink);
-      display: block;
-      line-height: 1.1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.13s, color 0.13s;
+      position: relative;
+      -webkit-tap-highlight-color: transparent;
     }
-    .date-day-num {
-      font-family: var(--sans);
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 3px;
-      display: block;
+    .cal-day:hover:not(:disabled):not(.cal-selected) { background: var(--cream-soft); }
+    .cal-day:disabled { color: rgba(26,20,16,.18); cursor: default; }
+    .cal-day.cal-other  { opacity: 0; pointer-events: none; }
+    .cal-day.cal-selected { background: var(--bordo); color: var(--cream); }
+    .cal-day.cal-today::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--bordo);
     }
+    .cal-day.cal-today.cal-selected::after { background: rgba(251,247,240,.65); }
 
     /* ─── Preview divider ────────────────────────────── */
     .preview-divider {
@@ -858,17 +860,17 @@
 
       <p class="helper" id="delivery-helper">¿Cuándo lo retirás?</p>
 
-      <div class="date-picker">
-        <button class="date-nav" id="date-prev" onclick="navigateDate(-1)" aria-label="Día anterior">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
-        </button>
-        <div class="date-center">
-          <span class="date-day-name" id="date-day-name">—</span>
-          <span class="date-day-num" id="date-day-num">—</span>
+      <div class="cal-widget" id="cal-widget">
+        <div class="cal-header">
+          <button class="cal-nav" id="cal-prev" onclick="navigateCalMonth(-1)" aria-label="Mes anterior">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
+          </button>
+          <span class="cal-month-label" id="cal-month-label">—</span>
+          <button class="cal-nav" id="cal-next" onclick="navigateCalMonth(+1)" aria-label="Mes siguiente">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </button>
         </div>
-        <button class="date-nav" id="date-next" onclick="navigateDate(+1)" aria-label="Día siguiente">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
-        </button>
+        <div class="cal-grid" id="cal-grid"></div>
       </div>
 
       <div class="address-block" id="address-block">
@@ -971,12 +973,13 @@
   const MONTHS_ES      = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   const MONTHS_ES_FULL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-  let cart      = [];
-  let notes     = '';
-  let mode      = 'retiro';   // 'retiro' | 'envio'
-  let selDate   = null;       // Date object
-  let address   = '';
-  let dateIndex = 0;          // índice dentro de buildDates()
+  let cart     = [];
+  let notes    = '';
+  let mode     = 'retiro';   // 'retiro' | 'envio'
+  let selDate  = null;       // Date object — null hasta que el usuario elija
+  let address  = '';
+  let calYear  = 0;
+  let calMonth = 0;
 
   /* ─────────────────────────────────────────────────────── */
   /*  Persistence                                            */
@@ -1065,44 +1068,90 @@
   }
 
   /* ─────────────────────────────────────────────────────── */
-  /*  Dates                                                  */
+  /*  Mini calendario                                        */
   /* ─────────────────────────────────────────────────────── */
 
-  function buildDates() {
-    const dates = [];
-    const base = new Date();
-    base.setHours(0, 0, 0, 0);
-    for (let i = 7; i <= 14; i++) {
-      const d = new Date(base);
-      d.setDate(base.getDate() + i);
-      dates.push(d);
-    }
-    return dates;
-  }
+  const MONTHS_CAP = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                      'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-  function formatDateLabel(d) {
-    return d.getDate() + ' ' + MONTHS_ES[d.getMonth()];
-  }
-
-  function renderDatePicker() {
-    const dates = buildDates();
-    const d = dates[dateIndex];
-    selDate = d;
-
-    document.getElementById('date-day-name').textContent = DAYS_ES_FULL[d.getDay()];
-    document.getElementById('date-day-num').textContent  = d.getDate() + ' de ' + MONTHS_ES_FULL[d.getMonth()];
-
-    document.getElementById('date-prev').disabled = dateIndex === 0;
-    document.getElementById('date-next').disabled = dateIndex === dates.length - 1;
-
-    updatePreview();
+  function initCalendar() {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 7);
+    // Abrir en el primer mes con fechas disponibles
+    calYear  = minDate.getFullYear();
+    calMonth = minDate.getMonth();
+    selDate  = null;
+    renderCalendar();
     updateCTA();
   }
 
-  function navigateDate(delta) {
-    const max = buildDates().length - 1;
-    dateIndex = Math.max(0, Math.min(max, dateIndex + delta));
-    renderDatePicker();
+  function renderCalendar() {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const minDate = new Date(today); minDate.setDate(today.getDate() + 7);
+
+    document.getElementById('cal-month-label').textContent =
+      MONTHS_CAP[calMonth] + ' ' + calYear;
+
+    // Deshabilitar "mes anterior" si ya estamos en el mes mínimo
+    document.getElementById('cal-prev').disabled =
+      (calYear === minDate.getFullYear() && calMonth === minDate.getMonth());
+
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+
+    // Cabecera días (Lunes primero, convención argentina)
+    ['L','M','M','J','V','S','D'].forEach(h => {
+      const el = document.createElement('div');
+      el.className = 'cal-day-header';
+      el.textContent = h;
+      grid.appendChild(el);
+    });
+
+    // Offset de la cuadrícula (Mon=0)
+    const firstDow = new Date(calYear, calMonth, 1).getDay();
+    const offset = (firstDow + 6) % 7;
+    for (let i = 0; i < offset; i++) {
+      const el = document.createElement('button');
+      el.className = 'cal-day cal-other';
+      el.tabIndex = -1;
+      grid.appendChild(el);
+    }
+
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(calYear, calMonth, d);
+      date.setHours(0,0,0,0);
+      const isToday    = date.getTime() === today.getTime();
+      const isDisabled = date < minDate;
+      const isSelected = selDate && date.getTime() === selDate.getTime();
+
+      const btn = document.createElement('button');
+      btn.className = 'cal-day';
+      btn.textContent = d;
+      if (isToday)    btn.classList.add('cal-today');
+      if (isSelected) btn.classList.add('cal-selected');
+      if (isDisabled) {
+        btn.disabled = true;
+      } else {
+        btn.addEventListener('click', () => selectCalDate(new Date(date)));
+      }
+      grid.appendChild(btn);
+    }
+  }
+
+  function navigateCalMonth(delta) {
+    calMonth += delta;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0)  { calMonth = 11; calYear--; }
+    renderCalendar();
+  }
+
+  function selectCalDate(date) {
+    selDate = date;
+    renderCalendar();
+    updatePreview();
+    updateCTA();
   }
 
   /* ─────────────────────────────────────────────────────── */
@@ -1116,17 +1165,8 @@
     document.getElementById('delivery-helper').textContent =
       m === 'retiro' ? '¿Cuándo lo retirás?' : '¿Cuándo te lo enviamos?';
     document.getElementById('address-block').classList.toggle('visible', m === 'envio');
-    const shipEl = document.getElementById('summary-shipping');
-    if (m === 'retiro') {
-      shipEl.textContent = 'sin cargo';
-      shipEl.classList.add('summary-row__value--muted');
-      shipEl.style.fontStyle = 'normal';
-    } else {
-      shipEl.textContent = 'a coordinar';
-      shipEl.classList.add('summary-row__value--muted');
-      shipEl.style.fontStyle = 'italic';
-    }
     updatePreview();
+    updateCTA();
   }
 
   /* ─────────────────────────────────────────────────────── */
@@ -1273,7 +1313,7 @@
     msg += '---\n';
     if (selDate) {
       const d = selDate;
-      const label = `${d.getDate()}/${(d.getMonth()+1).toString().padStart(2,'0')}`;
+      const label = `${DAYS_ES_FULL[d.getDay()]} ${d.getDate()} de ${MONTHS_ES_FULL[d.getMonth()]}`;
       msg += `${mode === 'retiro' ? 'Retiro' : 'Envío'}: ${label}\n`;
     }
     if (mode === 'envio' && address.trim()) {
@@ -1297,27 +1337,53 @@
   /* ─────────────────────────────────────────────────────── */
 
   function updateCTA() {
-    // selDate siempre está seteado con el date picker — botón siempre activo
     const btn = document.getElementById('whatsapp-btn');
-    btn.disabled = false;
+
+    if (!selDate) {
+      btn.textContent = 'Elegí una fecha para continuar';
+      btn.dataset.ctaState = 'no-date';
+      return;
+    }
+
+    if (mode === 'envio') {
+      const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
+      const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
+      if (!calle || !barrio) {
+        btn.textContent = 'Completá la dirección →';
+        btn.dataset.ctaState = 'no-address';
+        return;
+      }
+    }
+
+    btn.textContent = 'Pedir por WhatsApp →';
+    btn.dataset.ctaState = 'ready';
   }
 
   function sendWhatsApp() {
-    // Validate address if envio
+    const btn   = document.getElementById('whatsapp-btn');
+    const state = btn.dataset.ctaState;
+
+    if (state === 'no-date') {
+      const cal = document.getElementById('cal-widget');
+      cal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      cal.classList.remove('highlight');
+      void cal.offsetWidth; // forzar reflow para reiniciar animación
+      cal.classList.add('highlight');
+      setTimeout(() => cal.classList.remove('highlight'), 600);
+      return;
+    }
+
     if (mode === 'envio') {
       const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
       const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
       if (!calle || !barrio) {
         document.getElementById('address-error').classList.add('visible');
+        document.getElementById('addr-calle').scrollIntoView({ behavior: 'smooth' });
         document.getElementById('addr-calle').focus();
-        // Abrir sección si estaba cerrada
-        const sec = document.getElementById('section-notas');
-        if (sec && !document.getElementById('address-block').classList.contains('visible')) {
-          document.getElementById('address-block').scrollIntoView({ behavior: 'smooth' });
-        }
         return;
       }
     }
+
     const msg = buildMessage();
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
@@ -1341,6 +1407,7 @@
     address = [calle, piso, barrio, ref].filter(Boolean).join(', ');
     document.getElementById('address-error').classList.remove('visible');
     updatePreview();
+    updateCTA();
   }
 
   function toggleSection(id) {
@@ -1390,7 +1457,7 @@
     document.getElementById('notes-textarea').value = notes;
 
     renderItems();
-    renderDatePicker();
+    initCalendar();
     updateSummary();
     updateEyebrow();
     updatePreview();
