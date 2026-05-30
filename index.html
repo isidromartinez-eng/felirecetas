@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Feli Recetas · Pastelería artesanal en La Plata</title>
   <meta name="description" content="Pastelería artesanal en La Plata. Macarons, croissants, tortas personalizadas y más. Pedidos por WhatsApp con 48hs de anticipación."/>
-  <meta name="theme-color" content="#FBF7F0"/>
+  <meta name="theme-color" content="#EFEFEF"/>
 
   <!-- Open Graph / WhatsApp preview -->
   <meta property="og:type"        content="website"/>
@@ -32,9 +32,9 @@
       to   { transform: translateY(0);     opacity: 1; }
     }
     .draft-banner-inner {
-      background: #FBF7F0;
-      border: 1px solid rgba(42,31,23,.13);
-      border-left: 3px solid #7A2836;
+      background: #FFFFFF;
+      border: 1px solid rgba(54,68,89,.13);
+      border-left: 3px solid #7F2626;
       border-radius: 10px;
       padding: 10px 12px;
       display: flex;
@@ -70,7 +70,7 @@
     .draft-continue {
       font-family: 'DM Sans', sans-serif;
       font-size: 12px; font-weight: 500;
-      color: #FBF7F0; background: #7A2836;
+      color: #FFFFFF; background: #7F2626;
       text-decoration: none;
       padding: 0 13px; height: 32px; border-radius: 6px;
       display: flex; align-items: center;
@@ -467,6 +467,22 @@
 
     /* Badge queda encima del degradado */
     .product-card .card-img .chip-tag { z-index: 3; }
+
+    /* ── Hover lift en tarjetas (solo en dispositivos con cursor real) ── */
+    @media (hover: hover) {
+      .product-card {
+        transition: transform .2s cubic-bezier(0.4,0,0.2,1),
+                    box-shadow .2s cubic-bezier(0.4,0,0.2,1);
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 36px rgba(42,31,24,.22), 0 3px 10px rgba(42,31,24,.10);
+      }
+      .product-card:hover .card-img {
+        filter: brightness(1.04);
+        transition: filter .2s ease;
+      }
+    }
 
     /* ── Lightbox de galería ── */
     #lightbox {
@@ -1954,12 +1970,15 @@
 
   function closeProduct() {
     var _modal = document.getElementById('productModal');
+    var _inner = document.getElementById('productModalInner');
+    _inner.style.transform  = ''; // limpiar offset de swipe si quedó
+    _inner.style.transition = '';
     _modal.style.display = 'none';
     _modal.classList.remove('pm-open');
     document.body.style.overflow = '';
     if (_productHistoryPushed) {
       _productHistoryPushed = false;
-      history.back(); // consume the pushed state so back doesn't linger
+      history.back();
     }
   }
 
@@ -1971,23 +1990,45 @@
     }
   }, { passive: false });
 
-  // ── Swipe down para cerrar el modal de producto ──
+  // ── Swipe down para cerrar el modal de producto (con drag-follow) ──
   (function() {
-    const inner = document.getElementById('productModalInner');
-    let startY = 0;
-    let startScrollTop = 0;
+    var inner = document.getElementById('productModalInner');
+    var startY = 0, startScrollTop = 0, dragging = false;
 
     inner.addEventListener('touchstart', function(e) {
       startY = e.touches[0].clientY;
-      startScrollTop = inner.scrollTop;
+      startScrollTop = document.getElementById('pmBody').scrollTop || 0;
+      dragging = false;
+      inner.style.transition = 'none';
+    }, { passive: true });
+
+    inner.addEventListener('touchmove', function(e) {
+      if (startScrollTop > 2) return; // no interceptar si hay scroll en el body
+      var dy = e.touches[0].clientY - startY;
+      if (dy > 4) {
+        dragging = true;
+        inner.style.transform = 'translateY(' + Math.max(0, dy) + 'px)';
+      }
     }, { passive: true });
 
     inner.addEventListener('touchend', function(e) {
-      const deltaY = e.changedTouches[0].clientY - startY;
-      // Cerrar solo si desliza hacia abajo y el modal está en el tope (sin scroll)
-      if (deltaY > 80 && startScrollTop < 5) {
-        closeProduct();
+      var dy = e.changedTouches[0].clientY - startY;
+      if (dragging && dy > 80) {
+        // Umbral superado: snap hacia afuera y cerrar
+        inner.style.transition = 'transform 0.22s cubic-bezier(0.4,0,1,1)';
+        inner.style.transform  = 'translateY(110%)';
+        setTimeout(function() {
+          inner.style.transform  = '';
+          inner.style.transition = '';
+          closeProduct();
+        }, 220);
+      } else {
+        // No llegó: spring back
+        inner.style.transition = 'transform 0.28s cubic-bezier(0.32,0.72,0,1)';
+        inner.style.transform  = '';
+        setTimeout(function() { inner.style.transition = ''; }, 290);
       }
+      dragging = false;
     }, { passive: true });
   })();
 
@@ -2167,6 +2208,8 @@
   function closeProductDown() {
     var inner  = document.getElementById('productModalInner');
     var _modal = document.getElementById('productModal');
+    inner.style.transform  = ''; // limpiar offset de swipe si quedó
+    inner.style.transition = '';
     inner.classList.add('pm-closing');
     setTimeout(function() {
       inner.classList.remove('pm-closing');
@@ -2177,7 +2220,65 @@
         _productHistoryPushed = false;
         history.back();
       }
-      // Badge pop al terminar el slide-down
+    }, 290);
+  }
+
+  // Opción B: la foto vuela al ícono del carrito mientras el sheet baja
+  function flyPhotoToCart() {
+    var imgEl  = document.getElementById('pmImg');
+    var cartEl = document.querySelector('.topbar-cart');
+    if (!imgEl || !cartEl) return;
+
+    var imgRect  = imgEl.getBoundingClientRect();
+    var cartRect = cartEl.getBoundingClientRect();
+
+    // Centro del carrito (destino) y de la foto (origen del transform)
+    var cartCx = cartRect.left + cartRect.width  / 2;
+    var cartCy = cartRect.top  + cartRect.height / 2;
+    var imgCx  = imgRect.left  + imgRect.width   / 2;
+    var imgCy  = imgRect.top   + imgRect.height  / 2;
+
+    // Cuánto hay que trasladar para que el centro quede en el carrito
+    var dx = cartCx - imgCx;
+    var dy = cartCy - imgCy;
+    // Scale final: la foto se achica a ~24px
+    var scale = 24 / imgRect.width;
+
+    var bgImg   = imgEl.style.backgroundImage || '';
+    var bgColor = window.getComputedStyle(imgEl).backgroundColor || '';
+
+    // Clonar solo el fondo (sin los hijos: drag handle, overlay, botón)
+    var clone = document.createElement('div');
+    clone.style.cssText =
+      'position:fixed;' +
+      'top:'    + imgRect.top    + 'px;' +
+      'left:'   + imgRect.left   + 'px;' +
+      'width:'  + imgRect.width  + 'px;' +
+      'height:' + imgRect.height + 'px;' +
+      'border-radius:18px;' +
+      'background-image:' + bgImg + ';' +
+      'background-size:cover;background-position:center;' +
+      'background-color:' + bgColor + ';' +
+      'z-index:9999;pointer-events:none;' +
+      'will-change:transform,opacity,border-radius;' +
+      'transition:' +
+        'transform .44s cubic-bezier(0.4,0,0.2,1),' +
+        'border-radius .30s ease,' +
+        'opacity .14s .30s;';
+    document.body.appendChild(clone);
+
+    // Arrancar animación en el próximo frame (permite que el clone se pinte primero)
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        clone.style.transform    = 'translate(' + dx + 'px,' + dy + 'px) scale(' + scale + ')';
+        clone.style.borderRadius = '50%';
+        clone.style.opacity      = '0';
+      });
+    });
+
+    // Al llegar: limpiar clone + pop del badge
+    setTimeout(function() {
+      if (clone.parentNode) clone.parentNode.removeChild(clone);
       var badge = document.getElementById('cart-badge');
       if (badge) {
         badge.classList.remove('badge-pop');
@@ -2185,7 +2286,7 @@
         badge.classList.add('badge-pop');
         setTimeout(function() { badge.classList.remove('badge-pop'); }, 400);
       }
-    }, 290);
+    }, 500);
   }
 
   function addToCart() {
@@ -2213,7 +2314,8 @@
       }
       localStorage.setItem(CART_KEY, JSON.stringify(items));
       updateCartBadge();
-      closeProductDown();
+      flyPhotoToCart();              // foto despega hacia el carrito
+      setTimeout(closeProductDown, 80); // sheet baja 80ms después
     } catch(e) {}
   }
 
