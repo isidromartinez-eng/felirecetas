@@ -127,13 +127,20 @@
     }
     .badge-pop { animation: badgePop 0.38s cubic-bezier(0.34,1.56,0.64,1); }
 
-    /* ── Producto modal — animación slide-up ── */
+    /* ── Producto modal — animaciones ── */
     @keyframes pmSheetUp {
       from { transform: translateY(100%); }
       to   { transform: translateY(0); }
     }
+    @keyframes pmSheetDown {
+      from { transform: translateY(0); }
+      to   { transform: translateY(105%); }
+    }
     #productModal.pm-open #productModalInner {
       animation: pmSheetUp 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    #productModalInner.pm-closing {
+      animation: pmSheetDown 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
     }
 
     /* ═══ HERO FULL-BLEED ═══ */
@@ -776,7 +783,7 @@
     <a href="#" onclick="switchView('main');return false;" class="logo">FELIRECETAS</a>
     <a href="cart.html" class="topbar-btn topbar-hamburger topbar-cart" aria-label="Ver carrito" style="position:relative">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span id="cart-badge" style="display:none;position:absolute;top:4px;right:4px;min-width:16px;height:16px;padding:0 4px;background:var(--wine);color:#fff;font-family:var(--sans);font-size:10px;font-weight:700;border-radius:99px;line-height:16px;text-align:center;box-sizing:border-box"></span>
+      <span id="cart-badge" style="display:none;position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;padding:0 4px;background:var(--wine);color:#fff;font-family:var(--sans);font-size:10px;font-weight:700;border-radius:99px;line-height:16px;text-align:center;box-sizing:border-box"></span>
     </a>
   </header>
 
@@ -2157,43 +2164,20 @@
     } catch(e) {}
   }
 
-  function flyToCart() {
-    if (!pmCurrent) return;
-    var btn     = document.getElementById('pmAddCart');
-    var cartBtn = document.querySelector('.topbar-cart');
-    if (!btn || !cartBtn) return;
-
-    var sRect = btn.getBoundingClientRect();
-    var eRect = cartBtn.getBoundingClientRect();
-    var sx = sRect.left + sRect.width  / 2;
-    var sy = sRect.top  + sRect.height / 2;
-    var ex = eRect.left + eRect.width  / 2;
-    var ey = eRect.top  + eRect.height / 2;
-
-    var size = 36;
-    var el   = document.createElement('div');
-    el.style.cssText =
-      'position:fixed;z-index:9999;width:'  + size + 'px;height:' + size + 'px;' +
-      'border-radius:50%;pointer-events:none;' +
-      'left:' + (sx - size / 2) + 'px;top:' + (sy - size / 2) + 'px;' +
-      'box-shadow:0 4px 16px rgba(0,0,0,.35);border:2.5px solid rgba(255,255,255,.75);' +
-      (pmCurrent.img
-        ? 'background:url(' + pmCurrent.img + ') center/cover'
-        : 'background:var(--wine)');
-    document.body.appendChild(el);
-
-    // Punto medio del arco — desplaza a la derecha para curvar
-    var mx = sx + (ex - sx) * 0.35 + 50;
-    var my = sy + (ey - sy) * 0.28;
-
-    var anim = el.animate([
-      { transform: 'translate(0,0) scale(1)',                                        opacity: 1           },
-      { transform: 'translate('+(mx-sx)+'px,'+(my-sy)+'px) scale(.6)',               opacity: 1, offset:.4},
-      { transform: 'translate('+(ex-sx)+'px,'+(ey-sy)+'px) scale(.15)',              opacity: 0           }
-    ], { duration: 640, easing: 'ease-in', fill: 'forwards' });
-
-    var onDone = function() {
-      el.remove();
+  function closeProductDown() {
+    var inner  = document.getElementById('productModalInner');
+    var _modal = document.getElementById('productModal');
+    inner.classList.add('pm-closing');
+    setTimeout(function() {
+      inner.classList.remove('pm-closing');
+      _modal.style.display = 'none';
+      _modal.classList.remove('pm-open');
+      document.body.style.overflow = '';
+      if (_productHistoryPushed) {
+        _productHistoryPushed = false;
+        history.back();
+      }
+      // Badge pop al terminar el slide-down
       var badge = document.getElementById('cart-badge');
       if (badge) {
         badge.classList.remove('badge-pop');
@@ -2201,8 +2185,7 @@
         badge.classList.add('badge-pop');
         setTimeout(function() { badge.classList.remove('badge-pop'); }, 400);
       }
-    };
-    anim.finished ? anim.finished.then(onDone) : setTimeout(onDone, 660);
+    }, 290);
   }
 
   function addToCart() {
@@ -2230,22 +2213,7 @@
       }
       localStorage.setItem(CART_KEY, JSON.stringify(items));
       updateCartBadge();
-      flyToCart();
-
-      // Feedback visual: check en burdó por 0.8s, luego cierra
-      var btn = document.getElementById('pmAddCart');
-      if (btn) {
-        btn.disabled = true;
-        var orig = btn.innerHTML;
-        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ¡Agregado al pedido!';
-        btn.style.opacity = '0.85';
-        setTimeout(function() {
-          btn.innerHTML = orig;
-          btn.style.opacity = '';
-          btn.disabled = false;
-          closeProduct();
-        }, 800);
-      }
+      closeProductDown();
     } catch(e) {}
   }
 
