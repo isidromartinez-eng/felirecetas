@@ -843,7 +843,6 @@
 
     <!-- § 01 Items -->
     <section class="section section--items">
-      <p class="section-label"><span>01</span>TU SELECCIÓN</p>
       <div class="item-list" id="item-list"></div>
       <a href="index.html" class="add-item-btn" onclick="sessionStorage.setItem('openCatalog','1')">
         <span>+</span> Agregar otra pieza
@@ -852,8 +851,6 @@
 
     <!-- § 02 Retiro o envío -->
     <section class="section">
-      <p class="section-label"><span>02</span>¿CÓMO LO RECIBÍS?</p>
-
       <div class="toggle-grid" role="group" aria-label="Modo de entrega">
         <button class="toggle-pill active" id="pill-retiro" onclick="setMode('retiro')">Retiro en local</button>
         <button class="toggle-pill" id="pill-envio" onclick="setMode('envio')">Envío a domicilio</button>
@@ -872,10 +869,6 @@
         <button class="date-nav" id="date-next" onclick="navigateDate(+1)" aria-label="Día siguiente">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
         </button>
-      </div>
-
-      <div class="callout">
-        Los pedidos se reservan con <strong>1 semana</strong> mínimo de anticipación.
       </div>
 
       <div class="address-block" id="address-block">
@@ -916,7 +909,6 @@
 
     <!-- § 03 Notas para Feli -->
     <section class="section">
-      <p class="section-label"><span>03</span>NOTAS PARA FELI</p>
       <textarea
         class="notes-textarea"
         id="notes-textarea"
@@ -924,9 +916,6 @@
         placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
         oninput="onNotesInput()"
       ></textarea>
-      <p class="preview-helper" style="margin-top:10px">
-        Podés agregar cualquier aclaración — se la enviamos a Feli con tu pedido.
-      </p>
     </section>
 
     <!-- Sticky CTA -->
