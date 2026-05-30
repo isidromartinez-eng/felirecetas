@@ -132,13 +132,14 @@
     .section-label {
       font-family: var(--sans);
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 18px;
     }
-    .section-label span { opacity: 0.45; margin-right: 8px; }
+    .section-label::before { content: "— "; opacity: 0.45; }
+    .section-label span { opacity: 0.45; margin-right: 6px; }
 
     /* ─── Section ────────────────────────────────────── */
     .section {
@@ -161,9 +162,9 @@
     }
     .item-card:last-child { border-bottom: none; }
     .item-thumb {
-      width: 68px;
-      height: 68px;
-      border-radius: 10px;
+      width: 88px;
+      height: 88px;
+      border-radius: 12px;
       flex-shrink: 0;
       overflow: hidden;
       background-size: cover;
@@ -328,96 +329,98 @@
       margin-bottom: 12px;
     }
 
-    /* ─── Date pills ─────────────────────────────────── */
-    .dates-scroll-wrapper {
+    /* ─── Date chips (scroll horizontal) ───────────────── */
+    .chips-outer {
+      position: relative;
       margin: 0 -22px;
+    }
+    /* Fades en los bordes para indicar scroll */
+    .chips-outer::before,
+    .chips-outer::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 28px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .chips-outer::before {
+      left: 0;
+      background: linear-gradient(to right, var(--cream) 40%, transparent);
+    }
+    .chips-outer::after {
+      right: 0;
+      background: linear-gradient(to left, var(--cream) 40%, transparent);
+    }
+    .chips-scroll {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding: 4px 0 8px;
     }
-    .dates-scroll-wrapper::-webkit-scrollbar { display: none; }
-    .dates-row {
+    .chips-scroll::-webkit-scrollbar { display: none; }
+    .chips-row {
       display: flex;
       gap: 8px;
-      padding: 0 22px;
+      padding: 4px 26px 10px;
       width: max-content;
     }
-    .date-pill {
+    @keyframes chipsPulse {
+      0%,100% { opacity: 1; }
+      40%      { opacity: 0.35; }
+    }
+    .chips-row.highlight { animation: chipsPulse 0.45s ease; }
+    .date-chip {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--rule);
-      background: transparent;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-      min-width: 54px;
-    }
-    .date-pill.active {
-      background: var(--ink);
-      border-color: var(--ink);
-      color: var(--cream);
-    }
-    .date-pill__day {
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1;
-    }
-    .date-pill__date {
-      font-family: var(--sans);
-      font-size: 10px;
-      opacity: 0.65;
-      line-height: 1;
-    }
-
-    /* ─── Date picker (arrow nav) ───────────────────── */
-    .date-picker {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--cream-soft);
-      border: 1px solid var(--rule);
+      gap: 1px;
+      width: 56px;
+      height: 76px;
       border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      gap: 12px;
-    }
-    .date-nav {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+      border: 1.5px solid var(--rule);
       background: var(--cream);
-      border: 1px solid var(--rule);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
-      transition: background 0.15s, opacity 0.15s;
+      transition: background 0.15s, border-color 0.15s, transform 0.12s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .date-nav:disabled { opacity: 0.22; cursor: default; }
-    .date-nav:not(:disabled):active { background: var(--cream-warm); }
-    .date-center { text-align: center; flex: 1; min-width: 0; }
-    .date-day-name {
+    .date-chip:hover:not(.active) {
+      border-color: rgba(26,20,16,.3);
+      background: var(--cream-soft);
+    }
+    .date-chip:active:not(.active) { transform: scale(0.94); }
+    .date-chip.active {
+      background: var(--bordo);
+      border-color: var(--bordo);
+    }
+    .date-chip__day {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1;
+    }
+    .date-chip.active .date-chip__day { color: rgba(251,247,240,.65); }
+    .date-chip__num {
       font-family: var(--serif);
-      font-size: 22px;
+      font-size: 28px;
       font-weight: 500;
       color: var(--ink);
-      display: block;
-      line-height: 1.1;
+      line-height: 1;
+      letter-spacing: -0.02em;
     }
-    .date-day-num {
+    .date-chip.active .date-chip__num { color: var(--cream); }
+    .date-chip__month {
       font-family: var(--sans);
-      font-size: 12px;
+      font-size: 10px;
+      font-weight: 500;
       color: var(--muted);
-      margin-top: 3px;
-      display: block;
+      line-height: 1;
     }
+    .date-chip.active .date-chip__month { color: rgba(251,247,240,.65); }
 
     /* ─── Preview divider ────────────────────────────── */
     .preview-divider {
@@ -647,9 +650,6 @@
 
     /* ─── Sticky CTA ─────────────────────────────────── */
     .sticky-cta {
-      position: sticky;
-      bottom: 0;
-      z-index: 20;
       background: var(--bordo-deep);
       padding: 12px 20px 16px;
       display: flex;
@@ -842,17 +842,14 @@
 
     <!-- § 01 Items -->
     <section class="section section--items">
-      <p class="section-label"><span>01</span>TU SELECCIÓN</p>
       <div class="item-list" id="item-list"></div>
-      <a href="index.html#catalogo" class="add-item-btn">
+      <a href="index.html" class="add-item-btn" onclick="sessionStorage.setItem('openCatalog','1')">
         <span>+</span> Agregar otra pieza
       </a>
     </section>
 
     <!-- § 02 Retiro o envío -->
     <section class="section">
-      <p class="section-label"><span>02</span>¿CÓMO LO RECIBÍS?</p>
-
       <div class="toggle-grid" role="group" aria-label="Modo de entrega">
         <button class="toggle-pill active" id="pill-retiro" onclick="setMode('retiro')">Retiro en local</button>
         <button class="toggle-pill" id="pill-envio" onclick="setMode('envio')">Envío a domicilio</button>
@@ -860,21 +857,10 @@
 
       <p class="helper" id="delivery-helper">¿Cuándo lo retirás?</p>
 
-      <div class="date-picker">
-        <button class="date-nav" id="date-prev" onclick="navigateDate(-1)" aria-label="Día anterior">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
-        </button>
-        <div class="date-center">
-          <span class="date-day-name" id="date-day-name">—</span>
-          <span class="date-day-num" id="date-day-num">—</span>
+      <div class="chips-outer" id="chips-outer">
+        <div class="chips-scroll">
+          <div class="chips-row" id="chips-row"></div>
         </div>
-        <button class="date-nav" id="date-next" onclick="navigateDate(+1)" aria-label="Día siguiente">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
-        </button>
-      </div>
-
-      <div class="callout">
-        Los pedidos se reservan con <strong>1 semana</strong> mínimo de anticipación.
       </div>
 
       <div class="address-block" id="address-block">
@@ -913,24 +899,15 @@
       </div>
     </section>
 
-    <!-- § 03 Notas + vista previa (colapsable) -->
-    <section class="section section--collapsible" id="section-notas">
-      <button class="section-toggle" onclick="toggleSection('section-notas')" aria-expanded="false">
-        <p class="section-label" style="margin:0"><span>03</span>NOTAS PARA FELI</p>
-        <svg class="section-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="section-body">
-        <textarea
-          class="notes-textarea"
-          id="notes-textarea"
-          rows="4"
-          placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
-          oninput="onNotesInput()"
-        ></textarea>
-        <p class="preview-helper" style="margin-top:10px">
-          Podés agregar cualquier aclaración — se lo enviamos a Feli junto con tu pedido.
-        </p>
-      </div>
+    <!-- § 03 Notas para Feli -->
+    <section class="section">
+      <textarea
+        class="notes-textarea"
+        id="notes-textarea"
+        rows="4"
+        placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
+        oninput="onNotesInput()"
+      ></textarea>
     </section>
 
     <!-- Sticky CTA -->
@@ -986,12 +963,11 @@
   const MONTHS_ES      = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   const MONTHS_ES_FULL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-  let cart      = [];
-  let notes     = '';
-  let mode      = 'retiro';   // 'retiro' | 'envio'
-  let selDate   = null;       // Date object
-  let address   = '';
-  let dateIndex = 0;          // índice dentro de buildDates()
+  let cart    = [];
+  let notes   = '';
+  let mode    = 'retiro';   // 'retiro' | 'envio'
+  let selDate = null;       // Date object — null hasta que el usuario elija
+  let address = '';
 
   /* ─────────────────────────────────────────────────────── */
   /*  Persistence                                            */
@@ -1080,14 +1056,13 @@
   }
 
   /* ─────────────────────────────────────────────────────── */
-  /*  Dates                                                  */
+  /*  Date chips                                             */
   /* ─────────────────────────────────────────────────────── */
 
   function buildDates() {
+    const base = new Date(); base.setHours(0,0,0,0);
     const dates = [];
-    const base = new Date();
-    base.setHours(0, 0, 0, 0);
-    for (let i = 7; i <= 14; i++) {
+    for (let i = 7; i <= 34; i++) {   // ~4 semanas de opciones
       const d = new Date(base);
       d.setDate(base.getDate() + i);
       dates.push(d);
@@ -1095,29 +1070,38 @@
     return dates;
   }
 
-  function formatDateLabel(d) {
-    return d.getDate() + ' ' + MONTHS_ES[d.getMonth()];
-  }
-
-  function renderDatePicker() {
-    const dates = buildDates();
-    const d = dates[dateIndex];
-    selDate = d;
-
-    document.getElementById('date-day-name').textContent = DAYS_ES_FULL[d.getDay()];
-    document.getElementById('date-day-num').textContent  = d.getDate() + ' de ' + MONTHS_ES_FULL[d.getMonth()];
-
-    document.getElementById('date-prev').disabled = dateIndex === 0;
-    document.getElementById('date-next').disabled = dateIndex === dates.length - 1;
-
-    updatePreview();
+  function initDateChips() {
+    selDate = null;
+    renderDateChips();
     updateCTA();
   }
 
-  function navigateDate(delta) {
-    const max = buildDates().length - 1;
-    dateIndex = Math.max(0, Math.min(max, dateIndex + delta));
-    renderDatePicker();
+  function renderDateChips() {
+    const dates = buildDates();
+    const row   = document.getElementById('chips-row');
+    row.innerHTML = '';
+
+    dates.forEach(date => {
+      const chip = document.createElement('button');
+      const active = selDate && date.getTime() === selDate.getTime();
+      chip.className = 'date-chip' + (active ? ' active' : '');
+      chip.innerHTML =
+        `<span class="date-chip__day">${DAYS_ES_SHORT[date.getDay()]}</span>` +
+        `<span class="date-chip__num">${date.getDate()}</span>`              +
+        `<span class="date-chip__month">${MONTHS_ES[date.getMonth()]}</span>`;
+      chip.addEventListener('click', () => selectChipDate(new Date(date)));
+      row.appendChild(chip);
+    });
+  }
+
+  function selectChipDate(date) {
+    selDate = date;
+    renderDateChips();
+    // Hacer scroll al chip activo para que quede visible
+    const active = document.querySelector('.date-chip.active');
+    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    updatePreview();
+    updateCTA();
   }
 
   /* ─────────────────────────────────────────────────────── */
@@ -1131,17 +1115,8 @@
     document.getElementById('delivery-helper').textContent =
       m === 'retiro' ? '¿Cuándo lo retirás?' : '¿Cuándo te lo enviamos?';
     document.getElementById('address-block').classList.toggle('visible', m === 'envio');
-    const shipEl = document.getElementById('summary-shipping');
-    if (m === 'retiro') {
-      shipEl.textContent = 'sin cargo';
-      shipEl.classList.add('summary-row__value--muted');
-      shipEl.style.fontStyle = 'normal';
-    } else {
-      shipEl.textContent = 'a coordinar';
-      shipEl.classList.add('summary-row__value--muted');
-      shipEl.style.fontStyle = 'italic';
-    }
     updatePreview();
+    updateCTA();
   }
 
   /* ─────────────────────────────────────────────────────── */
@@ -1288,7 +1263,7 @@
     msg += '---\n';
     if (selDate) {
       const d = selDate;
-      const label = `${d.getDate()}/${(d.getMonth()+1).toString().padStart(2,'0')}`;
+      const label = `${DAYS_ES_FULL[d.getDay()]} ${d.getDate()} de ${MONTHS_ES_FULL[d.getMonth()]}`;
       msg += `${mode === 'retiro' ? 'Retiro' : 'Envío'}: ${label}\n`;
     }
     if (mode === 'envio' && address.trim()) {
@@ -1312,27 +1287,54 @@
   /* ─────────────────────────────────────────────────────── */
 
   function updateCTA() {
-    // selDate siempre está seteado con el date picker — botón siempre activo
     const btn = document.getElementById('whatsapp-btn');
-    btn.disabled = false;
+
+    if (!selDate) {
+      btn.textContent = 'Elegí una fecha para continuar';
+      btn.dataset.ctaState = 'no-date';
+      return;
+    }
+
+    if (mode === 'envio') {
+      const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
+      const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
+      if (!calle || !barrio) {
+        btn.textContent = 'Completá la dirección →';
+        btn.dataset.ctaState = 'no-address';
+        return;
+      }
+    }
+
+    btn.textContent = 'Pedir por WhatsApp →';
+    btn.dataset.ctaState = 'ready';
   }
 
   function sendWhatsApp() {
-    // Validate address if envio
+    const btn   = document.getElementById('whatsapp-btn');
+    const state = btn.dataset.ctaState;
+
+    if (state === 'no-date') {
+      const outer = document.getElementById('chips-outer');
+      const row   = document.getElementById('chips-row');
+      outer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      row.classList.remove('highlight');
+      void row.offsetWidth; // reiniciar animación
+      row.classList.add('highlight');
+      setTimeout(() => row.classList.remove('highlight'), 500);
+      return;
+    }
+
     if (mode === 'envio') {
       const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
       const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
       if (!calle || !barrio) {
         document.getElementById('address-error').classList.add('visible');
+        document.getElementById('addr-calle').scrollIntoView({ behavior: 'smooth' });
         document.getElementById('addr-calle').focus();
-        // Abrir sección si estaba cerrada
-        const sec = document.getElementById('section-notas');
-        if (sec && !document.getElementById('address-block').classList.contains('visible')) {
-          document.getElementById('address-block').scrollIntoView({ behavior: 'smooth' });
-        }
         return;
       }
     }
+
     const msg = buildMessage();
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
@@ -1356,6 +1358,7 @@
     address = [calle, piso, barrio, ref].filter(Boolean).join(', ');
     document.getElementById('address-error').classList.remove('visible');
     updatePreview();
+    updateCTA();
   }
 
   function toggleSection(id) {
@@ -1405,7 +1408,7 @@
     document.getElementById('notes-textarea').value = notes;
 
     renderItems();
-    renderDatePicker();
+    initDateChips();
     updateSummary();
     updateEyebrow();
     updatePreview();
