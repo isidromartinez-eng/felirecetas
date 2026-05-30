@@ -329,98 +329,98 @@
       margin-bottom: 12px;
     }
 
-    /* ─── Mini calendario ───────────────────────────── */
-    .cal-widget {
-      border: 1px solid var(--rule);
-      border-radius: 16px;
-      overflow: hidden;
-      margin-bottom: 4px;
-      background: var(--cream);
+    /* ─── Date chips (scroll horizontal) ───────────────── */
+    .chips-outer {
+      position: relative;
+      margin: 0 -22px;
     }
-    @keyframes calPulse {
-      0%   { box-shadow: 0 0 0 0   rgba(127,38,38,.4); }
-      65%  { box-shadow: 0 0 0 9px rgba(127,38,38,0); }
-      100% { box-shadow: 0 0 0 0   rgba(127,38,38,0); }
+    /* Fades en los bordes para indicar scroll */
+    .chips-outer::before,
+    .chips-outer::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 28px;
+      z-index: 1;
+      pointer-events: none;
     }
-    .cal-widget.highlight { animation: calPulse 0.55s ease; }
-    .cal-header {
+    .chips-outer::before {
+      left: 0;
+      background: linear-gradient(to right, var(--cream) 40%, transparent);
+    }
+    .chips-outer::after {
+      right: 0;
+      background: linear-gradient(to left, var(--cream) 40%, transparent);
+    }
+    .chips-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .chips-scroll::-webkit-scrollbar { display: none; }
+    .chips-row {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 14px 10px;
-      border-bottom: 1px solid var(--rule);
+      gap: 8px;
+      padding: 4px 26px 10px;
+      width: max-content;
     }
-    .cal-month-label {
-      font-family: var(--serif);
-      font-size: 19px;
-      font-style: italic;
-      font-weight: 500;
-      color: var(--ink);
+    @keyframes chipsPulse {
+      0%,100% { opacity: 1; }
+      40%      { opacity: 0.35; }
     }
-    .cal-nav {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--rule);
-      background: var(--cream-soft);
-      color: var(--ink);
+    .chips-row.highlight { animation: chipsPulse 0.45s ease; }
+    .date-chip {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 1px;
+      width: 56px;
+      height: 76px;
+      border-radius: 14px;
+      border: 1.5px solid var(--rule);
+      background: var(--cream);
       cursor: pointer;
       flex-shrink: 0;
-      transition: background 0.15s, opacity 0.15s;
+      transition: background 0.15s, border-color 0.15s, transform 0.12s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .cal-nav:disabled { opacity: 0.2; cursor: default; }
-    .cal-nav:not(:disabled):hover { background: var(--cream-warm); }
-    .cal-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      padding: 6px 8px 12px;
-      gap: 1px;
+    .date-chip:hover:not(.active) {
+      border-color: rgba(26,20,16,.3);
+      background: var(--cream-soft);
     }
-    .cal-day-header {
+    .date-chip:active:not(.active) { transform: scale(0.94); }
+    .date-chip.active {
+      background: var(--bordo);
+      border-color: var(--bordo);
+    }
+    .date-chip__day {
       font-family: var(--sans);
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
-      text-align: center;
-      padding: 6px 0 8px;
+      line-height: 1;
     }
-    .cal-day {
-      aspect-ratio: 1;
-      border: none;
-      background: transparent;
-      border-radius: 50%;
-      font-family: var(--sans);
-      font-size: 13px;
+    .date-chip.active .date-chip__day { color: rgba(251,247,240,.65); }
+    .date-chip__num {
+      font-family: var(--serif);
+      font-size: 28px;
       font-weight: 500;
       color: var(--ink);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.13s, color 0.13s;
-      position: relative;
-      -webkit-tap-highlight-color: transparent;
+      line-height: 1;
+      letter-spacing: -0.02em;
     }
-    .cal-day:hover:not(:disabled):not(.cal-selected) { background: var(--cream-soft); }
-    .cal-day:disabled { color: rgba(26,20,16,.18); cursor: default; }
-    .cal-day.cal-other  { opacity: 0; pointer-events: none; }
-    .cal-day.cal-selected { background: var(--bordo); color: var(--cream); }
-    .cal-day.cal-today::after {
-      content: '';
-      position: absolute;
-      bottom: 3px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 3px; height: 3px;
-      border-radius: 50%;
-      background: var(--bordo);
+    .date-chip.active .date-chip__num { color: var(--cream); }
+    .date-chip__month {
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1;
     }
-    .cal-day.cal-today.cal-selected::after { background: rgba(251,247,240,.65); }
+    .date-chip.active .date-chip__month { color: rgba(251,247,240,.65); }
 
     /* ─── Preview divider ────────────────────────────── */
     .preview-divider {
@@ -860,17 +860,10 @@
 
       <p class="helper" id="delivery-helper">¿Cuándo lo retirás?</p>
 
-      <div class="cal-widget" id="cal-widget">
-        <div class="cal-header">
-          <button class="cal-nav" id="cal-prev" onclick="navigateCalMonth(-1)" aria-label="Mes anterior">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
-          </button>
-          <span class="cal-month-label" id="cal-month-label">—</span>
-          <button class="cal-nav" id="cal-next" onclick="navigateCalMonth(+1)" aria-label="Mes siguiente">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
-          </button>
+      <div class="chips-outer" id="chips-outer">
+        <div class="chips-scroll">
+          <div class="chips-row" id="chips-row"></div>
         </div>
-        <div class="cal-grid" id="cal-grid"></div>
       </div>
 
       <div class="address-block" id="address-block">
@@ -973,13 +966,11 @@
   const MONTHS_ES      = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   const MONTHS_ES_FULL = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
-  let cart     = [];
-  let notes    = '';
-  let mode     = 'retiro';   // 'retiro' | 'envio'
-  let selDate  = null;       // Date object — null hasta que el usuario elija
-  let address  = '';
-  let calYear  = 0;
-  let calMonth = 0;
+  let cart    = [];
+  let notes   = '';
+  let mode    = 'retiro';   // 'retiro' | 'envio'
+  let selDate = null;       // Date object — null hasta que el usuario elija
+  let address = '';
 
   /* ─────────────────────────────────────────────────────── */
   /*  Persistence                                            */
@@ -1068,88 +1059,50 @@
   }
 
   /* ─────────────────────────────────────────────────────── */
-  /*  Mini calendario                                        */
+  /*  Date chips                                             */
   /* ─────────────────────────────────────────────────────── */
 
-  const MONTHS_CAP = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-                      'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  function buildDates() {
+    const base = new Date(); base.setHours(0,0,0,0);
+    const dates = [];
+    for (let i = 7; i <= 34; i++) {   // ~4 semanas de opciones
+      const d = new Date(base);
+      d.setDate(base.getDate() + i);
+      dates.push(d);
+    }
+    return dates;
+  }
 
-  function initCalendar() {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const minDate = new Date(today);
-    minDate.setDate(today.getDate() + 7);
-    // Abrir en el primer mes con fechas disponibles
-    calYear  = minDate.getFullYear();
-    calMonth = minDate.getMonth();
-    selDate  = null;
-    renderCalendar();
+  function initDateChips() {
+    selDate = null;
+    renderDateChips();
     updateCTA();
   }
 
-  function renderCalendar() {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const minDate = new Date(today); minDate.setDate(today.getDate() + 7);
+  function renderDateChips() {
+    const dates = buildDates();
+    const row   = document.getElementById('chips-row');
+    row.innerHTML = '';
 
-    document.getElementById('cal-month-label').textContent =
-      MONTHS_CAP[calMonth] + ' ' + calYear;
-
-    // Deshabilitar "mes anterior" si ya estamos en el mes mínimo
-    document.getElementById('cal-prev').disabled =
-      (calYear === minDate.getFullYear() && calMonth === minDate.getMonth());
-
-    const grid = document.getElementById('cal-grid');
-    grid.innerHTML = '';
-
-    // Cabecera días (Lunes primero, convención argentina)
-    ['L','M','M','J','V','S','D'].forEach(h => {
-      const el = document.createElement('div');
-      el.className = 'cal-day-header';
-      el.textContent = h;
-      grid.appendChild(el);
+    dates.forEach(date => {
+      const chip = document.createElement('button');
+      const active = selDate && date.getTime() === selDate.getTime();
+      chip.className = 'date-chip' + (active ? ' active' : '');
+      chip.innerHTML =
+        `<span class="date-chip__day">${DAYS_ES_SHORT[date.getDay()]}</span>` +
+        `<span class="date-chip__num">${date.getDate()}</span>`              +
+        `<span class="date-chip__month">${MONTHS_ES[date.getMonth()]}</span>`;
+      chip.addEventListener('click', () => selectChipDate(new Date(date)));
+      row.appendChild(chip);
     });
-
-    // Offset de la cuadrícula (Mon=0)
-    const firstDow = new Date(calYear, calMonth, 1).getDay();
-    const offset = (firstDow + 6) % 7;
-    for (let i = 0; i < offset; i++) {
-      const el = document.createElement('button');
-      el.className = 'cal-day cal-other';
-      el.tabIndex = -1;
-      grid.appendChild(el);
-    }
-
-    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-    for (let d = 1; d <= daysInMonth; d++) {
-      const date = new Date(calYear, calMonth, d);
-      date.setHours(0,0,0,0);
-      const isToday    = date.getTime() === today.getTime();
-      const isDisabled = date < minDate;
-      const isSelected = selDate && date.getTime() === selDate.getTime();
-
-      const btn = document.createElement('button');
-      btn.className = 'cal-day';
-      btn.textContent = d;
-      if (isToday)    btn.classList.add('cal-today');
-      if (isSelected) btn.classList.add('cal-selected');
-      if (isDisabled) {
-        btn.disabled = true;
-      } else {
-        btn.addEventListener('click', () => selectCalDate(new Date(date)));
-      }
-      grid.appendChild(btn);
-    }
   }
 
-  function navigateCalMonth(delta) {
-    calMonth += delta;
-    if (calMonth > 11) { calMonth = 0; calYear++; }
-    if (calMonth < 0)  { calMonth = 11; calYear--; }
-    renderCalendar();
-  }
-
-  function selectCalDate(date) {
+  function selectChipDate(date) {
     selDate = date;
-    renderCalendar();
+    renderDateChips();
+    // Hacer scroll al chip activo para que quede visible
+    const active = document.querySelector('.date-chip.active');
+    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     updatePreview();
     updateCTA();
   }
@@ -1364,12 +1317,13 @@
     const state = btn.dataset.ctaState;
 
     if (state === 'no-date') {
-      const cal = document.getElementById('cal-widget');
-      cal.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      cal.classList.remove('highlight');
-      void cal.offsetWidth; // forzar reflow para reiniciar animación
-      cal.classList.add('highlight');
-      setTimeout(() => cal.classList.remove('highlight'), 600);
+      const outer = document.getElementById('chips-outer');
+      const row   = document.getElementById('chips-row');
+      outer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      row.classList.remove('highlight');
+      void row.offsetWidth; // reiniciar animación
+      row.classList.add('highlight');
+      setTimeout(() => row.classList.remove('highlight'), 500);
       return;
     }
 
@@ -1457,7 +1411,7 @@
     document.getElementById('notes-textarea').value = notes;
 
     renderItems();
-    initCalendar();
+    initDateChips();
     updateSummary();
     updateEyebrow();
     updatePreview();
