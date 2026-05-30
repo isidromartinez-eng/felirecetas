@@ -106,6 +106,15 @@
       }
     }
 
+    /* ── Producto modal — animación slide-up ── */
+    @keyframes pmSheetUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    #productModal.pm-open #productModalInner {
+      animation: pmSheetUp 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
     /* ═══ HERO FULL-BLEED ═══ */
     .hero-fullbleed {
       position: relative;
@@ -1350,9 +1359,21 @@
   <div id="productModalInner" style="background:var(--paper);border-radius:18px 18px 0 0;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 -8px 60px rgba(0,0,0,.25);display:flex;flex-direction:column">
 
     <!-- Image -->
-    <div id="pmImg" class="img-placeholder wine" style="height:200px;border-radius:18px 18px 0 0;position:relative;flex-shrink:0">
+    <div id="pmImg" class="img-placeholder wine" style="height:260px;border-radius:18px 18px 0 0;position:relative;flex-shrink:0;overflow:hidden">
+
+      <!-- Drag handle pill -->
+      <div style="position:absolute;top:10px;left:0;right:0;display:flex;justify-content:center;pointer-events:none;z-index:3">
+        <div style="width:38px;height:4px;border-radius:99px;background:rgba(255,255,255,.45)"></div>
+      </div>
+
+      <!-- Gradiente + nombre del producto -->
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:14px 20px 18px;background:linear-gradient(to top,rgba(20,10,5,.75) 0%,rgba(20,10,5,0) 100%);pointer-events:none;z-index:2">
+        <div id="pmImgEyebrow" style="font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px"></div>
+        <div id="pmImgTitle" style="font-family:var(--serif);font-style:italic;font-size:26px;color:#fff;line-height:1.1"></div>
+      </div>
+
       <span id="pmImgLabel" class="img-label"></span>
-      <button onclick="closeProduct()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1a0f0a;box-shadow:0 2px 12px rgba(0,0,0,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)">
+      <button onclick="closeProduct()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.92);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#1a0f0a;box-shadow:0 2px 12px rgba(0,0,0,.25);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:4">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l12 12M16 4L4 16"/></svg>
       </button>
     </div>
@@ -1820,8 +1841,12 @@
     // Image
     const img = document.getElementById('pmImg');
     img.className = 'img-placeholder ' + p.tone;
-    img.style.cssText = `height:200px;border-radius:18px 18px 0 0;position:relative;flex-shrink:0;background-image:url('${p.img}');background-size:cover;background-position:center`;
+    img.style.cssText = `height:260px;border-radius:18px 18px 0 0;position:relative;flex-shrink:0;overflow:hidden;background-image:url('${p.img}');background-size:cover;background-position:center`;
     document.getElementById('pmImgLabel').textContent = '';
+
+    // Overlay nombre + eyebrow sobre la foto
+    document.getElementById('pmImgTitle').textContent   = p.name;
+    document.getElementById('pmImgEyebrow').textContent = p.cat || '';
 
     // Text
     document.getElementById('pmEyebrow').textContent = '— ' + p.cat;
@@ -1843,7 +1868,12 @@
     // Show — push history entry so mobile back gesture closes modal
     _productHistoryPushed = true;
     history.pushState({ modal: 'product' }, '');
-    document.getElementById('productModal').style.display = 'flex';
+    var _modal = document.getElementById('productModal');
+    _modal.classList.remove('pm-open');
+    _modal.style.display = 'flex';
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() { _modal.classList.add('pm-open'); });
+    });
     document.body.style.overflow = 'hidden';
   }
 
@@ -1899,7 +1929,9 @@
   document.getElementById('pmNota').addEventListener('input', updatePmCta);
 
   function closeProduct() {
-    document.getElementById('productModal').style.display = 'none';
+    var _modal = document.getElementById('productModal');
+    _modal.style.display = 'none';
+    _modal.classList.remove('pm-open');
     document.body.style.overflow = '';
     if (_productHistoryPushed) {
       _productHistoryPushed = false;
@@ -2127,16 +2159,19 @@
       localStorage.setItem(CART_KEY, JSON.stringify(items));
       updateCartBadge();
 
-      // Feedback visual: botón verde por 1.8s
+      // Feedback visual: check en burdó por 0.8s, luego cierra
       var btn = document.getElementById('pmAddCart');
       if (btn) {
+        btn.disabled = true;
         var orig = btn.innerHTML;
-        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ¡Agregado!';
-        btn.style.background = '#2d8a3e';
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ¡Agregado al pedido!';
+        btn.style.opacity = '0.85';
         setTimeout(function() {
           btn.innerHTML = orig;
-          btn.style.background = '';
-        }, 1800);
+          btn.style.opacity = '';
+          btn.disabled = false;
+          closeProduct();
+        }, 800);
       }
     } catch(e) {}
   }
