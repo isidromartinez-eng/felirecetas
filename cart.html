@@ -236,8 +236,10 @@
     .notes-textarea:focus { border-color:rgba(127,38,38,.4); }
 
     /* Sticky CTA */
+    #cart-content,#empty-state { padding-bottom:90px; }
     .sticky-cta {
-      position:sticky;bottom:0;
+      position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+      width:100%;max-width:480px;z-index:50;
       background:var(--dark-bar);
       padding:14px 20px 20px;
       display:flex;align-items:center;justify-content:space-between;gap:14px;
