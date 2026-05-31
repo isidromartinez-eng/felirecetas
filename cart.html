@@ -6,1039 +6,437 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Tu pedido · Feli Recetas</title>
   <meta name="theme-color" content="#364459"/>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
   <style>
-    /* ─── Design tokens ─────────────────────────────── */
     :root {
-      --cream:      #FFFFFF;
-      --cream-warm: #EFEFEF;
-      --cream-soft: #E6E6E6;
+      --cream:      #FAF5EF;
+      --cream-card: #FFFFFF;
+      --cream-warm: #F0E8DC;
+      --cream-soft: #EAE0D5;
       --bordo:      #7F2626;
       --bordo-deep: #364459;
-      --brown:      #364459;
-      --ink:        #364459;
-      --muted:      #5A6878;
-      --rule:       rgba(54,68,89,0.12);
-      --serif:      "Cormorant Garamond", "Cormorant", Georgia, serif;
-      --sans:       "DM Sans", -apple-system, "Helvetica Neue", system-ui, sans-serif;
-      --mono:       "DM Mono", "JetBrains Mono", ui-monospace, monospace;
+      --dark-bar:   #364459;
+      --ink:        #2A1810;
+      --muted:      #8A7060;
+      --rule:       rgba(42,24,16,.10);
+      --serif:      "Cormorant Garamond","Cormorant",Georgia,serif;
+      --sans:       "DM Sans",-apple-system,"Helvetica Neue",system-ui,sans-serif;
+      --mono:       "DM Mono","JetBrains Mono",ui-monospace,monospace;
     }
+    [data-palette="v1"] body { background:#7F2626; }
+    [data-palette="v2"] body { background:#364459; }
+    [data-palette="v3"] body { background:#EFEFEF; }
 
-    /* ── Variantes de paleta: cambian el fondo (la tarjeta queda blanca) ── */
-    [data-palette="v1"] body { background: #7F2626; }
-    [data-palette="v2"] body { background: #364459; }
-    [data-palette="v3"] body { background: #EFEFEF; }
-
-    /* ─── Reset ─────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    *,*::before,*::after { box-sizing:border-box;margin:0;padding:0; }
+    html { scroll-behavior:smooth;-webkit-text-size-adjust:100%; }
     body {
-      font-family: var(--sans);
-      background: var(--bordo-deep);
-      color: var(--ink);
-      -webkit-font-smoothing: antialiased;
-      font-size: 14px;
-      line-height: 1.5;
-      min-height: 100dvh;
+      font-family:var(--sans);
+      background:var(--bordo-deep);
+      color:var(--ink);
+      -webkit-font-smoothing:antialiased;
+      font-size:14px;
+      line-height:1.5;
+      min-height:100dvh;
     }
-    img { max-width: 100%; display: block; }
-    button { font-family: var(--sans); cursor: pointer; border: none; background: none; }
-    a { color: inherit; text-decoration: none; }
-    input, textarea { font-family: var(--sans); }
+    img { max-width:100%;display:block; }
+    button { font-family:var(--sans);cursor:pointer;border:none;background:none; }
+    a { color:inherit;text-decoration:none; }
+    input,textarea { font-family:var(--sans); }
 
-    /* ─── Column layout ─────────────────────────────── */
     #app {
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
-      background: var(--cream);
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
+      width:100%;max-width:480px;margin:0 auto;
+      background:var(--cream);min-height:100dvh;
+      display:flex;flex-direction:column;position:relative;
     }
 
-    /* ─── Top bar ────────────────────────────────────── */
+    /* Top bar */
     .top-bar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--rule);
-      height: 52px;
-      padding: 0 22px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      position:sticky;top:0;z-index:30;
+      background:rgba(250,245,239,.96);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--rule);
+      height:52px;padding:0 20px;
+      display:flex;align-items:center;justify-content:space-between;
     }
     .top-bar__nav {
-      font-family: var(--sans);
-      font-size: 13px;
-      color: var(--ink);
-      opacity: 0.7;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 6px 0;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: opacity 0.15s;
-      min-width: 48px;
+      font-size:13px;color:var(--muted);cursor:pointer;
+      padding:6px 0;display:flex;align-items:center;gap:4px;
+      transition:color .15s;min-width:52px;
     }
-    .top-bar__nav:hover { opacity: 1; }
-    .top-bar__nav--close { justify-content: flex-end; font-size: 18px; }
+    .top-bar__nav:hover { color:var(--ink); }
     .top-bar__brand {
-      font-family: var(--sans);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      color: var(--ink);
-      text-transform: uppercase;
-      text-align: center;
-      flex: 1;
+      font-size:11px;font-weight:600;letter-spacing:.14em;
+      color:var(--ink);text-transform:uppercase;text-align:center;
     }
 
-    /* ─── Page header ────────────────────────────────── */
-    .page-header {
-      padding: 24px 22px 4px;
-      border-top: 3px solid var(--bordo);
-    }
+    /* Page header */
+    .page-header { padding:24px 22px 12px; }
     .eyebrow {
-      font-family: var(--sans);
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      font-size:11px;font-weight:500;letter-spacing:.10em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:6px;
     }
-    .eyebrow::before { content: "—"; opacity: 0.5; }
+    .eyebrow::before { content:"—";color:var(--bordo); }
     .page-title {
-      font-family: var(--serif);
-      font-size: 42px;
-      font-weight: 400;
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-      color: var(--ink);
+      font-family:var(--serif);font-size:44px;font-weight:400;
+      line-height:.95;letter-spacing:-.02em;color:var(--ink);
     }
-    .page-title em { font-style: italic; }
+    .page-title em { font-style:italic; }
 
-    /* ─── Section label ──────────────────────────────── */
+    /* Sections */
+    .section { padding:22px 22px 24px;border-top:1px solid var(--rule); }
+    .section--items { padding:16px 22px 24px;border-top:none; }
     .section-label {
-      font-family: var(--sans);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 18px;
-    }
-    .section-label::before { content: "— "; opacity: 0.45; }
-    .section-label span { opacity: 0.45; margin-right: 6px; }
-
-    /* ─── Section ────────────────────────────────────── */
-    .section {
-      padding: 28px 22px;
-      border-top: 1px solid var(--rule);
-    }
-    .section--items {
-      padding: 20px 22px 28px;
-      border-top: none;
+      font-size:12px;font-weight:600;color:var(--ink);
+      margin-bottom:14px;letter-spacing:.01em;
     }
 
-    /* ─── Item card ──────────────────────────────────── */
-    .item-list { display: flex; flex-direction: column; }
+    /* Item card */
+    .item-list { display:flex;flex-direction:column; }
     .item-card {
-      display: flex;
-      flex-direction: row;
-      gap: 14px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--rule);
+      display:flex;flex-direction:row;gap:14px;
+      padding:16px 0;border-bottom:1px solid var(--rule);
+      animation:fadeIn .2s ease;position:relative;
     }
-    .item-card:last-child { border-bottom: none; }
+    .item-card:last-child { border-bottom:none; }
     .item-thumb {
-      width: 88px;
-      height: 88px;
-      border-radius: 12px;
-      flex-shrink: 0;
-      overflow: hidden;
-      background-size: cover;
-      background-position: center;
+      width:80px;height:80px;border-radius:10px;
+      flex-shrink:0;overflow:hidden;
+      background-size:cover;background-position:center;
     }
-    .item-body {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .item-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-    }
+    .item-body { flex:1;min-width:0;display:flex;flex-direction:column;gap:3px; }
     .item-name {
-      font-family: var(--serif);
-      font-size: 19px;
-      font-style: italic;
-      font-weight: 400;
-      color: var(--ink);
-      line-height: 1.2;
+      font-family:var(--serif);font-size:19px;font-style:italic;
+      font-weight:400;color:var(--ink);line-height:1.2;padding-right:28px;
     }
-    .item-price {
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--ink);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .item-meta {
-      font-family: var(--sans);
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
+    .item-meta { font-size:12px;color:var(--muted);line-height:1.4; }
     .item-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 6px;
+      display:flex;align-items:center;justify-content:space-between;margin-top:8px;
     }
-    .qty-stepper {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .item-consult { font-size:12px;color:var(--muted);font-style:italic; }
+    .qty-stepper { display:flex;align-items:center;gap:10px; }
     .qty-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      border: 1px solid var(--rule) !important;
-      background: transparent !important;
-      color: var(--ink);
-      font-size: 14px;
-      font-weight: 400;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-      line-height: 1;
-      padding: 0;
+      width:26px;height:26px;border-radius:50%;
+      border:1px solid var(--rule) !important;
+      background:var(--cream-card) !important;
+      color:var(--ink);font-size:16px;font-weight:300;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;transition:background .15s;line-height:1;padding:0;
     }
-    .qty-btn:hover { background: var(--cream-soft) !important; }
-    .qty-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .qty-btn:hover { background:var(--cream-warm) !important; }
+    .qty-btn:disabled { opacity:.3;cursor:not-allowed; }
     .qty-num {
-      font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink);
-      min-width: 14px;
-      text-align: center;
+      font-size:14px;font-weight:600;color:var(--ink);
+      min-width:16px;text-align:center;
     }
     .remove-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      font-family: var(--sans);
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      transition: color 0.15s;
+      position:absolute;top:14px;right:0;
+      width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+      color:var(--muted);opacity:.45;transition:opacity .15s,color .15s;
+      cursor:pointer;padding:0;
     }
-    .remove-btn:hover { color: var(--bordo); }
+    .remove-btn:hover { opacity:1;color:var(--bordo); }
 
-    /* ─── Add item button ────────────────────────────── */
+    /* Add item button */
     .add-item-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      padding: 12px 18px;
-      border: 1px dashed var(--rule);
-      border-radius: 4px;
-      background: transparent;
-      font-family: var(--sans);
-      font-size: 13px;
-      color: var(--muted);
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s, background 0.15s;
-      margin-top: 16px;
-      text-decoration: none;
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      width:100%;padding:13px 18px;
+      border:1.5px dashed rgba(127,38,38,.3);border-radius:10px;
+      background:transparent;font-size:13px;font-weight:500;
+      color:var(--bordo);cursor:pointer;
+      transition:border-color .15s,background .15s;
+      margin-top:16px;text-decoration:none;
     }
-    .add-item-btn:hover {
-      border-color: var(--ink);
-      color: var(--ink);
-      background: var(--cream-warm);
-    }
+    .add-item-btn:hover { border-color:var(--bordo);background:rgba(127,38,38,.04); }
 
-    /* ─── Toggle pills ───────────────────────────────── */
+    /* Toggle pills */
     .toggle-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: var(--cream-soft);
-      border-radius: 999px;
-      padding: 4px;
-      gap: 2px;
-      margin-bottom: 22px;
+      display:grid;grid-template-columns:1fr 1fr;
+      background:var(--cream-soft);border-radius:999px;
+      padding:4px;gap:2px;margin-bottom:20px;
     }
     .toggle-pill {
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 500;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.18s, color 0.18s;
-      color: var(--ink);
-      background: transparent;
-      border: none;
-      letter-spacing: 0.01em;
+      border-radius:999px;padding:9px 16px;
+      font-size:13px;font-weight:500;text-align:center;
+      cursor:pointer;transition:background .18s,color .18s;
+      color:var(--ink);background:transparent;border:none;
     }
-    .toggle-pill.active {
-      background: var(--ink);
-      color: var(--cream);
-    }
+    .toggle-pill.active { background:var(--bordo);color:#fff; }
 
-    /* ─── Helper text ────────────────────────────────── */
-    .helper {
-      font-family: var(--sans);
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
+    /* Helper */
+    .helper { font-size:12px;color:var(--muted);margin-bottom:12px; }
 
-    /* ─── Date chips (scroll horizontal) ───────────────── */
-    .chips-outer {
-      position: relative;
-      margin: 0 -22px;
+    /* Date chips */
+    .chips-outer { position:relative;margin:0 -22px; }
+    .chips-outer::before,.chips-outer::after {
+      content:'';position:absolute;top:0;bottom:0;width:28px;z-index:1;pointer-events:none;
     }
-    /* Fades en los bordes para indicar scroll */
-    .chips-outer::before,
-    .chips-outer::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 28px;
-      z-index: 1;
-      pointer-events: none;
-    }
-    .chips-outer::before {
-      left: 0;
-      background: linear-gradient(to right, var(--cream) 40%, transparent);
-    }
-    .chips-outer::after {
-      right: 0;
-      background: linear-gradient(to left, var(--cream) 40%, transparent);
-    }
-    .chips-scroll {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .chips-scroll::-webkit-scrollbar { display: none; }
-    .chips-row {
-      display: flex;
-      gap: 8px;
-      padding: 4px 26px 10px;
-      width: max-content;
-    }
-    @keyframes chipsPulse {
-      0%,100% { opacity: 1; }
-      40%      { opacity: 0.35; }
-    }
-    .chips-row.highlight { animation: chipsPulse 0.45s ease; }
+    .chips-outer::before { left:0;background:linear-gradient(to right,var(--cream) 40%,transparent); }
+    .chips-outer::after  { right:0;background:linear-gradient(to left,var(--cream) 40%,transparent); }
+    .chips-scroll { overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none; }
+    .chips-scroll::-webkit-scrollbar { display:none; }
+    .chips-row { display:flex;gap:8px;padding:4px 26px 10px;width:max-content; }
+    @keyframes chipsPulse { 0%,100%{opacity:1}40%{opacity:.35} }
+    .chips-row.highlight { animation:chipsPulse .45s ease; }
     .date-chip {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1px;
-      width: 56px;
-      height: 76px;
-      border-radius: 14px;
-      border: 1.5px solid var(--rule);
-      background: var(--cream);
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: background 0.15s, border-color 0.15s, transform 0.12s;
-      -webkit-tap-highlight-color: transparent;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+      width:56px;height:76px;border-radius:14px;
+      border:1.5px solid var(--rule);background:var(--cream-card);
+      cursor:pointer;flex-shrink:0;
+      transition:background .15s,border-color .15s,transform .12s;
+      -webkit-tap-highlight-color:transparent;
     }
-    .date-chip:hover:not(.active) {
-      border-color: rgba(26,20,16,.3);
-      background: var(--cream-soft);
-    }
-    .date-chip:active:not(.active) { transform: scale(0.94); }
-    .date-chip.active {
-      background: var(--bordo);
-      border-color: var(--bordo);
-    }
+    .date-chip:hover:not(.active) { border-color:rgba(127,38,38,.3);background:rgba(127,38,38,.04); }
+    .date-chip:active:not(.active) { transform:scale(.94); }
+    .date-chip.active { background:var(--bordo);border-color:var(--bordo); }
     .date-chip__day {
-      font-family: var(--sans);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      line-height: 1;
+      font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);line-height:1;
     }
-    .date-chip.active .date-chip__day { color: rgba(255,255,255,.65); }
+    .date-chip.active .date-chip__day { color:rgba(255,255,255,.65); }
     .date-chip__num {
-      font-family: var(--serif);
-      font-size: 28px;
-      font-weight: 500;
-      color: var(--ink);
-      line-height: 1;
-      letter-spacing: -0.02em;
+      font-family:var(--serif);font-size:28px;font-weight:500;
+      color:var(--ink);line-height:1;letter-spacing:-.02em;
     }
-    .date-chip.active .date-chip__num { color: var(--cream); }
-    .date-chip__month {
-      font-family: var(--sans);
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--muted);
-      line-height: 1;
-    }
-    .date-chip.active .date-chip__month { color: rgba(255,255,255,.65); }
+    .date-chip.active .date-chip__num { color:#fff; }
+    .date-chip__month { font-size:10px;font-weight:500;color:var(--muted);line-height:1; }
+    .date-chip.active .date-chip__month { color:rgba(255,255,255,.65); }
 
-    /* ─── Preview divider ────────────────────────────── */
-    .preview-divider {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 22px 0 16px;
-    }
-    .preview-divider hr {
-      flex: 1;
-      border: none;
-      border-top: 1px solid var(--rule);
-    }
-    .preview-divider span {
-      font-family: var(--sans);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    /* ─── Anticipation callout ───────────────────────── */
-    .callout {
-      background: var(--cream-soft);
-      border-radius: 4px;
-      padding: 10px 14px;
-      font-family: var(--sans);
-      font-size: 12px;
-      color: var(--brown);
-      line-height: 1.5;
-      margin-top: 14px;
-    }
-    .callout strong { font-weight: 600; }
-
-    /* ─── Collapsible section ────────────────────────── */
-    .section--collapsible { padding: 0; overflow: hidden; }
-    .section-toggle {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 20px 22px;
-      text-align: left;
-    }
-    .section-chevron {
-      flex-shrink: 0;
-      color: var(--muted);
-      transition: transform 0.3s ease;
-    }
-    .section--collapsible.open .section-chevron { transform: rotate(180deg); }
-    .section-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
-      padding: 0 22px;
-    }
-    .section--collapsible.open .section-body {
-      max-height: 900px;
-      padding-bottom: 20px;
-    }
-
-    /* ─── Delivery form ──────────────────────────────── */
-    .address-block {
-      margin-top: 18px;
-      display: none;
-    }
-    .address-block.visible { display: block; }
-    .delivery-fields {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    /* Address block */
+    .address-block { margin-top:18px;display:none; }
+    .address-block.visible { display:block; }
+    .delivery-fields { display:flex;flex-direction:column;gap:10px; }
     .delivery-field-card {
-      background: var(--cream);
-      border: 1px solid var(--rule);
-      border-radius: 12px;
-      padding: 14px 16px;
+      background:var(--cream-card);border:1px solid var(--rule);
+      border-radius:12px;padding:14px 16px;
     }
     .field-label {
-      font-family: var(--sans);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-      display: block;
+      font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:8px;display:block;
     }
     .field-input {
-      width: 100%;
-      border: none;
-      border-radius: 4px;
-      background: transparent;
-      padding: 12px 14px;
-      font-family: var(--sans);
-      font-size: 14px;
-      color: var(--ink);
-      background: var(--cream);
-      outline: none;
-      transition: border-color 0.15s;
-      -webkit-appearance: none;
+      width:100%;border:none;background:transparent;padding:0;
+      font-size:14px;color:var(--ink);outline:none;-webkit-appearance:none;
     }
-    .field-input::placeholder { color: var(--muted); opacity: 0.6; }
-    .field-input:focus { border-color: var(--ink); }
-    .field-input.error { border-color: var(--bordo); }
-    .field-error {
-      font-family: var(--sans);
-      font-size: 11px;
-      color: var(--bordo);
-      margin-top: 5px;
-      display: none;
-    }
-    .field-error.visible { display: block; }
+    .field-input::placeholder { color:var(--muted);opacity:.6; }
+    .field-error { font-size:11px;color:var(--bordo);margin-top:5px;display:none; }
+    .field-error.visible { display:block; }
 
-    /* ─── Notes textarea ─────────────────────────────── */
+    /* Notes */
     .notes-textarea {
-      width: 100%;
-      border: 1px solid var(--rule);
-      border-radius: 4px;
-      padding: 14px 16px;
-      font-family: var(--sans);
-      font-size: 14px;
-      color: var(--ink);
-      background: var(--cream);
-      outline: none;
-      resize: vertical;
-      min-height: 96px;
-      line-height: 1.55;
-      transition: border-color 0.15s;
-      -webkit-appearance: none;
+      width:100%;border:1.5px solid var(--rule);border-radius:12px;
+      padding:14px 16px;font-size:14px;color:var(--ink);
+      background:var(--cream-card);outline:none;resize:vertical;
+      min-height:100px;line-height:1.55;transition:border-color .15s;
+      -webkit-appearance:none;
     }
-    .notes-textarea::placeholder { color: var(--muted); opacity: 0.6; }
-    .notes-textarea:focus { border-color: var(--ink); }
+    .notes-textarea::placeholder { color:var(--muted);opacity:.6; }
+    .notes-textarea:focus { border-color:rgba(127,38,38,.4); }
 
-    /* ─── WhatsApp preview ───────────────────────────── */
-    .chat-container {
-      background: #ECE5DA;
-      border-radius: 6px;
-      padding: 18px 14px;
-      background-image: radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px);
-      background-size: 14px 14px;
-    }
-    .chat-bubble {
-      background: #DCF8C6;
-      border-radius: 8px 8px 2px 8px;
-      padding: 12px 14px;
-      margin-left: 24px;
-      position: relative;
-    }
-    .chat-bubble pre {
-      font-family: var(--sans);
-      font-size: 13px;
-      color: #1F2937;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .chat-timestamp {
-      font-family: var(--sans);
-      font-size: 11px;
-      color: #6B7280;
-      text-align: right;
-      margin-top: 6px;
-    }
-    .preview-helper {
-      font-family: var(--sans);
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 12px;
-      line-height: 1.5;
-    }
-
-    /* ─── Order summary ──────────────────────────────── */
-    .summary {
-      padding: 20px 22px;
-      background: var(--cream-soft);
-      border-top: 1px solid var(--rule);
-    }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-family: var(--sans);
-      font-size: 13px;
-      color: var(--ink);
-      padding: 4px 0;
-    }
-    .summary-row__label { color: var(--muted); }
-    .summary-row__value--muted { color: var(--muted); font-style: italic; }
-    .summary-separator {
-      height: 1px;
-      background: var(--rule);
-      margin: 12px 0;
-    }
-    .summary-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 4px 0;
-    }
-    .summary-total__label {
-      font-family: var(--serif);
-      font-size: 22px;
-      font-style: italic;
-      font-weight: 400;
-      color: var(--ink);
-    }
-    .summary-total__value {
-      font-family: var(--serif);
-      font-size: 28px;
-      font-weight: 500;
-      color: var(--ink);
-      letter-spacing: -0.01em;
-    }
-    .summary-disclaimer {
-      font-family: var(--sans);
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 10px;
-      line-height: 1.5;
-    }
-
-    /* ─── Sticky CTA ─────────────────────────────────── */
+    /* Sticky CTA */
     .sticky-cta {
-      background: var(--bordo-deep);
-      padding: 12px 20px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      box-shadow: 0 -8px 24px rgba(0,0,0,.18);
+      position:sticky;bottom:0;
+      background:var(--dark-bar);
+      padding:14px 20px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:14px;
+      box-shadow:0 -8px 32px rgba(0,0,0,.25);
     }
-    .sticky-cta__left { display: flex; flex-direction: column; gap: 1px; }
-    .sticky-cta__disclaimer {
-      font-family: var(--sans);
-      font-size: 10px;
-      color: rgba(255,255,255,0.45);
-      letter-spacing: 0.01em;
-    }
+    .sticky-cta__left { display:flex;flex-direction:column;gap:2px; }
     .sticky-cta__eyebrow {
-      font-family: var(--mono);
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
+      font-family:var(--mono);font-size:10px;font-weight:500;
+      letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);
     }
     .sticky-cta__total {
-      font-family: var(--serif);
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--cream);
-      letter-spacing: -0.01em;
-      line-height: 1;
+      font-family:var(--serif);font-size:18px;font-style:italic;
+      color:rgba(255,255,255,.9);line-height:1;
     }
     .sticky-cta__btn {
-      background: var(--cream);
-      color: var(--bordo-deep);
-      border: none;
-      border-radius: 999px;
-      padding: 15px 22px;
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: opacity 0.15s, transform 0.15s;
-      letter-spacing: 0.01em;
+      background:#fff;color:var(--ink);border:none;border-radius:999px;
+      padding:14px 22px;font-size:14px;font-weight:600;cursor:pointer;
+      white-space:nowrap;transition:opacity .15s,transform .15s;
     }
-    .sticky-cta__btn:hover:not(:disabled) {
-      transform: scale(1.02);
-    }
-    .sticky-cta__btn:disabled {
-      opacity: 0.5;
-      pointer-events: none;
-    }
+    .sticky-cta__btn:hover { transform:scale(1.02); }
 
-    /* ─── Empty state ────────────────────────────────── */
-    #empty-state {
-      display: none;
-      flex-direction: column;
-      align-items: stretch;
-      flex: 1;
-      background: var(--cream);
-    }
-    #empty-state.visible { display: flex; }
-
-    .empty-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      height: 56px;
-      border-bottom: 1px solid var(--rule);
-      flex-shrink: 0;
-    }
-    .empty-topbar-nav {
-      font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      transition: color 0.15s;
-      min-width: 52px;
-    }
-    .empty-topbar-nav:hover { color: var(--ink); }
-    .empty-topbar-brand {
-      font-family: var(--serif);
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      color: var(--ink);
-      text-decoration: none;
-    }
-
+    /* Empty state */
+    #empty-state { display:none;flex-direction:column;flex:1;background:var(--cream); }
+    #empty-state.visible { display:flex; }
     .empty-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 32px 72px;
-      text-align: center;
+      flex:1;display:flex;flex-direction:column;align-items:center;
+      justify-content:center;padding:40px 32px 72px;text-align:center;
     }
-
-    .empty-illustration {
-      margin-bottom: 28px;
-    }
-
+    .empty-illustration { margin-bottom:28px; }
     .empty-title {
-      font-family: var(--serif);
-      font-size: 34px;
-      font-weight: 400;
-      color: var(--ink);
-      line-height: 1.15;
-      margin-bottom: 10px;
+      font-family:var(--serif);font-size:34px;font-weight:400;
+      color:var(--ink);line-height:1.15;margin-bottom:10px;
     }
-    .empty-title em { font-style: italic; }
-
-    .empty-sub {
-      font-family: var(--sans);
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.6;
-      max-width: 240px;
-      margin-bottom: 36px;
-    }
-
-    .empty-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-      max-width: 300px;
-    }
-
+    .empty-title em { font-style:italic; }
+    .empty-sub { font-size:14px;color:var(--muted);line-height:1.6;max-width:240px;margin-bottom:36px; }
+    .empty-actions { display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px; }
     .empty-btn-primary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 50px;
-      background: var(--bordo);
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-family: var(--sans);
-      font-size: 15px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: opacity 0.15s, transform 0.12s;
+      display:flex;align-items:center;justify-content:center;height:50px;
+      background:var(--bordo);color:#fff;border:none;border-radius:12px;
+      font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;
+      transition:opacity .15s;
     }
-    .empty-btn-primary:hover  { opacity: .88; }
-    .empty-btn-primary:active { transform: scale(.98); }
-
+    .empty-btn-primary:hover { opacity:.88; }
     .empty-btn-secondary {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 48px;
-      background: transparent;
-      color: var(--ink);
-      border: 1.5px solid var(--rule);
-      border-radius: 12px;
-      font-family: var(--sans);
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      cursor: pointer;
-      transition: border-color 0.15s, transform 0.12s;
+      display:flex;align-items:center;justify-content:center;height:48px;
+      background:transparent;color:var(--ink);border:1.5px solid var(--rule);
+      border-radius:12px;font-size:14px;font-weight:500;
+      text-decoration:none;cursor:pointer;transition:border-color .15s;
     }
-    .empty-btn-secondary:hover  { border-color: var(--ink); }
-    .empty-btn-secondary:active { transform: scale(.98); }
+    .empty-btn-secondary:hover { border-color:rgba(127,38,38,.4); }
 
-    /* ─── Filled cart ────────────────────────────────── */
-    #cart-content { display: none; flex-direction: column; flex: 1; }
-    #cart-content.visible { display: flex; }
+    /* Cart content */
+    #cart-content { display:none;flex-direction:column;flex:1; }
+    #cart-content.visible { display:flex; }
 
-    /* ─── Animations ─────────────────────────────────── */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes sheetIn {
-      from { transform: translateY(100%); }
-      to   { transform: translateY(0); }
-    }
-    .item-card { animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes sheetIn { from{transform:translateY(100%)}to{transform:translateY(0)} }
 
-    /* ─── Desktop outer ──────────────────────────────── */
-    @media (min-width: 480px) {
-      body { padding: 0; }
-      #app {
-        box-shadow: 0 0 80px rgba(0,0,0,0.35);
-      }
+    @media(min-width:480px) {
+      #app { box-shadow:0 0 80px rgba(0,0,0,.35); }
     }
   </style>
 </head>
 <body>
-
 <div id="app">
 
   <!-- ── Empty state ── -->
   <div id="empty-state">
-
-    <!-- Topbar consistente con el carrito lleno -->
-    <header class="empty-topbar">
-      <button class="empty-topbar-nav" onclick="goBack()">← Volver</button>
-      <a href="index.html" class="empty-topbar-brand">FELIRECETAS</a>
+    <header class="top-bar">
+      <button class="top-bar__nav" onclick="goBack()">← Volver</button>
+      <span class="top-bar__brand">Feli · Recetas</span>
       <span style="min-width:52px"></span>
     </header>
-
-    <!-- Cuerpo centrado -->
     <div class="empty-body">
-
-      <!-- Ilustración torta artesanal -->
       <div class="empty-illustration">
         <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Capa inferior -->
           <rect x="8" y="58" width="84" height="30" rx="8" fill="rgba(127,38,38,.07)" stroke="#7F2626" stroke-width="1.8"/>
-          <!-- Crema capa inferior (olas) -->
           <path d="M8 64 Q19 52 30 64 Q41 52 52 64 Q63 52 74 64 Q85 52 92 58" fill="rgba(127,38,38,.05)" stroke="#7F2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- Capa superior -->
           <rect x="20" y="33" width="60" height="26" rx="7" fill="rgba(127,38,38,.07)" stroke="#7F2626" stroke-width="1.8"/>
-          <!-- Crema capa superior -->
           <path d="M20 39 Q30 27 40 39 Q50 27 60 39 Q70 27 80 33" fill="rgba(127,38,38,.05)" stroke="#7F2626" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- Vela -->
           <rect x="46" y="18" width="8" height="17" rx="4" fill="rgba(127,38,38,.12)" stroke="#7F2626" stroke-width="1.5"/>
-          <!-- Llama -->
           <path d="M50 18 C47 12 47.5 7 50 5 C52.5 7 53 12 50 18Z" fill="#7F2626"/>
           <ellipse cx="50" cy="14" rx="1.5" ry="2.5" fill="#A55656" opacity="0.45"/>
-          <!-- Puntitos decorativos capa inferior -->
           <circle cx="30" cy="73" r="2.5" fill="#7F2626" opacity="0.28"/>
           <circle cx="50" cy="73" r="2.5" fill="#7F2626" opacity="0.28"/>
           <circle cx="70" cy="73" r="2.5" fill="#7F2626" opacity="0.28"/>
-          <!-- Puntitos decorativos capa superior -->
           <circle cx="38" cy="46" r="2" fill="#7F2626" opacity="0.22"/>
           <circle cx="62" cy="46" r="2" fill="#7F2626" opacity="0.22"/>
         </svg>
       </div>
-
       <h2 class="empty-title">Tu pedido está<br><em>vacío</em></h2>
       <p class="empty-sub">Explorá la carta o personalizá una torta para empezar tu encargo.</p>
-
       <div class="empty-actions">
-        <a href="index.html" class="empty-btn-primary">Ver carta →</a>
+        <a href="index.html" class="empty-btn-primary" onclick="sessionStorage.setItem('openCatalog','1')">Ver carta →</a>
         <a href="configurar.html" class="empty-btn-secondary">Personalizar torta</a>
       </div>
-
     </div>
   </div>
 
   <!-- ── Filled cart ── -->
   <div id="cart-content">
 
-    <!-- Top bar -->
     <header class="top-bar">
       <button class="top-bar__nav" onclick="goBack()">← Volver</button>
-      <a href="index.html" class="top-bar__brand" style="text-decoration:none">FELIRECETAS</a>
-      <span class="top-bar__nav" style="opacity:0;pointer-events:none"></span>
+      <span class="top-bar__brand">Feli · Recetas</span>
+      <span style="min-width:52px"></span>
     </header>
 
-    <!-- Page header -->
     <div class="page-header">
       <p class="eyebrow" id="eyebrow-count">Tu pedido · 0 piezas</p>
       <h1 class="page-title">Tu <em>pedido</em></h1>
     </div>
 
-    <!-- § 01 Items -->
+    <!-- Items -->
     <section class="section section--items">
       <div class="item-list" id="item-list"></div>
       <a href="index.html" class="add-item-btn" onclick="sessionStorage.setItem('openCatalog','1')">
-        <span>+</span> Agregar otra pieza
+        + Agregar otra pieza
       </a>
     </section>
 
-    <!-- § 02 Retiro o envío -->
+    <!-- Retiro / Envío -->
     <section class="section">
       <div class="toggle-grid" role="group" aria-label="Modo de entrega">
         <button class="toggle-pill active" id="pill-retiro" onclick="setMode('retiro')">Retiro en local</button>
-        <button class="toggle-pill" id="pill-envio" onclick="setMode('envio')">Envío a domicilio</button>
+        <button class="toggle-pill" id="pill-envio"  onclick="setMode('envio')">Envío a domicilio</button>
       </div>
-
       <p class="helper" id="delivery-helper">¿Cuándo lo retirás?</p>
-
       <div class="chips-outer" id="chips-outer">
         <div class="chips-scroll">
           <div class="chips-row" id="chips-row"></div>
         </div>
       </div>
-
       <div class="address-block" id="address-block">
         <div class="delivery-fields">
-
           <div class="delivery-field-card">
             <label class="field-label" for="addr-calle">Calle y número *</label>
-            <input class="field-input" id="addr-calle" type="text"
-              placeholder="Ej: Calle 7 N° 1234"
-              autocomplete="address-line1" oninput="onAddressInput()"/>
+            <input class="field-input" id="addr-calle" type="text" placeholder="Ej: Calle 7 N° 1234" autocomplete="address-line1" oninput="onAddressInput()"/>
           </div>
-
           <div class="delivery-field-card">
-            <label class="field-label" for="addr-piso">Piso / Departamento</label>
-            <input class="field-input" id="addr-piso" type="text"
-              placeholder="Ej: 3° B  (opcional)"
-              autocomplete="address-line2" oninput="onAddressInput()"/>
+            <label class="field-label" for="addr-piso">Piso / Dpto.</label>
+            <input class="field-input" id="addr-piso" type="text" placeholder="Ej: 3° B  (opcional)" autocomplete="address-line2" oninput="onAddressInput()"/>
           </div>
-
           <div class="delivery-field-card">
             <label class="field-label" for="addr-barrio">Barrio / Localidad *</label>
-            <input class="field-input" id="addr-barrio" type="text"
-              placeholder="Ej: La Plata, City Bell, Gonnet…"
-              autocomplete="address-level2" oninput="onAddressInput()"/>
+            <input class="field-input" id="addr-barrio" type="text" placeholder="Ej: La Plata, City Bell…" autocomplete="address-level2" oninput="onAddressInput()"/>
           </div>
-
           <div class="delivery-field-card">
             <label class="field-label" for="addr-ref">Referencia</label>
-            <input class="field-input" id="addr-ref" type="text"
-              placeholder="Ej: timbre 3B, portón azul  (opcional)"
-              oninput="onAddressInput()"/>
+            <input class="field-input" id="addr-ref" type="text" placeholder="Ej: timbre 3B, portón azul  (opcional)" oninput="onAddressInput()"/>
           </div>
-
         </div>
         <p class="field-error" id="address-error">Completá calle y localidad para continuar</p>
       </div>
     </section>
 
-    <!-- § 03 Notas para Feli -->
+    <!-- Notas -->
     <section class="section">
-      <textarea
-        class="notes-textarea"
-        id="notes-textarea"
-        rows="4"
+      <p class="section-label">Una nota para nosotros</p>
+      <textarea class="notes-textarea" id="notes-textarea" rows="4"
         placeholder="Alergias, mensaje en la torta, preferencias de decoración…"
-        oninput="onNotesInput()"
-      ></textarea>
+        oninput="onNotesInput()"></textarea>
     </section>
 
     <!-- Sticky CTA -->
     <div class="sticky-cta">
       <div class="sticky-cta__left">
-        <span class="sticky-cta__eyebrow">Total estimado</span>
-        <span class="sticky-cta__total" id="cta-total">—</span>
-        <span class="sticky-cta__disclaimer">Seña 50% para confirmar</span>
+        <span class="sticky-cta__eyebrow">Precio</span>
+        <span class="sticky-cta__total">A consultar</span>
       </div>
-      <button class="sticky-cta__btn" id="whatsapp-btn" onclick="sendWhatsApp()">
-        Pedir por WhatsApp →
+      <button class="sticky-cta__btn" id="whatsapp-btn" onclick="goToConfirmacion()">
+        Elegí una fecha →
       </button>
     </div>
 
   </div><!-- /cart-content -->
-
 </div><!-- /app -->
 
-<!-- Preview text oculto — solo para buildMessage() -->
-<pre id="preview-text" style="display:none"></pre>
-
-<!-- Confirm remove modal -->
-<div id="confirm-overlay" onclick="closeConfirm()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(26,20,16,.55);align-items:flex-end;justify-content:center;padding:0">
+<!-- Confirm remove sheet -->
+<div id="confirm-overlay" onclick="closeConfirm()" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(42,24,16,.55);align-items:flex-end;justify-content:center;padding:0">
   <div id="confirm-sheet" onclick="event.stopPropagation()" style="background:var(--cream);border-radius:20px 20px 0 0;padding:28px 24px 40px;width:100%;max-width:480px;animation:sheetIn .22s ease">
     <div style="width:36px;height:4px;border-radius:99px;background:var(--rule);margin:0 auto 24px"></div>
     <p style="font-family:var(--serif);font-size:22px;font-weight:400;color:var(--ink);line-height:1.2;margin-bottom:6px">¿Quitás este producto?</p>
-    <p id="confirm-name" style="font-family:var(--sans);font-size:14px;color:var(--muted);margin-bottom:26px"></p>
+    <p id="confirm-name" style="font-size:14px;color:var(--muted);margin-bottom:26px"></p>
     <div style="display:flex;flex-direction:column;gap:10px">
-      <button onclick="confirmRemove()" style="width:100%;padding:14px;background:var(--bordo);color:#fff;border:none;border-radius:12px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer">Sí, quitar</button>
-      <button onclick="closeConfirm()" style="width:100%;padding:14px;background:transparent;color:var(--ink);border:1.5px solid var(--rule);border-radius:12px;font-family:var(--sans);font-size:14px;cursor:pointer">No, mantenerlo</button>
+      <button onclick="confirmRemove()" style="width:100%;padding:14px;background:var(--bordo);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer">Sí, quitar</button>
+      <button onclick="closeConfirm()" style="width:100%;padding:14px;background:transparent;color:var(--ink);border:1.5px solid var(--rule);border-radius:12px;font-size:14px;cursor:pointer">No, mantenerlo</button>
     </div>
   </div>
 </div>
 
 <script>
-  /* ─────────────────────────────────────────────────────── */
-  /*  State                                                  */
-  /* ─────────────────────────────────────────────────────── */
-
   const CART_KEY  = 'feli:cart';
   const NOTES_KEY = 'feli:cart:notes';
-  const WA_NUMBER = '5492216023377';
 
   const TONES = {
-    warm:  'linear-gradient(135deg, #E8C4A0, #C4956A)',
-    deep:  'linear-gradient(135deg, #8B3A3A, #5C1A1B)',
-    cream: 'linear-gradient(135deg, #EFEFEF, #DDE1E8)',
-    dark:  'linear-gradient(135deg, #3D2B1A, #1A0F07)',
+    warm:  'linear-gradient(135deg,#E8C4A0,#C4956A)',
+    deep:  'linear-gradient(135deg,#8B3A3A,#5C1A1B)',
+    cream: 'linear-gradient(135deg,#EFEFEF,#DDE1E8)',
+    dark:  'linear-gradient(135deg,#3D2B1A,#1A0F07)',
   };
 
   const DAYS_ES_SHORT  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
@@ -1048,131 +446,46 @@
 
   let cart    = [];
   let notes   = '';
-  let mode    = 'retiro';   // 'retiro' | 'envio'
-  let selDate = null;       // Date object — null hasta que el usuario elija
+  let mode    = 'retiro';
+  let selDate = null;
   let address = '';
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Persistence                                            */
-  /* ─────────────────────────────────────────────────────── */
-
-  function loadCart() {
-    try {
-      const raw = localStorage.getItem(CART_KEY);
-      cart = raw ? JSON.parse(raw) : [];
-    } catch(e) { cart = []; }
-  }
-
-  function saveCart() {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  }
-
-  function loadNotes() {
-    notes = localStorage.getItem(NOTES_KEY) || '';
-  }
-
-  function saveNotes() {
-    localStorage.setItem(NOTES_KEY, notes);
-  }
-
-  /* ─────────────────────────────────────────────────────── */
-  /*  Demo seed (only if cart is empty)                      */
-  /* ─────────────────────────────────────────────────────── */
-
-  function seedDemoIfEmpty() {
-    if (cart.length > 0) return;
-    cart = [
-      {
-        id: 'demo-rv',
-        name: 'Red Velvet',
-        meta: '16 porciones · chocolate blanco y crema',
-        price: 18500,
-        qty: 1,
-        tone: 'deep'
-      },
-      {
-        id: 'demo-mac',
-        name: 'Caja de Macarons',
-        meta: '12 unidades · surtidos',
-        price: 9800,
-        qty: 2,
-        tone: 'warm'
-      },
-      {
-        id: 'demo-chk',
-        name: 'Cheesecake de Limón',
-        meta: '12 porciones · frambuesa',
-        price: 14200,
-        qty: 1,
-        tone: 'cream'
-      }
-    ];
-    saveCart();
-  }
-
-  /* ─────────────────────────────────────────────────────── */
-  /*  Helpers                                                */
-  /* ─────────────────────────────────────────────────────── */
-
-  function formatCurrency(n) {
-    return new Intl.NumberFormat('es-AR', {
-      style: 'currency',
-      currency: 'ARS',
-      minimumFractionDigits: 0
-    }).format(n);
-  }
-
-  function totalPieces() {
-    return cart.reduce((s, i) => s + i.qty, 0);
-  }
-
-  function subtotal() {
-    return cart.reduce((s, i) => s + i.price * i.qty, 0);
-  }
+  function loadCart()  { try { cart = JSON.parse(localStorage.getItem(CART_KEY)||'[]'); } catch(e){cart=[];} }
+  function saveCart()  { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+  function loadNotes() { notes = localStorage.getItem(NOTES_KEY)||''; }
+  function saveNotes() { localStorage.setItem(NOTES_KEY, notes); }
+  function totalPieces() { return cart.reduce((s,i)=>s+i.qty,0); }
 
   function goBack() {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      window.location.href = 'index.html';
-    }
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = 'index.html';
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Date chips                                             */
-  /* ─────────────────────────────────────────────────────── */
-
+  /* ── Date chips ── */
   function buildDates() {
     const base = new Date(); base.setHours(0,0,0,0);
     const dates = [];
-    for (let i = 7; i <= 34; i++) {   // ~4 semanas de opciones
-      const d = new Date(base);
-      d.setDate(base.getDate() + i);
-      dates.push(d);
+    for (let i = 7; i <= 34; i++) {
+      const d = new Date(base); d.setDate(base.getDate()+i); dates.push(d);
     }
     return dates;
   }
 
-  function initDateChips() {
-    selDate = null;
-    renderDateChips();
-    updateCTA();
-  }
+  function initDateChips() { selDate=null; renderDateChips(); updateCTA(); }
 
   function renderDateChips() {
     const dates = buildDates();
-    const row   = document.getElementById('chips-row');
+    const row = document.getElementById('chips-row');
     row.innerHTML = '';
-
     dates.forEach(date => {
       const chip = document.createElement('button');
-      const active = selDate && date.getTime() === selDate.getTime();
-      chip.className = 'date-chip' + (active ? ' active' : '');
+      const active = selDate && date.getTime()===selDate.getTime();
+      chip.className = 'date-chip'+(active?' active':'');
       chip.innerHTML =
-        `<span class="date-chip__day">${DAYS_ES_SHORT[date.getDay()]}</span>` +
-        `<span class="date-chip__num">${date.getDate()}</span>`              +
+        `<span class="date-chip__day">${DAYS_ES_SHORT[date.getDay()]}</span>`+
+        `<span class="date-chip__num">${date.getDate()}</span>`+
         `<span class="date-chip__month">${MONTHS_ES[date.getMonth()]}</span>`;
-      chip.addEventListener('click', () => selectChipDate(new Date(date)));
+      chip.addEventListener('click', ()=>selectChipDate(new Date(date)));
       row.appendChild(chip);
     });
   }
@@ -1180,134 +493,92 @@
   function selectChipDate(date) {
     selDate = date;
     renderDateChips();
-    // Hacer scroll al chip activo para que quede visible
     const active = document.querySelector('.date-chip.active');
-    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    updatePreview();
+    if (active) active.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
     updateCTA();
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Mode toggle                                            */
-  /* ─────────────────────────────────────────────────────── */
-
+  /* ── Mode toggle ── */
   function setMode(m) {
     mode = m;
-    document.getElementById('pill-retiro').classList.toggle('active', m === 'retiro');
-    document.getElementById('pill-envio').classList.toggle('active', m === 'envio');
+    document.getElementById('pill-retiro').classList.toggle('active', m==='retiro');
+    document.getElementById('pill-envio').classList.toggle('active',  m==='envio');
     document.getElementById('delivery-helper').textContent =
-      m === 'retiro' ? '¿Cuándo lo retirás?' : '¿Cuándo te lo enviamos?';
-    document.getElementById('address-block').classList.toggle('visible', m === 'envio');
-    updatePreview();
+      m==='retiro' ? '¿Cuándo lo retirás?' : '¿Cuándo te lo enviamos?';
+    document.getElementById('address-block').classList.toggle('visible', m==='envio');
     updateCTA();
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Item list render                                       */
-  /* ─────────────────────────────────────────────────────── */
-
+  /* ── Item list ── */
   function renderItems() {
     const list = document.getElementById('item-list');
     list.innerHTML = '';
-
-    cart.forEach((item) => {
+    cart.forEach(item => {
       const card = document.createElement('div');
       card.className = 'item-card';
       card.dataset.id = item.id;
-
-      const bg = TONES[item.tone] || TONES.warm;
+      const bg = TONES[item.tone]||TONES.warm;
       const thumbStyle = item.img
-        ? `background-image:url('${escHtml(item.img)}');background-color:${bg.split(',')[1] || '#e8c4a0'}`
+        ? `background-image:url('${escHtml(item.img)}');background-size:cover;background-position:center`
         : `background:${bg}`;
-
       card.innerHTML = `
         <div class="item-thumb" style="${thumbStyle}"></div>
         <div class="item-body">
-          <div class="item-header">
-            <span class="item-name">${escHtml(item.name)}</span>
-            <span class="item-price item-price-val" data-id="${escHtml(item.id)}">${formatCurrency(item.price * item.qty)}</span>
-          </div>
+          <span class="item-name">${escHtml(item.name)}</span>
           <p class="item-meta">${escHtml(item.meta)}</p>
           <div class="item-footer">
             <div class="qty-stepper">
-              <button class="qty-btn qty-minus" data-id="${escHtml(item.id)}" aria-label="Reducir cantidad">−</button>
+              <button class="qty-btn qty-minus" data-id="${escHtml(item.id)}" aria-label="Reducir">−</button>
               <span class="qty-num qty-display" data-id="${escHtml(item.id)}">${item.qty}</span>
-              <button class="qty-btn qty-plus" data-id="${escHtml(item.id)}" aria-label="Aumentar cantidad">+</button>
+              <button class="qty-btn qty-plus"  data-id="${escHtml(item.id)}" aria-label="Aumentar">+</button>
             </div>
-            <button class="remove-btn" data-id="${escHtml(item.id)}" aria-label="Quitar producto">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-            </button>
+            <span class="item-consult">Consultar precio</span>
           </div>
-        </div>
-      `;
-
+          <button class="remove-btn" data-id="${escHtml(item.id)}" aria-label="Quitar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+              <path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+            </svg>
+          </button>
+        </div>`;
       list.appendChild(card);
     });
-
-    // Bind events
-    list.querySelectorAll('.qty-minus').forEach(btn => {
-      btn.addEventListener('click', () => changeQty(btn.dataset.id, -1));
-    });
-    list.querySelectorAll('.qty-plus').forEach(btn => {
-      btn.addEventListener('click', () => changeQty(btn.dataset.id, +1));
-    });
-    list.querySelectorAll('.remove-btn').forEach(btn => {
-      btn.addEventListener('click', () => removeItem(btn.dataset.id));
-    });
+    list.querySelectorAll('.qty-minus').forEach(b=>b.addEventListener('click',()=>changeQty(b.dataset.id,-1)));
+    list.querySelectorAll('.qty-plus') .forEach(b=>b.addEventListener('click',()=>changeQty(b.dataset.id,+1)));
+    list.querySelectorAll('.remove-btn').forEach(b=>b.addEventListener('click',()=>removeItem(b.dataset.id)));
   }
 
   function escHtml(s) {
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Item actions                                           */
-  /* ─────────────────────────────────────────────────────── */
-
-  function changeQty(id, delta) {
-    const item = cart.find(i => i.id === id);
+  function changeQty(id,delta) {
+    const item = cart.find(i=>i.id===id);
     if (!item) return;
-    const newQty = item.qty + delta;
-    if (newQty < 1) return; // use Quitar to remove
+    const newQty = item.qty+delta;
+    if (newQty<1) return;
     item.qty = newQty;
-    saveCart();
-    renderItems();
-    updateSummary();
-    updateEyebrow();
-    updatePreview();
-    updateCTA();
+    saveCart(); renderItems(); updateEyebrow(); updateCTA();
   }
 
   let pendingRemoveId = null;
 
   function removeItem(id) {
-    const item = cart.find(i => i.id === id);
+    const item = cart.find(i=>i.id===id);
     if (!item) return;
     pendingRemoveId = id;
-    document.getElementById('confirm-name').textContent = item.name + (item.meta ? ' · ' + item.meta : '');
-    const overlay = document.getElementById('confirm-overlay');
-    overlay.style.display = 'flex';
+    document.getElementById('confirm-name').textContent = item.name+(item.meta?' · '+item.meta:'');
+    document.getElementById('confirm-overlay').style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
 
   function confirmRemove() {
     if (!pendingRemoveId) return;
-    cart = cart.filter(i => i.id !== pendingRemoveId);
+    cart = cart.filter(i=>i.id!==pendingRemoveId);
     pendingRemoveId = null;
-    saveCart();
-    closeConfirm();
-    if (cart.length === 0) {
-      showEmptyState();
-    } else {
-      renderItems();
-      updateSummary();
-      updateEyebrow();
-      updateCTA();
-    }
+    saveCart(); closeConfirm();
+    if (cart.length===0) showEmptyState();
+    else { renderItems(); updateEyebrow(); updateCTA(); }
   }
 
   function closeConfirm() {
@@ -1316,190 +587,118 @@
     document.body.style.overflow = '';
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Summary                                                */
-  /* ─────────────────────────────────────────────────────── */
-
-  function updateSummary() {
-    const sub = subtotal();
-    document.getElementById('cta-total').textContent = formatCurrency(sub);
-  }
-
   function updateEyebrow() {
     const n = totalPieces();
-    document.getElementById('eyebrow-count').textContent = `Tu pedido · ${n} ${n === 1 ? 'pieza' : 'piezas'}`;
+    document.getElementById('eyebrow-count').textContent = `Tu pedido · ${n} ${n===1?'pieza':'piezas'}`;
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  WhatsApp preview                                       */
-  /* ─────────────────────────────────────────────────────── */
+  /* ── CTA ── */
+  const WA_NUMBER = '5492216023377';
 
   function buildMessage() {
-    let msg = '¡Hola Feli! Quiero pedir:\n\n';
-
+    let msg = '¡Hola Feli! Quiero hacer un pedido:\n\n';
     cart.forEach(item => {
       msg += `• ${item.qty}x ${item.name}\n`;
       if (item.meta) msg += `  ${item.meta}\n`;
       msg += '\n';
     });
-
     msg += '---\n';
     if (selDate) {
       const d = selDate;
       const label = `${DAYS_ES_FULL[d.getDay()]} ${d.getDate()} de ${MONTHS_ES_FULL[d.getMonth()]}`;
-      msg += `${mode === 'retiro' ? 'Retiro' : 'Envío'}: ${label}\n`;
+      msg += `${mode==='retiro' ? 'Retiro' : 'Envío'}: ${label}\n`;
     }
-    if (mode === 'envio' && address.trim()) {
-      msg += `Dirección: ${address.trim()}\n`;
-    }
-    if (notes.trim()) {
-      msg += `Notas: ${notes.trim()}\n`;
-    }
-
-    msg += `\nTotal: ${formatCurrency(subtotal())}`;
-
+    if (mode==='envio' && address.trim()) msg += `Dirección: ${address.trim()}\n`;
+    if (notes.trim()) msg += `Notas: ${notes.trim()}\n`;
+    msg += '\n¿Me podés confirmar disponibilidad y precio?';
     return msg;
   }
 
-  function updatePreview() {
-    document.getElementById('preview-text').textContent = buildMessage();
-  }
-
-  /* ─────────────────────────────────────────────────────── */
-  /*  CTA                                                    */
-  /* ─────────────────────────────────────────────────────── */
-
   function updateCTA() {
     const btn = document.getElementById('whatsapp-btn');
-
     if (!selDate) {
-      btn.textContent = 'Elegí una fecha para continuar';
+      btn.textContent = 'Elegí una fecha →';
       btn.dataset.ctaState = 'no-date';
       return;
     }
-
-    if (mode === 'envio') {
-      const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
-      const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
-      if (!calle || !barrio) {
+    if (mode==='envio') {
+      const calle  = (document.getElementById('addr-calle')?.value||'').trim();
+      const barrio = (document.getElementById('addr-barrio')?.value||'').trim();
+      if (!calle||!barrio) {
         btn.textContent = 'Completá la dirección →';
         btn.dataset.ctaState = 'no-address';
         return;
       }
     }
-
     btn.textContent = 'Pedir por WhatsApp →';
     btn.dataset.ctaState = 'ready';
   }
 
-  function sendWhatsApp() {
+  function goToConfirmacion() {
     const btn   = document.getElementById('whatsapp-btn');
     const state = btn.dataset.ctaState;
 
-    if (state === 'no-date') {
-      const outer = document.getElementById('chips-outer');
-      const row   = document.getElementById('chips-row');
-      outer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (state==='no-date') {
+      const row = document.getElementById('chips-row');
+      document.getElementById('chips-outer').scrollIntoView({behavior:'smooth',block:'nearest'});
       row.classList.remove('highlight');
-      void row.offsetWidth; // reiniciar animación
+      void row.offsetWidth;
       row.classList.add('highlight');
-      setTimeout(() => row.classList.remove('highlight'), 500);
+      setTimeout(()=>row.classList.remove('highlight'),500);
       return;
     }
 
-    if (mode === 'envio') {
-      const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
-      const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
-      if (!calle || !barrio) {
+    if (mode==='envio') {
+      const calle  = (document.getElementById('addr-calle')?.value||'').trim();
+      const barrio = (document.getElementById('addr-barrio')?.value||'').trim();
+      if (!calle||!barrio) {
         document.getElementById('address-error').classList.add('visible');
-        document.getElementById('addr-calle').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('addr-calle').scrollIntoView({behavior:'smooth'});
         document.getElementById('addr-calle').focus();
         return;
       }
     }
 
     const msg = buildMessage();
-    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-    window.open(url, '_blank');
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Input handlers                                         */
-  /* ─────────────────────────────────────────────────────── */
-
+  /* ── Inputs ── */
   function onNotesInput() {
     notes = document.getElementById('notes-textarea').value;
     saveNotes();
-    updatePreview();
   }
 
   function onAddressInput() {
-    const calle  = (document.getElementById('addr-calle')?.value  || '').trim();
-    const piso   = (document.getElementById('addr-piso')?.value   || '').trim();
-    const barrio = (document.getElementById('addr-barrio')?.value || '').trim();
-    const ref    = (document.getElementById('addr-ref')?.value    || '').trim();
-    address = [calle, piso, barrio, ref].filter(Boolean).join(', ');
+    const calle  = (document.getElementById('addr-calle')?.value||'').trim();
+    const piso   = (document.getElementById('addr-piso')?.value||'').trim();
+    const barrio = (document.getElementById('addr-barrio')?.value||'').trim();
+    const ref    = (document.getElementById('addr-ref')?.value||'').trim();
+    address = [calle,piso,barrio,ref].filter(Boolean).join(', ');
     document.getElementById('address-error').classList.remove('visible');
-    updatePreview();
     updateCTA();
   }
 
-  function toggleSection(id) {
-    const sec = document.getElementById(id);
-    const isOpen = sec.classList.contains('open');
-    const btn = sec.querySelector('.section-toggle');
-    if (isOpen) {
-      sec.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-    } else {
-      sec.classList.add('open');
-      btn.setAttribute('aria-expanded', 'true');
-    }
-  }
-
-  /* ─────────────────────────────────────────────────────── */
-  /*  Show / Hide states                                     */
-  /* ─────────────────────────────────────────────────────── */
-
+  /* ── Show/hide ── */
   function showEmptyState() {
     document.getElementById('empty-state').classList.add('visible');
     document.getElementById('cart-content').classList.remove('visible');
   }
-
   function showCartContent() {
     document.getElementById('empty-state').classList.remove('visible');
     document.getElementById('cart-content').classList.add('visible');
   }
 
-  /* ─────────────────────────────────────────────────────── */
-  /*  Init                                                   */
-  /* ─────────────────────────────────────────────────────── */
-
+  /* ── Init ── */
   function init() {
-    loadCart();
-    // seedDemoIfEmpty();  // removed: real "Agregar al carrito" now populates the cart
-    loadNotes();
-
-    if (cart.length === 0) {
-      showEmptyState();
-      return;
-    }
-
+    loadCart(); loadNotes();
+    if (cart.length===0) { showEmptyState(); return; }
     showCartContent();
-
-    // Restore notes textarea
     document.getElementById('notes-textarea').value = notes;
-
-    renderItems();
-    initDateChips();
-    updateSummary();
-    updateEyebrow();
-    updatePreview();
-    updateCTA();
+    renderItems(); initDateChips(); updateEyebrow(); updateCTA();
   }
 
   document.addEventListener('DOMContentLoaded', init);
 </script>
-
 </body>
 </html>
