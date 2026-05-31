@@ -1109,6 +1109,14 @@ function addToCartFromConfig() {
     if (state.porciones) metaParts.push(state.porciones + ' porciones');
     if (state.pisos && state.pisos > 1) metaParts.push(state.pisos + ' pisos');
 
+    var BASE_IMGS = {
+      'Red Velvet':        'red-velvet-pers.jpg',
+      'Chocolate intenso': 'chocolate-intenso-pers.jpg',
+      'Vainilla bourbon':  'vainilla-pers.jpg',
+      'Lemon poppy':       'limon-pers.jpg',
+      'Zanahoria y nuez':  'zanahoria-pers.jpg',
+      'Pistacho':          'pistacho-pers.jpg',
+    };
     var price = calcPrice();
     var item = {
       id: 'config-' + Date.now(),
@@ -1117,7 +1125,7 @@ function addToCartFromConfig() {
       price: price,
       qty: 1,
       tone: 'deep',
-      img: ''
+      img: BASE_IMGS[state.base] || ''
     };
 
     var items = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
