@@ -307,7 +307,7 @@
   <div id="empty-state">
     <header class="top-bar">
       <button class="top-bar__nav" onclick="goBack()">← Volver</button>
-      <span class="top-bar__brand">FELIRECETAS</span>
+      <a href="index.html" class="top-bar__brand">FELIRECETAS</a>
       <span style="min-width:52px"></span>
     </header>
     <div class="empty-body">
@@ -341,7 +341,7 @@
 
     <header class="top-bar">
       <button class="top-bar__nav" onclick="goBack()">← Volver</button>
-      <span class="top-bar__brand">FELIRECETAS</span>
+      <a href="index.html" class="top-bar__brand">FELIRECETAS</a>
       <span style="min-width:52px"></span>
     </header>
 
@@ -457,8 +457,7 @@
   function totalPieces() { return cart.reduce((s,i)=>s+i.qty,0); }
 
   function goBack() {
-    if (window.history.length > 1) window.history.back();
-    else window.location.href = 'index.html';
+    window.location.href = 'index.html';
   }
 
   /* ── Date chips ── */
