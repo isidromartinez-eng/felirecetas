@@ -1648,33 +1648,10 @@
     }
   }
 
-  // Scroll spy — solo rastrear secciones del inicio
-  const sections = ['inicio'];
-  const tabMap = { inicio: 'tab-home' };
+  // Tab activo: tab-home en todo el body principal, tab-catalogo lo maneja switchView
   function updateTabFromScroll() {
-    const wH = window.innerHeight;
-    let active = null;
-    sections.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      // Section is active if its top is above 65% of viewport AND still visible
-      if (r.top < wH * 0.65 && r.bottom > 80) active = id;
-    });
-    document.querySelectorAll('.tab').forEach(t => {
-      t.classList.remove('active');
-      const dot = t.querySelector('.dot');
-      if (dot) dot.remove();
-    });
-    if (active && tabMap[active]) {
-      const tab = document.getElementById(tabMap[active]);
-      if (tab) {
-        tab.classList.add('active');
-        const dot = document.createElement('div');
-        dot.className = 'dot';
-        tab.appendChild(dot);
-      }
-    }
+    if (document.body.classList.contains('showing-catalogo')) return;
+    setActiveTab('tab-home');
   }
   window.addEventListener('scroll', updateTabFromScroll, { passive: true });
   updateTabFromScroll();
@@ -1682,6 +1659,7 @@
   // ── Hero-aware nav: topbar, split-header, tabbar y FAB ──
   (function() {
     const hero        = document.getElementById('inicio');
+    const eventos     = document.getElementById('eventos');
     const topbar      = document.querySelector('.topbar');
     const tabbar      = document.querySelector('.tabbar');
     const splitHeader = document.querySelector('.split-header');
@@ -1694,6 +1672,11 @@
       const heroVisible = rect.bottom > 80;
       const inCatalogo  = document.body.classList.contains('showing-catalogo');
 
+      // Tabbar aparece cuando #eventos entra en pantalla (o después del hero si no existe)
+      const eventosVisible = eventos
+        ? eventos.getBoundingClientRect().top < window.innerHeight
+        : heroPassed;
+
       // Topbar: negro en hero, crema cuando sale
       if (topbar)
         topbar.classList.toggle('topbar-in-hero', !heroPassed && !inCatalogo);
@@ -1701,8 +1684,8 @@
       // Split-header (desktop): aparece solo tras el hero
       if (splitHeader) splitHeader.classList.toggle('nav-visible', heroPassed || inCatalogo);
 
-      // Tabbar: se oculta durante el hero
-      if (tabbar) tabbar.classList.toggle('nav-hidden', heroVisible && !inCatalogo);
+      // Tabbar: oculto hasta que #eventos sea visible en pantalla
+      if (tabbar) tabbar.classList.toggle('nav-hidden', !eventosVisible && !inCatalogo);
 
       // FAB WA: solo aparece tras el hero
       if (fab && window.innerWidth < 768)

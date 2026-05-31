@@ -247,7 +247,23 @@
     cursor: not-allowed !important;
   }
 
-  /* ── Mensaje de error paso 1 ── */
+  /* ── Mensaje de error pasos ── */
+  #step2Error {
+    display: none;
+    background: rgba(127,38,38,.07);
+    border: 1px solid rgba(127,38,38,.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #7F2626;
+    font-family: var(--sans);
+    line-height: 1.4;
+    margin-bottom: 16px;
+  }
+  #step2Error.visible {
+    display: block;
+    animation: step1Shake .35s ease;
+  }
   #step1Error {
     display: none;
     background: rgba(127,38,38,.07);
@@ -384,6 +400,8 @@
       </div>
 
       <div class="config-body" style="padding-bottom:100px">
+        <div id="step2Error">⚠ Elegí al menos un relleno y una cobertura para continuar.</div>
+
         <!-- Rellenos -->
         <div class="ornament left" style="gap:10px">
           <span class="section-badge">Rellenos <span id="fillCount" class="badge-count">(1/2)</span></span>
@@ -407,7 +425,7 @@
           <div class="mobile-step-selection" id="navLabel2"></div>
           <div class="mobile-step-nav-row">
             <button class="btn btn-ghost" onclick="goStep(1)">← Volver</button>
-            <button class="btn btn-wine" onclick="goStep(3)">Siguiente: Tamaño →</button>
+            <button class="btn btn-wine" onclick="tryGoStep(3)">Siguiente: Tamaño →</button>
           </div>
           <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost" style="height:44px;display:flex;align-items:center;justify-content:center;text-decoration:none">← Ver catálogo</a>
         </div>
@@ -420,7 +438,7 @@
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-soft btn-sm" style="height:40px" onclick="goStep(1)">← Volver</button>
-          <button class="btn btn-wine btn-sm" style="height:40px;padding:0 18px" onclick="goStep(3)">Siguiente →</button>
+          <button class="btn btn-wine btn-sm" style="height:40px;padding:0 18px" onclick="tryGoStep(3)">Siguiente →</button>
         </div>
       </div>
     </div><!-- /step2 -->
@@ -707,7 +725,7 @@ const state = {
   fills: [],
   cobertura: null,
   porciones: 16,
-  forma: null,
+  forma: 'Redonda',
   pisos: 1,
   decoracion: null,
   mensaje: '',
@@ -766,7 +784,7 @@ function updateDesktopNav() {
   if (s < 4) {
     nextBtn.style.display = '';
     nextBtn.textContent = 'Siguiente: ' + STEP_LABELS[s + 1] + ' →';
-    nextBtn.onclick = () => goStep(s + 1);
+    nextBtn.onclick = () => tryGoStep(s + 1);
   } else {
     nextBtn.style.display = 'none';
   }
@@ -810,7 +828,18 @@ function tryGoStep(n) {
     const err = document.getElementById('step1Error');
     if (err) {
       err.classList.remove('visible');
-      err.offsetHeight; // reflow para re-lanzar animación
+      err.offsetHeight;
+      err.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => err.classList.remove('visible'), 3500);
+    }
+    return;
+  }
+  if (n === 3 && (state.fills.length === 0 || !state.cobertura)) {
+    const err = document.getElementById('step2Error');
+    if (err) {
+      err.classList.remove('visible');
+      err.offsetHeight;
       err.classList.add('visible');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       setTimeout(() => err.classList.remove('visible'), 3500);
