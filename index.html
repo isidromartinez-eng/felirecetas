@@ -403,6 +403,14 @@
       opacity: 0;
       pointer-events: none;
     }
+    /* Desktop: tabbar siempre visible como header */
+    @media (min-width: 768px) {
+      .tabbar.nav-hidden {
+        transform: none !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+      }
+    }
 
     /* WA FAB sube cuando el banner está activo */
     @media (max-width: 767px) {
@@ -1346,6 +1354,7 @@
 
 <!-- Tab bar -->
 <nav class="tabbar" aria-label="Navegación principal">
+  <a href="#" onclick="switchView('main');return false;" class="tabbar-logo">FELIRECETAS</a>
   <button class="tab active" id="tab-home" onclick="goTo('inicio','tab-home')">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l7-6 7 6v8a1 1 0 01-1 1h-4v-5H8v5H4a1 1 0 01-1-1V9z"/></svg>
     <span>Inicio</span>
