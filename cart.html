@@ -67,9 +67,15 @@
     }
     .top-bar__nav:hover { color:var(--ink); }
     .top-bar__brand {
-      font-size:15px;font-weight:700;letter-spacing:.06em;
-      color:var(--ink);text-transform:uppercase;text-align:center;
+      text-align:center;
       text-decoration:none;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .brand-logo-img {
+      height: 30px;
+      width: auto;
+      display: block;
+      filter: brightness(0) saturate(100%) invert(25%) sepia(18%) saturate(800%) hue-rotate(175deg) brightness(90%) contrast(95%);
     }
 
     /* Page header */
@@ -310,7 +316,7 @@
   <div id="empty-state">
     <header class="top-bar">
       <button class="top-bar__nav" onclick="goBack()">← Volver</button>
-      <a href="index.html" class="top-bar__brand">FELIRECETAS</a>
+      <a href="index.html" class="top-bar__brand"><img src="logoheader.png" alt="Feli Recetas" class="brand-logo-img"></a>
       <span style="min-width:52px"></span>
     </header>
     <div class="empty-body">
@@ -344,7 +350,7 @@
 
     <header class="top-bar">
       <button class="top-bar__nav" onclick="goBack()">← Volver</button>
-      <a href="index.html" class="top-bar__brand">FELIRECETAS</a>
+      <a href="index.html" class="top-bar__brand"><img src="logoheader.png" alt="Feli Recetas" class="brand-logo-img"></a>
       <span style="min-width:52px"></span>
     </header>
 

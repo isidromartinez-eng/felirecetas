@@ -298,6 +298,34 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 }
 .logo-whisk { height: 17px; width: auto; color: var(--wine); flex-shrink: 0; }
 .topbar .logo em { font-style: normal; color: var(--wine); }
+/* Logo imágenes — todas las variantes */
+.logo-img-sidemenu {
+  height: 28px;
+  width: auto;
+  display: block;
+  /* PNG blanco sobre fondo oscuro del menú — sin filtro */
+}
+.logo-img-footer {
+  height: 28px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+  /* PNG blanco sobre footer oscuro — sin filtro */
+}
+.logo-img-hero {
+  height: 20px;
+  width: auto;
+  display: block;
+  /* PNG blanco sobre hero oscuro — sin filtro */
+}
+/* Logo imagen mobile (topbar) */
+.logo-img-mobile {
+  height: 30px;
+  width: auto;
+  display: block;
+  /* blanco del PNG → navy de la marca */
+  filter: brightness(0) saturate(100%) invert(25%) sepia(18%) saturate(800%) hue-rotate(175deg) brightness(90%) contrast(95%);
+}
 .topbar-btn {
   background: transparent; border: 0; padding: 4px;
   color: var(--ink); position: relative;
@@ -744,6 +772,7 @@ section { scroll-margin-top: 60px; }
     box-shadow: none;
   }
   .topbar-hamburger { display: none; }
+  .logo-img-mobile { display: none; } /* en desktop lo maneja el tabbar */
   .desktop-nav {
     display: flex; align-items: center; gap: 28px;
     font-size: 14px; font-weight: 500;
@@ -800,15 +829,15 @@ section { scroll-margin-top: 60px; }
   .tabbar-logo {
     display: flex;
     align-items: center;
-    font-family: var(--sans);
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--ink);
     text-decoration: none;
     margin-right: auto;
-    white-space: nowrap;
+  }
+  .tabbar-logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+    /* convierte el blanco del PNG al navy de la marca */
+    filter: brightness(0) saturate(100%) invert(25%) sepia(18%) saturate(800%) hue-rotate(175deg) brightness(90%) contrast(95%);
   }
   /* Tabs: layout horizontal */
   .tab {

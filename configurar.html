@@ -45,7 +45,7 @@
       display: flex;
       gap: 8px;
       margin-top: 24px;
-      padding-bottom: 32px;
+      padding-bottom: 0;
     }
     .mobile-step-nav-row { display: flex; gap: 8px; }
     .mobile-step-nav-row .btn { flex: 1; height: 48px; font-size: 14px; }
@@ -81,7 +81,7 @@
 
   /* En desktop, el aside tiene WA — ocultar el bloque inline */
   .step4-wa-inline { display: none; }
-  .step4-body { padding-bottom: 100px; }
+  .step4-body { padding-bottom: 24px; }
 
   @media (max-width: 767px) {
     /* Dentro del mobile-step-nav el botón WA se muestra */
@@ -90,7 +90,7 @@
 
   @media (min-width: 768px) {
     /* En paso 4, el único resumen es el aside — ocultar el duplicado */
-    #step4 .summary-box { display: none; }
+    /* en mobile paso 4 el summary SÍ se muestra (resumen visual) */
   }
 
   /* ─── Success state ─── */
@@ -151,7 +151,7 @@
   .float-bar { display: none; }
 
   @media (max-width: 767px) {
-    .step4-body { padding-bottom: 80px; }
+    .step4-body { padding-bottom: 0; }
 
     .float-bar {
       display: block;
@@ -296,7 +296,7 @@
     <a href="#" class="topbar-btn" aria-label="Volver" onclick="saveDraftAndGoToCatalog(); return false;">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4L6 10l6 6"/></svg>
     </a>
-    <a href="index.html" class="logo">FELIRECETAS</a>
+    <a href="index.html" class="logo"><img src="logoheader.png" alt="Feli Recetas" class="logo-img-mobile"></a>
     <div style="width:28px"></div>
   </header>
 
@@ -323,6 +323,22 @@
       <div class="config-body" style="display:flex;flex-direction:column;gap:10px;padding-bottom:100px">
         <div id="step1Error">⚠ Elegí una base para continuar al siguiente paso.</div>
 
+        <div class="option-row" data-base="Vainilla" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('vainilla-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Vainilla</div>
+            <div class="caption" style="margin-top:2px">Bizcocho liviano · clásica</div>
+          </div>
+          <div class="option-radio"></div>
+        </div>
+        <div class="option-row" data-base="Chocolate" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('chocolate-intenso-pers.jpg') center/cover"></div>
+          <div style="flex:1">
+            <div class="serif" style="font-size:19px;line-height:1.1">Chocolate</div>
+            <div class="caption" style="margin-top:2px">Intensa · semi-amargo</div>
+          </div>
+          <div class="option-radio"></div>
+        </div>
         <div class="option-row" data-base="Red Velvet" onclick="selectBase(this)">
           <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('red-velvet-pers.jpg') center/cover"></div>
           <div style="flex:1">
@@ -331,43 +347,11 @@
           </div>
           <div class="option-radio"></div>
         </div>
-        <div class="option-row" data-base="Chocolate intenso" onclick="selectBase(this)">
-          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('chocolate-intenso-pers.jpg') center/cover"></div>
+        <div class="option-row" data-base="Marmolado" onclick="selectBase(this)">
+          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#d4b896 45%,#3b1e0e 45%)"></div>
           <div style="flex:1">
-            <div class="serif" style="font-size:19px;line-height:1.1">Chocolate intenso</div>
-            <div class="caption" style="margin-top:2px">70% · semi-amargo</div>
-          </div>
-          <div class="option-radio"></div>
-        </div>
-        <div class="option-row" data-base="Vainilla bourbon" onclick="selectBase(this)">
-          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('vainilla-pers.jpg') center/cover"></div>
-          <div style="flex:1">
-            <div class="serif" style="font-size:19px;line-height:1.1">Vainilla bourbon</div>
-            <div class="caption" style="margin-top:2px">Bizcocho liviano</div>
-          </div>
-          <div class="option-radio"></div>
-        </div>
-        <div class="option-row" data-base="Lemon poppy" onclick="selectBase(this)">
-          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('limon-pers.jpg') center/cover"></div>
-          <div style="flex:1">
-            <div class="serif" style="font-size:19px;line-height:1.1">Lemon poppy</div>
-            <div class="caption" style="margin-top:2px">Cítrica · semillas amapola</div>
-          </div>
-          <div class="option-radio"></div>
-        </div>
-        <div class="option-row" data-base="Zanahoria y nuez" onclick="selectBase(this)">
-          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('zanahoria-pers.jpg') center/cover"></div>
-          <div style="flex:1">
-            <div class="serif" style="font-size:19px;line-height:1.1">Zanahoria y nuez</div>
-            <div class="caption" style="margin-top:2px">Especiada · clásica</div>
-          </div>
-          <div class="option-radio"></div>
-        </div>
-        <div class="option-row" data-base="Pistacho" onclick="selectBase(this)">
-          <div style="width:78px;height:78px;border-radius:10px;flex-shrink:0;background:url('pistacho-pers.jpg') center/cover"></div>
-          <div style="flex:1">
-            <div class="serif" style="font-size:19px;line-height:1.1">Pistacho</div>
-            <div class="caption" style="margin-top:2px">Edición limitada</div>
+            <div class="serif" style="font-size:19px;line-height:1.1">Marmolado</div>
+            <div class="caption" style="margin-top:2px">Vainilla y chocolate</div>
           </div>
           <div class="option-radio"></div>
         </div>
@@ -542,65 +526,19 @@
     <div class="step-page" id="step4">
       <div class="config-header">
         <div class="eyebrow">— Personalizá tu torta · paso 4/4</div>
-        <div class="h1" style="margin-top:6px">El <span class="serif-i">detalle</span> final</div>
-        <p class="caption" style="margin-top:6px;font-size:13px">Decoración y mensaje.</p>
+        <div class="h1" style="margin-top:6px">Revisá tu <span class="serif-i">pedido</span></div>
+        <p class="caption" style="margin-top:6px;font-size:13px">Confirmá los detalles y enviá por WhatsApp.</p>
       </div>
 
       <div class="config-body step4-body">
-        <!-- Decoración -->
-        <div class="ornament left" style="gap:10px">
-          <span class="section-badge">Decoración</span>
-          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
-          <div class="deco-card selected" data-deco="Minimalista" onclick="selectDeco(this)">
-            <div style="height:80px;background:url('deco-minimalista.jpg') center/cover;border-radius:8px 8px 0 0"></div>
-            <div class="deco-body">
-              <div class="serif" style="font-size:14px;line-height:1.1">Minimalista</div>
-              <div class="caption" style="font-size:10.5px;margin-top:2px">Frosting liso + flor seca</div>
-            </div>
-          </div>
-          <div class="deco-card" data-deco="Macarons arriba" onclick="selectDeco(this)">
-            <div style="height:80px;background:url('deco-macarons.jpg') center/cover;border-radius:8px 8px 0 0"></div>
-            <div class="deco-body">
-              <div class="serif" style="font-size:14px;line-height:1.1">Macarons arriba</div>
-            </div>
-          </div>
-          <div class="deco-card" data-deco="Frutas frescas" onclick="selectDeco(this)">
-            <div style="height:80px;background:url('deco-frutas.jpg') center/cover;border-radius:8px 8px 0 0"></div>
-            <div class="deco-body">
-              <div class="serif" style="font-size:14px;line-height:1.1">Frutas frescas</div>
-              <div class="caption" style="font-size:10.5px;margin-top:2px">Según temporada</div>
-            </div>
-          </div>
-          <div class="deco-card" data-deco="Drip de chocolate" onclick="selectDeco(this)">
-            <div style="height:80px;background:url('deco-drip.jpg') center/cover;border-radius:8px 8px 0 0"></div>
-            <div class="deco-body">
-              <div class="serif" style="font-size:14px;line-height:1.1">Drip de chocolate</div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Mensaje -->
-        <div class="ornament left" style="gap:10px;margin-top:22px">
-          <span class="section-badge">Mensaje <span class="badge-count">(opcional)</span></span>
-          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
-        </div>
-        <textarea class="textarea" id="mensajeInput" placeholder="Ej: "Feliz cumple, Mati ♡"" maxlength="30" style="margin-top:12px;font-family:var(--serif);font-style:italic;font-size:16px" oninput="updateMsg()"></textarea>
-        <div style="display:flex;justify-content:space-between;margin-top:6px">
-          <div class="caption" style="color:var(--ink-3)">Lo escribimos a mano. Máx 30 caracteres.</div>
-          <div class="caption" id="msgCount">0/30</div>
-        </div>
-
-        <!-- Resumen -->
-        <div class="summary-box" style="margin-top:24px">
-          <div class="eyebrow">— Resumen de tu torta</div>
-          <div class="h3 serif" style="margin-top:6px" id="summaryTitle">Red Velvet · 16 porciones</div>
-
+        <!-- Resumen de la torta -->
+        <div class="summary-box">
+          <div class="eyebrow">— Tu torta</div>
+          <div class="h3 serif" style="margin-top:6px" id="summaryTitle">Tu torta</div>
           <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px" id="summaryRows">
             <!-- JS renders -->
           </div>
-
           <hr class="rule-soft" style="margin:14px 0"/>
           <div style="display:flex;justify-content:space-between;align-items:baseline">
             <div>
@@ -610,6 +548,18 @@
           </div>
         </div>
 
+        <!-- Aclaraciones -->
+        <div class="ornament left" style="gap:10px;margin-top:22px">
+          <span class="section-badge">Aclaraciones <span class="badge-count">(opcional)</span></span>
+          <span style="flex:1;border-top:1px solid var(--rule);height:0"></span>
+        </div>
+        <textarea class="textarea" id="aclaracionesInput" placeholder="Describí colores, detalles, inscripciones o cualquier aclaración para el pedido." style="margin-top:12px" oninput="updateAclaraciones()"></textarea>
+
+        <!-- Nota replicado -->
+        <div style="margin-top:16px;background:var(--bg-soft);border-radius:14px;padding:16px 18px">
+          <p style="font-size:13px;color:var(--ink-2);line-height:1.6;margin:0">Voy a hacer lo posible para replicar la torta de referencia, aunque el resultado puede variar según los ingredientes y técnicas disponibles.</p>
+        </div>
+
         <!-- Nav mobile paso 4 -->
         <div class="mobile-step-nav" style="flex-direction:column;gap:8px;">
           <!-- Agregar al carrito -->
@@ -617,7 +567,7 @@
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             Agregar al carrito
           </button>
-          <button class="step4-wa-inline" onclick="sendWhatsApp()">
+          <button id="waBtnMobile" class="step4-wa-inline" onclick="confirmAndSend()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
             Enviar pedido por WhatsApp
           </button>
@@ -635,7 +585,7 @@
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-soft btn-sm" style="height:40px" onclick="goStep(3)">← Volver</button>
-          <button class="btn btn-sm" style="height:40px;padding:0 14px;background:#fff;color:var(--ink)" onclick="sendWhatsApp()">
+          <button id="waBtnDesktop" class="btn btn-sm" style="height:40px;padding:0 14px;background:#fff;color:var(--ink)" onclick="confirmAndSend()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
             Enviar pedido
           </button>
@@ -727,8 +677,9 @@ const state = {
   porciones: 16,
   forma: 'Redonda',
   pisos: 1,
-  decoracion: null,
-  mensaje: '',
+  aclaraciones: '',
+  refPhotosCount: 0,
+  refPhotoThumb: null,
   _touched: false,
 };
 
@@ -746,9 +697,9 @@ const PRICES = { 12: 18500, 16: 23800, 24: 33500 };
 const PISO_EXTRA = { 1: 0, 2: 8500, 3: 18000 };
 const DECO_EXTRA = { 'Minimalista': 0, 'Macarons arriba': 3500, 'Frutas frescas': 0, 'Drip de chocolate': 2500 };
 const FILL_EXTRA = {
-  'Queso crema': 0, 'Dulce de leche': 0, 'Ganache chocolate': 1500,
-  'Frutos rojos': 2000, 'Crema de pistacho': 2500, 'Lemon curd': 1200,
-  'Crema de café': 1000, 'Praliné de avellana': 2500
+  'Dulce de leche': 0, 'Ganache de chocolate con leche': 1500,
+  'Ganache de chocolate semiamargo': 1500, 'Ganache de chocolate blanco': 1500,
+  'Crema Oreo': 0, 'Buttercream': 0, 'Creamcheese': 0, 'Nutella': 1500
 };
 const COB_EXTRA = {
   'Buttercream': 0,
@@ -881,7 +832,7 @@ function selectBase(el) {
 // ═══════════════════════════════════════════
 //  STEP 2 — RELLENOS
 // ═══════════════════════════════════════════
-const fills = ['Queso crema','Dulce de leche','Ganache chocolate','Frutos rojos','Crema de pistacho','Lemon curd','Crema de café','Praliné de avellana'];
+const fills = ['Dulce de leche','Ganache de chocolate con leche','Ganache de chocolate semiamargo','Ganache de chocolate blanco','Crema Oreo','Buttercream','Creamcheese','Nutella'];
 const coberturas = ['Buttercream','Ganache choc. con leche','Ganache choc. blanco','Ganache semi-amargo'];
 function renderFills() {
   document.getElementById('fillGrid').innerHTML = fills.map(f => {
@@ -1041,10 +992,59 @@ function selectDeco(el) {
   renderSummary();
 }
 
-function updateMsg() {
+function confirmAndSend() {
+  const modal = document.getElementById('photoModal');
+  modal.style.display = 'flex';
+}
+function closePhotoModal() {
+  document.getElementById('photoModal').style.display = 'none';
+}
+function closeModalAndSend() {
+  closePhotoModal();
+  sendWhatsApp();
+}
+
+function updateAclaraciones() {
   state._touched = true;
-  state.mensaje = document.getElementById('mensajeInput').value;
-  document.getElementById('msgCount').textContent = state.mensaje.length + '/30';
+  state.aclaraciones = document.getElementById('aclaracionesInput').value;
+  renderSummary();
+}
+
+function handlePhotoUpload(input) {
+  state._touched = true;
+  state.refPhotosCount = input.files.length;
+  state.refPhotoThumb = null;
+  const grid = document.getElementById('photoPreviewGrid');
+  const countEl = document.getElementById('photoCount');
+  grid.innerHTML = '';
+  Array.from(input.files).forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      // Mostrar preview
+      const imgEl = document.createElement('img');
+      imgEl.src = e.target.result;
+      imgEl.style.cssText = 'width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px';
+      grid.appendChild(imgEl);
+      // Primera foto: guardar inmediatamente (full) y luego comprimir
+      if (i === 0) {
+        state.refPhotoThumb = e.target.result; // disponible al instante
+        const tmpImg = new Image();
+        tmpImg.onload = () => {
+          const canvas = document.createElement('canvas');
+          const size = 300;
+          const scale = Math.min(size / tmpImg.width, size / tmpImg.height);
+          canvas.width  = Math.round(tmpImg.width  * scale);
+          canvas.height = Math.round(tmpImg.height * scale);
+          canvas.getContext('2d').drawImage(tmpImg, 0, 0, canvas.width, canvas.height);
+          state.refPhotoThumb = canvas.toDataURL('image/jpeg', 0.75); // reemplaza con versión liviana
+        };
+        tmpImg.src = e.target.result;
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  countEl.style.display = input.files.length > 0 ? 'block' : 'none';
+  countEl.textContent = input.files.length + ' foto' + (input.files.length > 1 ? 's' : '') + ' seleccionada' + (input.files.length > 1 ? 's' : '');
   renderSummary();
 }
 
@@ -1052,10 +1052,9 @@ function calcPrice() {
   if (!state.base) return 0;
   const base = state.porciones <= 12 ? 18500 : state.porciones <= 16 ? 23800 : state.porciones <= 24 ? 33500 : 33500 + (state.porciones - 24) * 800;
   const piso   = PISO_EXTRA[state.pisos] || 0;
-  const deco   = DECO_EXTRA[state.decoracion] || 0;
   const fillEx = state.fills.reduce((s, f) => s + (FILL_EXTRA[f] || 0), 0);
   const cobEx  = COB_EXTRA[state.cobertura] || 0;
-  return base + piso + deco + fillEx + cobEx;
+  return base + piso + fillEx + cobEx;
 }
 
 function renderSummary() {
@@ -1069,8 +1068,7 @@ function renderSummary() {
     ['Relleno', v2 ? (state.fills.join(' + ') || '—') : '—'],
     ['Cobertura', v2 ? (state.cobertura || '—') : '—'],
     ['Forma', v3 ? `${state.forma || '—'} · ${state.porciones} porc. · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}` : '—'],
-    ['Decoración', v4 ? (state.decoracion || '—') : '—'],
-    ...(v4 && state.mensaje ? [['Mensaje', `"${state.mensaje}"`]] : []),
+    ...(v4 && state.aclaraciones ? [['Aclaraciones', state.aclaraciones]] : []),
   ];
   const rowsHtml = rows.map(([k, v]) =>
     `<div class="summary-row"><span style="color:var(--ink-3)">${k}</span><span style="color:var(--ink);font-weight:500;text-align:right;max-width:60%">${v}</span></div>`
@@ -1139,12 +1137,9 @@ function addToCartFromConfig() {
     if (state.pisos && state.pisos > 1) metaParts.push(state.pisos + ' pisos');
 
     var BASE_IMGS = {
-      'Red Velvet':        'red-velvet-pers.jpg',
-      'Chocolate intenso': 'chocolate-intenso-pers.jpg',
-      'Vainilla bourbon':  'vainilla-pers.jpg',
-      'Lemon poppy':       'limon-pers.jpg',
-      'Zanahoria y nuez':  'zanahoria-pers.jpg',
-      'Pistacho':          'pistacho-pers.jpg',
+      'Vainilla':   'vainilla-pers.jpg',
+      'Chocolate':  'chocolate-intenso-pers.jpg',
+      'Red Velvet': 'red-velvet-pers.jpg',
     };
     var price = calcPrice();
     var item = {
@@ -1154,7 +1149,7 @@ function addToCartFromConfig() {
       price: price,
       qty: 1,
       tone: 'deep',
-      img: BASE_IMGS[state.base] || ''
+      img: state.refPhotoThumb || BASE_IMGS[state.base] || ''
     };
 
     var items = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
@@ -1190,8 +1185,8 @@ function sendWhatsApp() {
   msg += `• Cobertura: ${state.cobertura}\n`;
   msg += `• Forma: ${state.forma} · ${state.pisos} piso${state.pisos > 1 ? 's' : ''}\n`;
   msg += `• Porciones: ${state.porciones}\n`;
-  msg += `• Decoración: ${state.decoracion}\n`;
-  if (state.mensaje) msg += `• Mensaje: "${state.mensaje}"\n`;
+  if (state.aclaraciones) msg += `• Aclaraciones: ${state.aclaraciones}\n`;
+  if (state.refPhotosCount > 0) msg += `• Fotos de referencia: ${state.refPhotosCount} adjunta${state.refPhotosCount > 1 ? 's' : ''} 📷\n`;
   msg += `\n¿Me podés dar el precio?\n`;
   msg += `\n¿Podemos coordinar fecha y entrega?`;
 
@@ -1322,6 +1317,20 @@ if (state._draftStep && state._draftStep > 1) {
     </button>
   </div>
 </div>
+
+<!-- Modal confirmación fotos -->
+<div id="photoModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:flex-end;justify-content:center" onclick="if(event.target===this)closePhotoModal()">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:28px 24px 36px;width:100%;max-width:480px;animation:slideUp .25s ease">
+    <div style="text-align:center;font-size:36px;margin-bottom:14px">📸</div>
+    <div style="font-family:var(--serif);font-size:22px;color:var(--ink);text-align:center;line-height:1.3;margin-bottom:10px">¿Ya tenés tus fotos<br>de referencia listas?</div>
+    <p style="font-size:13.5px;color:var(--ink-2);text-align:center;line-height:1.6;margin:0 0 24px">Cuando se abra WhatsApp, <strong>adjuntá las fotos</strong> de la torta que querés antes de enviar el mensaje.</p>
+    <button onclick="closeModalAndSend()" style="width:100%;height:52px;background:var(--wine);color:#fff;border:none;border-radius:14px;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer">Entendido, abrir WhatsApp →</button>
+    <button onclick="closePhotoModal()" style="width:100%;height:44px;background:transparent;border:none;font-family:var(--sans);font-size:14px;color:var(--ink-3);cursor:pointer;margin-top:8px">Volver</button>
+  </div>
+</div>
+<style>
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+</style>
 
 </body>
 </html>
