@@ -1684,7 +1684,7 @@
   // ── Hero-aware nav: topbar, split-header, tabbar y FAB ──
   (function() {
     const hero        = document.getElementById('inicio');
-    const eventos     = document.getElementById('eventos');
+    const comoPedir   = document.getElementById('como-pedir');
     const topbar      = document.querySelector('.topbar');
     const tabbar      = document.querySelector('.tabbar');
     const splitHeader = document.querySelector('.split-header');
@@ -1697,6 +1697,11 @@
       const heroVisible = rect.bottom > 80;
       const inCatalogo  = document.body.classList.contains('showing-catalogo');
 
+      // Tabbar aparece cuando #como-pedir entra en pantalla
+      const comoPedirVisible = comoPedir
+        ? comoPedir.getBoundingClientRect().top < window.innerHeight
+        : heroPassed;
+
       // Topbar: negro en hero, crema cuando sale
       if (topbar)
         topbar.classList.toggle('topbar-in-hero', !heroPassed && !inCatalogo);
@@ -1704,8 +1709,8 @@
       // Split-header (desktop): aparece solo tras el hero
       if (splitHeader) splitHeader.classList.toggle('nav-visible', heroPassed || inCatalogo);
 
-      // Tabbar: oculto solo mientras el hero es visible en pantalla
-      if (tabbar) tabbar.classList.toggle('nav-hidden', heroVisible && !inCatalogo);
+      // Tabbar: aparece cuando #como-pedir es visible, nunca desaparece después
+      if (tabbar) tabbar.classList.toggle('nav-hidden', !comoPedirVisible && !inCatalogo);
 
       // FAB WA: solo aparece tras el hero
       if (fab && window.innerWidth < 768)
