@@ -2147,6 +2147,19 @@
     }
   })();
 
+  // ── Scroll centrado hacia #como-pedir ──
+  document.querySelectorAll('a[href="#como-pedir"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var el = document.getElementById('como-pedir');
+      if (!el) return;
+      var elRect  = el.getBoundingClientRect();
+      var elH     = el.offsetHeight;
+      var centered = elRect.top + window.scrollY - (window.innerHeight / 2) + (elH / 2);
+      window.scrollTo({ top: Math.max(0, centered), behavior: 'smooth' });
+    });
+  });
+
   // ── Cómo pedir: toggle desplegable ──
   function toggleComoPedir(btn) {
     var body = document.getElementById('como-pedir-body');
