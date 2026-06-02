@@ -2173,6 +2173,15 @@
       btn.setAttribute('aria-expanded', 'true');
       body.classList.add('open');
       if (pill) pill.textContent = 'Ocultar ↑';
+      // Espera que termine la animación y centra la sección expandida
+      setTimeout(function() {
+        var sec = document.getElementById('como-pedir');
+        if (!sec) return;
+        var secH = sec.offsetHeight;
+        var top  = sec.getBoundingClientRect().top + window.scrollY
+                   - (window.innerHeight / 2) + (secH / 2);
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      }, 420);
     }
     // Fuerza re-evaluación del tabbar tras el cambio de layout
     setTimeout(function() { window.dispatchEvent(new Event('scroll')); }, 10);
