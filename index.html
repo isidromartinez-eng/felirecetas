@@ -885,7 +885,7 @@
             </div>
             <div class="step-body">
               <div class="h3 serif">Coordinemos</div>
-              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Escribime por WhatsApp y definimos juntos los detalles de tu pedido. Atención personalizada.</p>
+              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Escribime por WhatsApp y definimos los detalles.</p>
               <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">📸 Si personalizás una torta, mandá fotos de referencia — voy a hacer todo lo posible para replicarla.</p>
             </div>
           </div>
@@ -1697,11 +1697,6 @@
       const heroVisible = rect.bottom > 80;
       const inCatalogo  = document.body.classList.contains('showing-catalogo');
 
-      // Tabbar aparece cuando #eventos entra en pantalla (o después del hero si no existe)
-      const eventosVisible = eventos
-        ? eventos.getBoundingClientRect().top < window.innerHeight
-        : heroPassed;
-
       // Topbar: negro en hero, crema cuando sale
       if (topbar)
         topbar.classList.toggle('topbar-in-hero', !heroPassed && !inCatalogo);
@@ -1709,8 +1704,8 @@
       // Split-header (desktop): aparece solo tras el hero
       if (splitHeader) splitHeader.classList.toggle('nav-visible', heroPassed || inCatalogo);
 
-      // Tabbar: oculto hasta que #eventos sea visible en pantalla
-      if (tabbar) tabbar.classList.toggle('nav-hidden', !eventosVisible && !inCatalogo);
+      // Tabbar: oculto solo mientras el hero es visible en pantalla
+      if (tabbar) tabbar.classList.toggle('nav-hidden', heroVisible && !inCatalogo);
 
       // FAB WA: solo aparece tras el hero
       if (fab && window.innerWidth < 768)
@@ -2156,6 +2151,8 @@
       body.classList.add('open');
       if (pill) pill.textContent = 'Ocultar ↑';
     }
+    // Fuerza re-evaluación del tabbar tras el cambio de layout
+    setTimeout(function() { window.dispatchEvent(new Event('scroll')); }, 10);
   }
 
   // ── Carrito: badge + agregar ──
