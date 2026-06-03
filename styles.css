@@ -438,6 +438,9 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 .product-card-big .card-img { height: 200px; }
 .product-card     .card-img { height: 130px; }
 
+/* Carrito del header: solo visible en desktop */
+.tabbar-cart-btn { display: none; }
+
 /* ─── Tab bar ─────────────────────────────────── */
 .tabbar {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -825,6 +828,20 @@ section { scroll-margin-top: 60px; }
     opacity: 1 !important;
     pointer-events: auto !important;
   }
+  /* Carrito en el header desktop */
+  .tabbar-cart-btn {
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    width: 40px; height: 40px; border-radius: 8px;
+    color: var(--ink-2); margin-left: 8px;
+    transition: color .15s, background .15s;
+  }
+  .tabbar-cart-btn:hover { color: var(--ink); background: var(--bg-soft); }
+  #tabbar-cart-badge { display: none; }
+  #tabbar-cart-badge.visible {
+    display: flex !important;
+  }
+
   /* Logo visible en desktop */
   .tabbar-logo {
     display: flex;
