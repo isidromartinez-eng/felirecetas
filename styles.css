@@ -956,14 +956,22 @@ section { scroll-margin-top: 60px; }
   .info-cards { padding: 0; }
   .howto-cta { padding: 28px 0 0 !important; }
 
-  /* ── Historia ── */
-  .about-grid {
-    display: grid; grid-template-columns: 0.95fr 1.05fr;
-    align-items: start;
+  /* ── Historia desktop: strip horizontal compacto ── */
+  #historia > div:last-child {
+    display: grid !important;
+    grid-template-columns: 0.8fr 1.2fr;
+    margin: 0 50px !important;
+    border-radius: 16px;
+    overflow: hidden;
+    max-height: 320px;
   }
-  .about-img { height: 100%; min-height: 520px; margin: 0; border-radius: 0; }
-  .about-content { padding: 56px 56px 64px; }
-  #historia > div:first-child { padding: 64px 50px 0; }
+  #historia .hist-img {
+    aspect-ratio: unset;
+    height: 100%;
+    max-height: 320px;
+  }
+  #historia .hist-content { padding: 36px 52px 40px; }
+  #historia > div:first-child { padding: 48px 50px 24px; }
 
   /* ── Reviews ── */
   #testimonios > div:first-child { padding: 56px 50px 0; }
@@ -997,6 +1005,8 @@ section { scroll-margin-top: 60px; }
   /* ── Footer ── */
   .site-footer { padding: 64px 50px 40px; }
   .footer-cols { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 40px; }
+  .footer-contact { display: none; }
+  .footer-rule { display: none; }
 
   /* ── Configurator ── */
   .config-layout {
