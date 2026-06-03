@@ -850,7 +850,7 @@ section { scroll-margin-top: 60px; }
     border-bottom: 2px solid transparent;
     transition: color .15s, border-color .15s;
   }
-  .tab svg { width: 16px; height: 16px; }
+  .tab svg { display: none; }
   .tab .dot { display: none; }
   .tab.active {
     color: var(--wine);
