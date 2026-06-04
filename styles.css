@@ -1177,6 +1177,7 @@ section { scroll-margin-top: 60px; }
     min-width: unset !important; min-height: unset !important;
     border-radius: 0 !important;
     background: none !important;
+    border: none !important;
     color: var(--wine) !important;
     font-family: var(--serif) !important;
     font-weight: 500 !important;

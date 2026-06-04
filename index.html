@@ -2324,8 +2324,9 @@
     }
   })();
 
-  // ── Scroll centrado hacia #como-pedir ──
-  document.querySelectorAll('a[href="#como-pedir"]').forEach(function(link) {
+  // ── Scroll centrado hacia #como-pedir (mobile) ──
+  // En desktop esto lo maneja el handler de dnav-links de abajo
+  document.querySelectorAll('a[href="#como-pedir"]:not(.dnav-link)').forEach(function(link) {
     link.addEventListener('click', function(e) {
       e.preventDefault();
       var el = document.getElementById('como-pedir');
@@ -2526,12 +2527,11 @@
     if (e.persisted) updateCartBadge();
   });
 
-  // ── Desktop nav: highlight de sección activa ──────────────────────
+  // ── Desktop nav: clicks con offset + highlight de sección activa ──
   (function() {
-    if (window.innerWidth < 768) return; // solo desktop
-
+    var HEADER_H = 72; // altura del tabbar fijo en desktop
     var SECTIONS = ['como-pedir', 'eventos', 'historia', 'testimonios', 'faq'];
-    var links = document.querySelectorAll('.dnav-link[data-section]');
+    var links    = document.querySelectorAll('.dnav-link[data-section]');
 
     function setActive(id) {
       links.forEach(function(l) {
@@ -2539,26 +2539,47 @@
       });
     }
 
-    // IntersectionObserver: marca la sección que ocupa más del 30% del viewport
-    if ('IntersectionObserver' in window) {
-      var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
-
-      SECTIONS.forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) obs.observe(el);
-      });
+    function scrollToSection(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var top = el.getBoundingClientRect().top + window.scrollY - HEADER_H - 8;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     }
 
-    // Scroll: highlight "Catálogo" cuando está activo
-    window.addEventListener('scroll', function() {
+    // Click handler: todas las dnav-links de sección
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var id = link.dataset.section;
+        if (id === 'catalogo') { switchView('catalogo'); return; }
+        e.preventDefault();
+        if (document.body.classList.contains('showing-catalogo')) {
+          switchView('main');
+          setTimeout(function() { scrollToSection(id); }, 120);
+        } else {
+          scrollToSection(id);
+        }
+      });
+    });
+
+    // Scroll spy: marca la sección cuyo top pasó el header
+    function updateHighlight() {
       if (document.body.classList.contains('showing-catalogo')) {
         setActive('catalogo');
+        return;
       }
-    }, { passive: true });
+      var scrollY = window.scrollY + HEADER_H + 32;
+      var active  = null;
+      SECTIONS.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top + window.scrollY <= scrollY) {
+          active = id;
+        }
+      });
+      setActive(active);
+    }
+
+    window.addEventListener('scroll', updateHighlight, { passive: true });
+    updateHighlight(); // estado inicial
   })();
 
 </script>
