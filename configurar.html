@@ -14,6 +14,18 @@
   <link rel="stylesheet" href="styles.css"/>
 
   <style>
+    /* Topbar fijo en config page (igual que index.html) */
+    .topbar {
+      position: fixed !important;
+      top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,.97) !important;
+      border-bottom: 1px solid var(--rule-soft);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    /* Compensar el topbar fijo */
+    #pageConfig { padding-top: 56px; }
+
     .logo-whisk { height:17px;width:auto;color:var(--wine);flex-shrink:0; }
 
     .step-page { display:none; }
@@ -626,9 +638,14 @@
         <button id="desktopNextStep" class="btn btn-wine btn-block" style="padding:13px 16px;font-size:15px"></button>
         <button id="desktopPrevStep" class="btn btn-ghost btn-block" style="display:none">← Paso anterior</button>
       </div>
-      <button id="asideWaBtn" class="btn btn-wine btn-block" onclick="sendWhatsApp()" style="display:none">
+      <!-- Paso 4: carrito + WA (ambos ocultos hasta llegar al paso 4) -->
+      <button id="asideCartBtn" class="btn btn-wine btn-block" onclick="addToCartFromConfig()" style="display:none;align-items:center;justify-content:center;gap:8px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Agregar al carrito
+      </button>
+      <button id="asideWaBtn" class="btn btn-ghost btn-block" onclick="sendWhatsApp()" style="display:none;align-items:center;justify-content:center;gap:8px">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
-        Enviar pedido por WhatsApp
+        Enviar por WhatsApp
       </button>
       <a href="#" onclick="saveDraftAndGoToCatalog(); return false;" class="btn btn-ghost btn-block">Ver catálogo →</a>
     </div>
@@ -730,6 +747,7 @@ function updateDesktopNav() {
   const nextBtn = document.getElementById('desktopNextStep');
   const prevBtn = document.getElementById('desktopPrevStep');
   const waBtn   = document.getElementById('asideWaBtn');
+  const cartBtn = document.getElementById('asideCartBtn');
   prevBtn.style.display = s > 1 ? '' : 'none';
   prevBtn.onclick = () => goStep(s - 1);
   if (s < 4) {
@@ -739,8 +757,9 @@ function updateDesktopNav() {
   } else {
     nextBtn.style.display = 'none';
   }
-  // Botón WA solo en paso 4
-  if (waBtn) waBtn.style.display = s === 4 ? '' : 'none';
+  // Paso 4: mostrar carrito (primario) + WA (secundario)
+  if (cartBtn) cartBtn.style.display = s === 4 ? 'flex' : 'none';
+  if (waBtn)   waBtn.style.display   = s === 4 ? 'flex' : 'none';
 }
 
 function goStep(n) {
