@@ -577,10 +577,9 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 }
 .faq-item.open .faq-answer { display: block; }
 
-.faq-help-box {
-  margin: 26px 22px 30px; padding: 22px;
-  background: var(--bg-soft); border-radius: 14px; text-align: center;
-}
+/* faq-help-box y catalog-desc: ocultos en mobile, visibles solo en desktop */
+.faq-help-box { display: none; }
+.catalog-desc-desktop { display: none; }
 
 /* ─── Final CTA + Footer ──────────────────────── */
 .final-cta {
@@ -937,10 +936,26 @@ section { scroll-margin-top: 60px; }
   .featured-wrap .product-card-big .card-img {
     height: auto; min-height: 280px; border-radius: 0;
   }
+  /* Catálogo header: 2 columnas (título izq, descripción der) */
+  #catalogo .section-head {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    gap: 40px !important;
+  }
+  .catalog-desc-desktop {
+    font-family: var(--sans);
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 340px;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+  }
   .products-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     padding: 0 50px 32px;
-    gap: 18px;
+    gap: 22px;
   }
   .products-grid .product-card-big { display: none; }
 
@@ -979,11 +994,29 @@ section { scroll-margin-top: 60px; }
   }
   .stat-n { font-size: 54px; }
 
-  /* ── Cómo pedir desktop: 4 columnas horizontales ── */
-  #como-pedir > div:first-child { padding: 48px 50px 0; }
+  /* ── Cómo pedir desktop: heading centrado + 4 columnas ── */
+  /* Hacer el toggle no interactivo y transformarlo en heading */
+  .howto-toggle {
+    cursor: default !important;
+    pointer-events: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 64px 50px 0 !important;
+    background: none !important;
+    border: none !important;
+  }
+  .howto-chevron { display: none !important; }
+  .howto-pill { display: none !important; }
+  .howto-toggle-text { width: 100%; }
+  .howto-toggle-text .eyebrow { text-align: center; }
+  .howto-toggle-text .h1 {
+    font-size: clamp(40px, 4.5vw, 64px) !important;
+    letter-spacing: -.02em;
+  }
   .howto-grid {
     display: flex; flex-direction: column;
-    gap: 0; padding: 28px 50px 60px;
+    gap: 0; padding: 36px 80px 60px;
   }
   .howto-steps {
     display: grid; grid-template-columns: repeat(4, 1fr);
@@ -991,37 +1024,82 @@ section { scroll-margin-top: 60px; }
   }
   .step-row {
     flex-direction: column; gap: 0;
-    padding: 20px 32px 24px 0;
+    padding: 24px 32px 28px 0;
     border-top: 1.5px solid var(--rule);
   }
   .step-icon-col { flex-direction: row; align-items: center; margin-bottom: 14px; }
   .step-line { display: none; }
   .step-body { padding-top: 0; }
-  /* Fila de medios de pago + CTA debajo de los pasos */
-  .howto-grid > div:nth-child(2) {
-    display: flex; align-items: center; gap: 20px;
-    border-top: 1px solid var(--rule-soft);
-    padding-top: 24px; margin-top: 12px;
+  /* Número del paso: más grande en desktop */
+  .step-icon {
+    font-size: 42px !important;
+    width: auto !important; height: auto !important;
+    min-width: unset !important; min-height: unset !important;
+    border-radius: 0 !important;
+    background: none !important;
+    color: var(--wine) !important;
+    font-family: var(--serif) !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    margin-right: 8px !important;
   }
-  .info-cards { flex-direction: row; gap: 8px; padding: 0; }
-  .howto-cta { padding: 0 !important; margin-left: auto; }
+  /* Fila de medios de pago debajo */
+  .howto-grid > div:nth-child(2) {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 28px; margin-top: 16px;
+  }
+  .info-cards { flex-direction: row; gap: 10px; padding: 0; }
+  .howto-cta { display: none !important; }
 
-  /* ── Historia desktop: strip horizontal compacto ── */
+  /* ── Historia desktop: 2 columnas, fondo crema ── */
+  #historia > div:first-child { display: none !important; }
   #historia > div:last-child {
     display: grid !important;
-    grid-template-columns: 0.8fr 1.2fr;
-    margin: 0 50px !important;
-    border-radius: 16px;
-    overflow: hidden;
-    max-height: 320px;
+    grid-template-columns: 1fr 1.15fr;
+    margin: 80px 80px !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+    max-height: none !important;
+    gap: 80px;
+    align-items: center;
   }
   #historia .hist-img {
-    aspect-ratio: unset;
-    height: 100%;
-    max-height: 320px;
+    aspect-ratio: 3/4 !important;
+    height: auto !important;
+    max-height: none !important;
+    border-radius: 10px !important;
   }
-  #historia .hist-content { padding: 36px 52px 40px; }
-  #historia > div:first-child { padding: 48px 50px 24px; }
+  #historia .hist-content {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  #historia .hist-eyebrow { color: var(--wine) !important; }
+  #historia .hist-title {
+    color: var(--ink) !important;
+    font-size: clamp(34px, 3vw, 52px) !important;
+    line-height: 1.08 !important;
+  }
+  #historia .hist-title em { color: var(--ink) !important; }
+  #historia .hist-body {
+    color: var(--ink-2) !important;
+    font-size: 15.5px !important;
+    line-height: 1.65 !important;
+    margin-bottom: 36px !important;
+  }
+  #historia .hist-author {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+  #historia .hist-avatar { display: none !important; }
+  #historia .hist-author-name {
+    font-style: italic !important;
+    color: var(--wine) !important;
+    font-size: 28px !important;
+    line-height: 1.2 !important;
+  }
+  #historia .hist-author-role { color: var(--ink-3) !important; }
 
   /* ── Reviews ── */
   #testimonios > div:first-child { padding: 56px 50px 0; }
@@ -1038,15 +1116,18 @@ section { scroll-margin-top: 60px; }
   .instagram-grid { padding: 0 50px; gap: 10px; grid-template-columns: repeat(6, 1fr); }
   #testimonios > div:last-child { padding: 20px 50px 40px; }
 
-  /* ── FAQ ── */
-  #faq > div:first-child { padding: 56px 50px 0; }
+  /* ── FAQ desktop: 2 columnas — título izq, accordion der ── */
+  #faq > div:first-child { display: none !important; }
+  .faq-help-box { display: block !important; }
   .faq-layout {
-    display: grid; grid-template-columns: 3fr 2fr;
-    align-items: start; gap: 56px;
-    padding: 32px 50px 80px;
+    display: grid; grid-template-columns: 1fr 2fr;
+    align-items: start; gap: 80px;
+    padding: 80px 80px 100px;
   }
   .faq-layout .faq-list { padding: 0; }
-  .faq-layout .faq-help-box { margin: 0; position: sticky; top: 100px; }
+  .faq-layout .faq-help-box {
+    position: sticky; top: 100px;
+  }
 
   /* ── Final CTA ── */
   .final-cta { padding: 96px 50px 80px; }

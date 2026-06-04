@@ -685,7 +685,11 @@
         border-radius: 0 !important;
         margin: 0 !important;
         box-shadow: none !important;
+        overflow: visible !important;
+        padding: 0 !important;
       }
+      /* Ocultar párrafo intro de cómo pedir y también el howto-body padding wrapper */
+      #como-pedir-body > div:first-child { display: none !important; }
     }
   </style>
 </head>
@@ -1004,6 +1008,8 @@
         <div class="eyebrow">— 02 · La carta</div>
         <div class="h2" style="margin-top:4px">Nuestros <span class="serif-i">productos</span></div>
       </div>
+      <!-- Desktop only: descripción al lado del título -->
+      <p class="catalog-desc-desktop">Todo se hornea a pedido. Precios de referencia para tamaño mediano; ajustamos según porciones.</p>
     </div>
 
     <!-- Filters -->
@@ -1266,6 +1272,18 @@
     </div>
 
     <div class="faq-layout">
+
+    <!-- Desktop: columna izquierda con título y CTA (oculto en mobile) -->
+    <div class="faq-help-box">
+      <div class="eyebrow" style="color:var(--wine)">— Preguntas frecuentes</div>
+      <div class="h1" style="margin-top:12px;line-height:1.1">Antes de<br><span class="serif-i">encargar</span></div>
+      <p style="margin-top:18px;font-size:15px;line-height:1.6;color:var(--ink-2)">¿Tenés otra duda? Escribime y te respondo al toque.</p>
+      <a href="https://wa.me/5492216023377" target="_blank" class="btn btn-wine" style="margin-top:28px;display:inline-flex;align-items:center;gap:8px;text-decoration:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+        Escribime
+      </a>
+    </div>
+
     <div class="faq-list">
 
       <div class="faq-item">
