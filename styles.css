@@ -547,6 +547,8 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 .step-icon.rest  { background: var(--paper-2); border: 1px solid var(--rule); color: var(--ink); }
 .step-line { flex: 1; width: 1px; background: var(--rule); margin-top: 4px; }
 .step-body { flex: 1; padding-top: 6px; }
+/* Label de paso (ELEGÍ, ESCRIBÍ…) — oculto en mobile */
+.step-label { display: none; }
 .step-body .h3.serif { font-family: var(--sans); font-style: normal; font-weight: 500; font-size: 17px; letter-spacing: 0; }
 
 .info-cards { display: flex; flex-direction: column; gap: 8px; padding: 14px 22px 24px; }
@@ -1181,6 +1183,19 @@ section { scroll-margin-top: 60px; }
     line-height: 1 !important;
     margin-right: 8px !important;
   }
+  /* Label de paso: visible solo en desktop, al lado del número */
+  .step-label {
+    display: block;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    align-self: center;
+    white-space: nowrap;
+    padding-top: 4px;
+  }
   /* Fila de medios de pago debajo */
   .howto-grid > div:nth-child(2) {
     display: flex; align-items: center; justify-content: center; gap: 20px;
@@ -1248,8 +1263,9 @@ section { scroll-margin-top: 60px; }
     gap: 22px; padding: 32px 50px 0;
   }
   .review-item {
-    background: #fff; border: 1px solid var(--rule-soft);
+    background: #fff; border: 1px solid rgba(54,68,89,.10);
     border-radius: 14px; padding: 28px;
+    box-shadow: 0 2px 20px rgba(54,68,89,.09), 0 1px 4px rgba(54,68,89,.05);
   }
   .instagram-grid { padding: 0 50px; gap: 10px; grid-template-columns: repeat(6, 1fr); }
   #testimonios > div:last-child { padding: 20px 50px 40px; }
