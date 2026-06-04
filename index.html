@@ -1015,17 +1015,42 @@
 
   <!-- ░░ EVENTOS POR WHATSAPP ░░ -->
   <section id="eventos" style="padding-top:24px">
-    <div class="section-card" style="padding:20px 20px 24px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div class="eyebrow">— 02 · Eventos</div>
+    <div class="eventos-banner">
+      <!-- Izquierda: copy -->
+      <div class="eventos-copy">
+        <div class="eyebrow" style="color:var(--surface-dark-accent)">— Eventos a medida</div>
+        <h2 class="eventos-title">Tu fecha especial,<br><em>sin preocupaciones</em></h2>
+        <p class="eventos-desc">Mesas dulces completas para casamientos, cumpleaños y eventos corporativos. Coordinamos todo — desde la cantidad hasta la presentación.</p>
+        <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20consultar%20por%20una%20mesa%20dulce%20para%20un%20evento%20%F0%9F%8E%82"
+           target="_blank" class="eventos-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+          Consultar disponibilidad
+        </a>
       </div>
-      <div style="font-family:var(--serif);font-size:28px;line-height:1.1;margin-bottom:10px;color:var(--ink)">Eventos <em>a medida</em></div>
-      <p style="font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--ink-2);margin-bottom:20px">Mesas dulces completas para tu evento especial — coordinamos todo por WhatsApp. Consultá con más de una semana de anticipación.</p>
-      <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20consultar%20por%20una%20mesa%20dulce%20para%20un%20evento%20%F0%9F%8E%82"
-         target="_blank" class="btn btn-wine btn-block">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;vertical-align:middle;margin-right:6px"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.78 14.16c-.25.71-1.42 1.36-2 1.45-.5.08-1.15.11-1.85-.12-.43-.14-.97-.32-1.67-.62-2.95-1.27-4.87-4.24-5.02-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.45.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.42-.07.66.5.25.62.85 2.07.93 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.32.39-.45.52-.15.15-.31.31-.13.62.17.3.78 1.28 1.67 2.07 1.15 1.02 2.11 1.34 2.42 1.49.31.15.49.13.67-.07.18-.2.78-.91.99-1.22.2-.31.4-.26.68-.15.27.1 1.72.81 2.02.96.3.15.49.22.57.35.07.13.07.74-.18 1.45z"/></svg>
-        Consultar por WhatsApp
-      </a>
+      <!-- Derecha: qué incluye -->
+      <div class="eventos-items">
+        <div class="eventos-item">
+          <span class="eventos-item-icon">🎂</span>
+          <div>
+            <div class="eventos-item-title">Tortas personalizadas</div>
+            <div class="eventos-item-sub">Con temática y decoración a pedido</div>
+          </div>
+        </div>
+        <div class="eventos-item">
+          <span class="eventos-item-icon">🍪</span>
+          <div>
+            <div class="eventos-item-title">Mesa dulce completa</div>
+            <div class="eventos-item-sub">Macarons, cookies, cheesecakes y más</div>
+          </div>
+        </div>
+        <div class="eventos-item">
+          <span class="eventos-item-icon">📦</span>
+          <div>
+            <div class="eventos-item-title">Coordinación total</div>
+            <div class="eventos-item-sub">Consultá con más de una semana</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1485,23 +1510,38 @@
   <a href="#" onclick="switchView('main');return false;" class="tabbar-logo">
     <img src="logoheader.png" alt="Feli Recetas">
   </a>
-  <button class="tab active" id="tab-home" onclick="goTo('inicio','tab-home')">
+
+  <!-- Mobile tabs (visible solo en mobile) -->
+  <button class="tab active mobile-tab" id="tab-home" onclick="goTo('inicio','tab-home')">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l7-6 7 6v8a1 1 0 01-1 1h-4v-5H8v5H4a1 1 0 01-1-1V9z"/></svg>
     <span>Inicio</span>
     <div class="dot"></div>
   </button>
-  <button class="tab" id="tab-catalogo" onclick="switchView('catalogo')">
+  <button class="tab mobile-tab" id="tab-catalogo" onclick="switchView('catalogo')">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="3" y="4" width="6" height="6" rx="1"/><rect x="11" y="4" width="6" height="6" rx="1"/><rect x="3" y="11" width="6" height="6" rx="1"/><rect x="11" y="11" width="6" height="6" rx="1"/></svg>
     <span>Catálogo</span>
   </button>
-  <button class="tab" id="tab-personalizar" onclick="window.location.href='configurar.html'">
+  <button class="tab mobile-tab" id="tab-personalizar" onclick="window.location.href='configurar.html'">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2l3 3-10 10H5v-3L15 2z"/><path d="M13 4l3 3"/><path d="M5 17h10"/></svg>
     <span>Personalizar</span>
   </button>
-  <button class="tab" id="tab-pedir" onclick="window.open('https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido','_blank')">
+  <button class="tab mobile-tab" id="tab-pedir" onclick="window.open('https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido','_blank')">
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4 6h12l-1.5 8.5a1.5 1.5 0 01-1.5 1.3H7a1.5 1.5 0 01-1.5-1.3L4 6z"/><path d="M7 6V4.5a3 3 0 016 0V6"/></svg>
     <span>Pedir</span>
   </button>
+
+  <!-- Desktop nav links (visible solo en desktop) -->
+  <div class="desktop-nav" id="desktopNav">
+    <button class="dnav-link" onclick="switchView('catalogo')" data-section="catalogo">Catálogo</button>
+    <a class="dnav-link" href="#como-pedir" data-section="como-pedir">Cómo pedir</a>
+    <a class="dnav-link" href="#eventos" data-section="eventos">Eventos</a>
+    <a class="dnav-link" href="#historia" data-section="historia">Nosotros</a>
+    <a class="dnav-link" href="#faq" data-section="faq">Preguntas</a>
+  </div>
+
+  <!-- Desktop CTA: Personalizar torta -->
+  <a href="configurar.html" class="dnav-cta">Personalizar torta →</a>
+
   <a href="cart.html" class="tabbar-cart-btn" aria-label="Ver carrito">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
     <span id="tabbar-cart-badge" style="display:none;position:absolute;top:8px;right:6px;background:var(--wine);color:#fff;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:999px;display:none;align-items:center;justify-content:center;padding:0 4px;line-height:1"></span>
@@ -2481,6 +2521,41 @@
   window.addEventListener('pageshow', function(e) {
     if (e.persisted) updateCartBadge();
   });
+
+  // ── Desktop nav: highlight de sección activa ──────────────────────
+  (function() {
+    if (window.innerWidth < 768) return; // solo desktop
+
+    var SECTIONS = ['como-pedir', 'eventos', 'historia', 'testimonios', 'faq'];
+    var links = document.querySelectorAll('.dnav-link[data-section]');
+
+    function setActive(id) {
+      links.forEach(function(l) {
+        l.classList.toggle('dnav-active', l.dataset.section === id);
+      });
+    }
+
+    // IntersectionObserver: marca la sección que ocupa más del 30% del viewport
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+
+      SECTIONS.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) obs.observe(el);
+      });
+    }
+
+    // Scroll: highlight "Catálogo" cuando está activo
+    window.addEventListener('scroll', function() {
+      if (document.body.classList.contains('showing-catalogo')) {
+        setActive('catalogo');
+      }
+    }, { passive: true });
+  })();
 
 </script>
 
