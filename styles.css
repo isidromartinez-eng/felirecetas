@@ -149,6 +149,23 @@
   color: var(--surface-dark-ink-2); margin-top: 2px;
 }
 
+/* ── Eventos: minimalista, sin recuadro — vive sobre el fondo de la página ── */
+#eventos {
+  --surface-dark-ink:    var(--ink);           /* títulos en navy */
+  --surface-dark-ink-2:  var(--ink-2);         /* texto secundario */
+  --surface-dark-accent: var(--wine);          /* eyebrow + acentos en bordó */
+}
+#eventos .eventos-banner {
+  background: transparent;                      /* sin bloque de color */
+  border: none;
+  box-shadow: none;
+}
+#eventos .eventos-btn {
+  background: var(--wine);                      /* botón bordó sólido */
+  color: #fff;
+}
+#eventos .eventos-btn:hover { opacity: .9; }
+
 #historia {
   --surface-dark-accent: var(--c-navy-tint);
 }
@@ -510,7 +527,7 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 }
 .tab {
   display: flex; flex-direction: column; align-items: center; gap: 4px;
-  font-size: 10px; font-weight: 500; color: var(--ink-3);
+  font-size: 10px; font-weight: 600; color: var(--ink-2);
   cursor: pointer; transition: color .15s;
   background: none; border: 0; padding: 0;
 }
@@ -656,6 +673,7 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 .site-footer {
   background: var(--surface-dark); color: var(--surface-dark-ink-2);
   padding: 30px 22px;
+  text-align: center;
 }
 .footer-logo { display: flex; flex-direction: column; align-items: center; gap: 6px; font-family: var(--sans); font-size: 20px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--surface-dark-ink); }
 .footer-whisk { height: 32px; width: auto; color: var(--surface-dark-ink-2); }
@@ -673,7 +691,7 @@ hr.rule-soft { border: 0; border-top: 1px solid var(--rule-soft); margin: 0; }
 .page-bottom { height: 100px; }
 
 /* ─── Section wrapper ─────────────────────────── */
-section { scroll-margin-top: 60px; }
+section { scroll-margin-top: 64px; }
 
 /* ─── Configurator ────────────────────────────── */
 .config-page {
@@ -1290,7 +1308,7 @@ section { scroll-margin-top: 60px; }
 
   /* ── Footer ── */
   .site-footer { padding: 64px 50px 40px; }
-  .footer-cols { grid-template-columns: 1fr 1fr 1fr 1fr; gap: 40px; }
+  .footer-cols { grid-template-columns: repeat(2, max-content); justify-content: center; gap: 80px; }
   .footer-contact { display: none; }
   .footer-rule { display: none; }
 

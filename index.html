@@ -260,6 +260,16 @@
       font-style: italic;
       color: var(--surface-dark-accent);
     }
+    /* Bajada del hero: solo desktop (en mobile no se muestra) */
+    .hero-sub {
+      display: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 19px;
+      line-height: 1.55;
+      color: rgba(255,255,255,.82);
+      max-width: 34ch;
+      margin: 0 0 32px;
+    }
     .hero-ctas {
       display: flex;
       flex-direction: column;
@@ -294,9 +304,30 @@
       .hero-ctas        { flex-direction: row; }
       .hero-btn-primary,
       .hero-btn-secondary { min-width: 200px; }
-      .hero-content { padding: 0 50px 70px; }
       .hero-topbar  { padding: 28px 50px; }
       .hero-logo    { font-size: 22px; }
+
+      /* ── Desktop cinematográfico: contenido grande, en el tercio inferior, con aire ── */
+      .hero-content {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 50px 11vh;
+      }
+      .hero-eyebrow { font-size: 12px; margin-bottom: 18px; }
+      .hero-title {
+        font-size: clamp(60px, 8vw, 104px);
+        line-height: 1.02;
+        letter-spacing: -.02em;
+        max-width: 16ch;
+        margin-bottom: 22px;
+      }
+      .hero-sub { display: block; }
+      .hero-btn-primary,
+      .hero-btn-secondary {
+        padding: 16px 32px;
+        font-size: 15px;
+      }
     }
     /* ═══ FIN HERO ═══ */
 
@@ -323,6 +354,84 @@
     body.showing-catalogo #catalogo { padding-top: 56px !important; }
     @media (min-width: 768px) {
       body.showing-catalogo #catalogo { padding-top: 72px !important; }
+    }
+
+    /* ── Catálogo preview (solo desktop): oculto en mobile y dentro de las vistas ── */
+    .catalogo-preview { display: none; }
+    body.showing-catalogo #catalogo-preview,
+    body.showing-comopedir #catalogo-preview,
+    body.showing-faq #catalogo-preview { display: none !important; }
+    @media (min-width: 768px) {
+      body:not(.showing-catalogo):not(.showing-comopedir):not(.showing-faq) .catalogo-preview {
+        display: block;
+        padding: 84px 50px 0;
+      }
+      .cp-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 28px;
+      }
+      .cp-viewall {
+        font-family: var(--sans);
+        font-size: 14px; font-weight: 600;
+        color: var(--wine);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: opacity .15s;
+      }
+      .cp-viewall:hover { opacity: .7; }
+      .cp-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+      }
+      .cp-grid .product-card .card-img { height: 260px !important; }
+      .cp-grid .product-card .card-body .caption { display: block !important; }
+    }
+
+    /* ── Vista "Cómo pedir": sección fuera del scroll, aparece solo desde el menú ── */
+    body.showing-comopedir #inicio,
+    body.showing-comopedir #historia,
+    body.showing-comopedir #eventos,
+    body.showing-comopedir .cta-libre,
+    body.showing-comopedir #catalogo,
+    body.showing-comopedir #testimonios,
+    body.showing-comopedir #faq,
+    body.showing-comopedir .final-cta,
+    body.showing-comopedir .site-footer,
+    body.showing-comopedir .page-bottom,
+    body.showing-comopedir .personalizar-banner { display: none !important; }
+
+    /* "Cómo pedir" vive fuera del scroll principal: solo visible en su propia vista */
+    body:not(.showing-comopedir) #como-pedir { display: none !important; }
+
+    /* Padding-top para compensar el header fijo */
+    body.showing-comopedir #como-pedir { padding-top: 76px !important; }
+    @media (min-width: 768px) {
+      body.showing-comopedir #como-pedir { padding-top: 96px !important; }
+    }
+
+    /* ── Vista "FAQ": sección fuera del scroll, aparece solo desde el menú ── */
+    body.showing-faq #inicio,
+    body.showing-faq #historia,
+    body.showing-faq #eventos,
+    body.showing-faq .cta-libre,
+    body.showing-faq #catalogo,
+    body.showing-faq #como-pedir,
+    body.showing-faq #testimonios,
+    body.showing-faq .final-cta,
+    body.showing-faq .site-footer,
+    body.showing-faq .page-bottom,
+    body.showing-faq .personalizar-banner { display: none !important; }
+
+    /* El FAQ vive fuera del scroll principal: solo visible en su propia vista */
+    body:not(.showing-faq) #faq { display: none !important; }
+
+    /* Padding-top para compensar el header fijo */
+    body.showing-faq #faq { padding-top: 76px !important; }
+    @media (min-width: 768px) {
+      body.showing-faq #faq { padding-top: 96px !important; }
     }
 
     /* ── Topbar: siempre visible, color según posición ── */
@@ -418,8 +527,9 @@
 
     /* WA FAB sube cuando el banner está activo */
     @media (max-width: 767px) {
+      /* En mobile la tab "Pedir" ya cubre el CTA de WhatsApp — ocultamos el FAB para no duplicar */
       .whatsapp-fab {
-        transition: transform .15s, bottom .35s cubic-bezier(.34,1.4,.64,1), opacity .25s, visibility .25s !important;
+        display: none !important;
       }
       .whatsapp-fab.draft-lifted {
         bottom: 150px;
@@ -622,6 +732,52 @@
       max-height: 1200px;
     }
 
+    /* ── Cómo pedir: tira simple de 3 pasos ── */
+    .howto-strip {
+      margin: 18px 22px 0;
+      display: grid;
+      gap: 12px;
+    }
+    .howto-strip-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 15px 18px;
+      background: var(--c-white);
+      border-radius: 14px;
+      border-left: 3px solid var(--wine);
+    }
+    .howto-strip-num {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--wine);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .howto-strip-text { display: flex; flex-direction: column; gap: 3px; }
+    .howto-strip-text strong {
+      font-family: var(--sans);
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .howto-strip-text span {
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--ink-2);
+    }
+    @media (min-width: 768px) {
+      .howto-strip {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 1080px;
+        margin: 24px auto 0;
+        padding: 0 40px;
+        gap: 20px;
+      }
+    }
+
     /* ── Historia (nueva) ── */
     #historia { margin: 0; padding: 0; }
     .hist-img { width: 100%; aspect-ratio: 4/3; overflow: hidden; }
@@ -787,7 +943,7 @@
           <div class="caption" style="margin-top:2px">Configurador paso a paso</div>
         </div>
       </a>
-      <a href="#como-pedir" class="menu-item" onclick="closeMenu()">
+      <a href="#" class="menu-item" onclick="switchView('comopedir');closeMenu();return false;">
         <span class="eyebrow num">03</span>
         <div>
           <div class="menu-item-title">Cómo pedir</div>
@@ -807,7 +963,7 @@
           <div class="menu-item-title">Testimonios</div>
         </div>
       </a>
-      <a href="#faq" class="menu-item" onclick="closeMenu()">
+      <a href="#" class="menu-item" onclick="switchView('faq');closeMenu();return false;">
         <span class="eyebrow num">06</span>
         <div>
           <div class="menu-item-title">Preguntas frecuentes</div>
@@ -855,6 +1011,7 @@
     <div class="hero-content">
       <div class="hero-eyebrow">Pastelería artesanal · La Plata</div>
       <h1 class="hero-title">Pastelería artesanal,<br>hecha <em>para vos</em></h1>
+      <p class="hero-sub">Macarons, tortas personalizadas y mesas dulces, hechos a mano en La Plata.</p>
       <div class="hero-ctas">
         <a href="#" onclick="switchView('catalogo');return false;" class="hero-btn-primary">Ver carta →</a>
         <a href="configurar.html" class="hero-btn-secondary">Personalizar torta →</a>
@@ -907,9 +1064,9 @@
     <nav class="split-nav">
       <a href="#" onclick="switchView('catalogo');return false;">Catálogo</a>
       <a href="configurar.html">Personalizar</a>
-      <a href="#como-pedir">Cómo pedir</a>
+      <a href="#" onclick="switchView('comopedir');return false;">Cómo pedir</a>
       <a href="#historia">Nosotros</a>
-      <a href="#faq">FAQ</a>
+      <a href="#" onclick="switchView('faq');return false;">FAQ</a>
     </nav>
     <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido" target="_blank" class="split-wa-btn">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.92.55 3.79 1.6 5.41L2 22l4.79-1.26a9.9 9.9 0 005.25 1.5c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.78 14.16c-.25.71-1.42 1.36-2 1.45-.5.08-1.15.11-1.85-.12-.43-.14-.97-.32-1.67-.62-2.95-1.27-4.87-4.24-5.02-4.44-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.45.27-.3.59-.37.79-.37.2 0 .39 0 .57.01.18.01.42-.07.66.5.25.62.85 2.07.93 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.32.39-.45.52-.15.17-.32.39-.45.52-.15.15-.31.31-.13.62.17.3.78 1.28 1.67 2.07 1.15 1.02 2.11 1.34 2.42 1.49.31.15.49.13.67-.07.18-.2.78-.91.99-1.22.2-.31.4-.26.68-.15.27.1 1.72.81 2.02.96.3.15.49.22.57.35.07.13.07.74-.18 1.45z"/></svg>
@@ -917,104 +1074,75 @@
     </a>
   </header>
 
+  <!-- ░░ CATÁLOGO PREVIEW (solo desktop) ░░ -->
+  <section id="catalogo-preview" class="catalogo-preview">
+    <div class="cp-head">
+      <div>
+        <div class="eyebrow">— La carta</div>
+        <div class="h2" style="margin-top:4px">Nuestros <span class="serif-i">productos</span></div>
+      </div>
+      <a href="#" onclick="switchView('catalogo');return false;" class="cp-viewall">Ver toda la carta →</a>
+    </div>
+    <div class="cp-grid">
+      <div class="card product-card" data-product="pavlova" onclick="openProduct('pavlova')" style="cursor:pointer">
+        <div class="card-img" style="height:240px;position:relative;background-image:url('pavlova.jpg');background-size:cover;background-position:center">
+          <span class="chip-tag">Destacado del mes</span>
+        </div>
+        <div class="card-body">
+          <div class="h3">Pavlova <span class="serif-i">de la casa</span></div>
+          <div class="caption" style="margin-top:2px">Merengue · crema chantilly · frutos rojos</div>
+          <div class="card-row"><span class="price-serif">Consultar precio</span></div>
+        </div>
+      </div>
+      <div class="card product-card" data-product="macarons" onclick="openProduct('macarons')" style="cursor:pointer">
+        <div class="card-img" style="height:240px;position:relative;background-image:url('macarons.jpg');background-size:cover;background-position:center"></div>
+        <div class="card-body">
+          <div class="h3">Macarons</div>
+          <div class="caption" style="margin-top:2px">Coquille de almendra · sabores de temporada</div>
+          <div class="card-row"><span class="price-serif">Consultar precio</span></div>
+        </div>
+      </div>
+      <div class="card product-card" data-product="cheesecake-ny" onclick="openProduct('cheesecake-ny')" style="cursor:pointer">
+        <div class="card-img" style="height:240px;position:relative;background-image:url('cheesecake.jpg');background-size:cover;background-position:center"></div>
+        <div class="card-body">
+          <div class="h3">Cheesecake <span class="serif-i">estilo NY</span></div>
+          <div class="caption" style="margin-top:2px">Base crocante · queso crema · frío</div>
+          <div class="card-row"><span class="price-serif">Consultar precio</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ░░ CÓMO PEDIR ░░ -->
   <section id="como-pedir" style="padding-top:60px">
-    <div class="section-card">
-
-      <!-- Encabezado siempre visible — toca para desplegar -->
-      <button class="howto-toggle" onclick="toggleComoPedir(this)" aria-expanded="false" aria-controls="como-pedir-body">
-        <div class="howto-toggle-text">
-          <div class="eyebrow" style="margin-bottom:4px">— 01 · El proceso</div>
-          <div class="h1">¿Cómo <span class="serif-i">pedir</span>?</div>
-          <span class="howto-pill howto-pill-label">Ver los 4 pasos →</span>
-        </div>
-        <svg class="howto-chevron" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-      </button>
-
-      <!-- Contenido desplegable -->
-      <div id="como-pedir-body" class="howto-body">
-      <div style="padding:0 22px;margin-top:8px">
-        <p style="font-size:14px;line-height:1.55;color:var(--ink-2)">
-          Trabajamos sólo por encargo, así horneamos cada pieza el día anterior a la entrega.
-        </p>
-      </div>
-      <div class="howto-grid">
-        <div class="howto-steps">
-          <div class="step-row">
-            <div class="step-icon-col">
-              <div class="step-icon first">01</div>
-              <span class="step-label">Elegí</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-body">
-              <div class="h3 serif">Elegí tu pedido</div>
-              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Explorá el catálogo o usá el personalizador para armar tu torta paso a paso.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-icon-col">
-              <div class="step-icon rest">02</div>
-              <span class="step-label">Escribí</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-body">
-              <div class="h3 serif">Coordinemos</div>
-              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Escribime por WhatsApp y definimos los detalles.</p>
-              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">📸 Si personalizás una torta, mandá fotos de referencia — voy a hacer todo lo posible para replicarla.</p>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-icon-col">
-              <div class="step-icon rest">03</div>
-              <span class="step-label">Reservá</span>
-              <div class="step-line"></div>
-            </div>
-            <div class="step-body">
-              <div class="h3 serif">Reservá</div>
-              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Los pedidos se reservan con una seña del 50% y un mínimo de 48 hs de anticipación.</p>
-              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Para eventos grandes, más de una semana de anticipación.</p>
-            </div>
-          </div>
-          <div class="step-row" style="padding-bottom:0">
-            <div class="step-icon-col">
-              <div class="step-icon rest">04</div>
-              <span class="step-label">Disfrutás</span>
-            </div>
-            <div class="step-body">
-              <div class="h3 serif">Entrega o retiro</div>
-              <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:6px">Retirá en zona centro (La Plata) o coordinamos envío a City Bell, Gonnet, Villa Elisa y alrededores.</p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div class="ornament" style="margin:24px 22px 0">Medios de pago</div>
-          <div class="info-cards" style="margin-top:14px">
-            <div class="info-card bg-soft">
-              <span class="icon">💳</span>
-              <span style="color:var(--ink-2)">Transferencia bancaria</span>
-            </div>
-            <div class="info-card bg-paper">
-              <span class="icon">💵</span>
-              <span style="color:var(--ink-2)">Efectivo</span>
-            </div>
-            <div class="info-card bg-paper">
-              <span class="icon">📱</span>
-              <span style="color:var(--ink-2)">Mercado Pago</span>
-            </div>
-          </div>
-          <div class="howto-cta" style="padding:0 22px 32px">
-            <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20hacer%20un%20pedido" target="_blank" class="btn btn-wine btn-block" style="margin-top:16px">
-              Empezar mi pedido por WhatsApp
-            </a>
-          </div>
+    <div style="padding:0 22px 0">
+      <div class="eyebrow">— El proceso</div>
+      <div class="h1" style="margin-top:6px">¿Cómo <span class="serif-i">pedir</span>?</div>
+      <p style="margin-top:12px;font-size:14px;line-height:1.6;color:var(--ink-2);max-width:520px">Trabajamos solo por encargo, así horneamos cada pieza el día anterior a la entrega. En tres pasos:</p>
+    </div>
+    <div class="howto-strip">
+      <div class="howto-strip-step">
+        <span class="howto-strip-num">01</span>
+        <div class="howto-strip-text">
+          <strong>Elegí</strong>
+          <span>Del catálogo o personalizá tu torta paso a paso.</span>
         </div>
       </div>
+      <div class="howto-strip-step">
+        <span class="howto-strip-num">02</span>
+        <div class="howto-strip-text">
+          <strong>Escribime</strong>
+          <span>Coordinamos los detalles por WhatsApp.</span>
+        </div>
       </div>
-
-    </div><!-- /.section-card -->
+      <div class="howto-strip-step">
+        <span class="howto-strip-num">03</span>
+        <div class="howto-strip-text">
+          <strong>Reservá</strong>
+          <span>Seña 50% · mínimo 48hs · retiro o envío.</span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ░░ EVENTOS POR WHATSAPP ░░ -->
@@ -1022,8 +1150,7 @@
     <div class="eventos-banner">
       <!-- Izquierda: copy -->
       <div class="eventos-copy">
-        <div class="eyebrow" style="color:var(--surface-dark-accent)">— Eventos a medida</div>
-        <h2 class="eventos-title">Tu fecha especial,<br><em>sin preocupaciones</em></h2>
+        <h2 class="eventos-title">Eventos <em>a medida</em></h2>
         <p class="eventos-desc">Mesas dulces completas para casamientos, cumpleaños y eventos corporativos. Coordinamos todo — desde la cantidad hasta la presentación.</p>
         <a href="https://wa.me/5492216023377?text=Hola%20Feli!%20Quiero%20consultar%20por%20una%20mesa%20dulce%20para%20un%20evento%20%F0%9F%8E%82"
            target="_blank" class="eventos-btn">
@@ -1045,13 +1172,6 @@
           <div>
             <div class="eventos-item-title">Mesa dulce completa</div>
             <div class="eventos-item-sub">Macarons, cookies, cheesecakes y más</div>
-          </div>
-        </div>
-        <div class="eventos-item">
-          <span class="eventos-item-icon">📦</span>
-          <div>
-            <div class="eventos-item-title">Coordinación total</div>
-            <div class="eventos-item-sub">Consultá con más de una semana</div>
           </div>
         </div>
       </div>
@@ -1076,7 +1196,7 @@
       <div class="hist-content">
         <div class="hist-eyebrow">— 03 · La historia</div>
         <h2 class="hist-title">Una receta <em>de familia</em>, hecha en casa.</h2>
-        <p class="hist-body">Soy Felipe. Desde los 8 estoy entre ollas — y hace 7 años eso se convirtió en FR. Un proyecto donde junto recetas, fotografía y diseño. Cada torta es un proyecto propio, hecho a mano y con ganas.</p>
+        <p class="hist-body">Soy Felipe. Desde los 8 estoy entre ollas, y hace 7 años eso se convirtió en FR. Cada torta es un proyecto propio, hecho a mano y con ganas.</p>
         <div class="hist-author">
           <div class="hist-avatar"><img src="logo.png" alt="FR" style="width:100%;height:100%;object-fit:contain;"></div>
           <div>
@@ -1307,7 +1427,7 @@
 
     <!-- Review list -->
     <div class="review-list">
-      <div class="review-item">
+      <div class="review-item" style="border-bottom:none">
         <div style="display:flex;align-items:center;gap:12px">
           <div class="review-avatar" style="background:var(--wine);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff;font-family:var(--sans)">V</div>
           <div style="flex:1">
@@ -1319,19 +1439,6 @@
           </div>
         </div>
         <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:10px">Hola! qué rico todo!! el pastel y los macarons estuvieron perfectos! muchas gracias todo impecable</p>
-      </div>
-      <div class="review-item" style="border-bottom:none">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div class="review-avatar" style="background:var(--sage);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff;font-family:var(--sans)">A</div>
-          <div style="flex:1">
-            <div style="display:flex;justify-content:space-between">
-              <span style="font-weight:600;font-size:13.5px">Ana Senosiain</span>
-              <span style="color:var(--gold);font-size:12px">★★★★★</span>
-            </div>
-            <div class="caption" style="font-size:11px">Cliente · vía WhatsApp</div>
-          </div>
-        </div>
-        <p style="font-size:13.5px;line-height:1.55;color:var(--ink-2);margin-top:10px">Hola! todo estaba delicioso. Las tartas espectaculares, el cheesecake divino. muchas gracias</p>
       </div>
     </div>
 
@@ -1406,22 +1513,6 @@
         <div class="faq-answer">Sí, siempre. Trabajo con materias primas de calidad — manteca real, chocolate de cobertura, huevos frescos, frutas de temporada. Sin mezclas ni conservantes industriales.</div>
       </div>
 
-      <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span class="faq-q">¿Puedo cancelar o modificar mi pedido?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">Modificaciones con más de 72 hs de anticipación están bien. Cancelaciones con menos de 48 hs del retiro no devuelven la seña, porque ya compramos y empezamos a trabajar.</div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span class="faq-q">¿Cuánto duran los productos?</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">Al ser artesanales y sin conservantes, los macarons duran 3–5 días refrigerados. Las tortas 2–3 días. Los cookies y brownies hasta una semana en un envase hermético. Siempre te lo indico al entregar.</div>
-      </div>
-
     </div>
 
     </div><!-- /faq-layout -->
@@ -1441,8 +1532,8 @@
           <a href="#" onclick="switchView('catalogo');return false;">Catálogo</a>
           <a href="configurar.html">Personalizar torta</a>
           <a href="#historia">Nosotros</a>
-          <a href="#como-pedir">Cómo pedir</a>
-          <a href="#faq">FAQ</a>
+          <a href="#" onclick="switchView('comopedir');return false;">Cómo pedir</a>
+          <a href="#" onclick="switchView('faq');return false;">FAQ</a>
         </div>
       </div>
       <div>
@@ -1453,46 +1544,9 @@
           <span>Atención: 9 a 20 hs</span>
         </div>
       </div>
-      <div>
-        <div class="footer-col-head">Zonas de entrega</div>
-        <div class="footer-col-list">
-          <span>La Plata</span>
-          <span>City Bell</span>
-          <span>Gonnet</span>
-          <span>Villa Elisa y alrededores</span>
-        </div>
-      </div>
-      <div>
-        <div class="footer-col-head">Feli Recetas</div>
-        <div class="footer-col-list">
-          <span>Pastelería artesanal</span>
-          <span>La Plata · Desde 2019</span>
-          <span>Solo por encargo</span>
-          <a href="cart.html">Ver carrito</a>
-        </div>
-      </div>
     </div>
 
     <hr class="footer-rule"/>
-
-    <div class="footer-contact">
-      <div class="footer-contact-row">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="7" cy="5.5" r="2"/><path d="M7 11.5C5 9.5 3 7.5 3 5.5a4 4 0 018 0c0 2-2 4-4 6z"/></svg>
-        <span>La Plata · City Bell · Gonnet · Villa Elisa</span>
-      </div>
-      <div class="footer-contact-row">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="7" cy="7" r="5"/><path d="M7 4v3l2 1.5"/></svg>
-        <span>Atención: 9 a 20 hs</span>
-      </div>
-      <div class="footer-contact-row">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2.5" y="3" width="9" height="8" rx="1.5"/><circle cx="7" cy="7" r="2"/><circle cx="9.5" cy="4.5" r=".5" fill="currentColor"/></svg>
-        <a href="https://instagram.com/felirecetas" target="_blank">@felirecetas</a>
-      </div>
-      <div class="footer-contact-row">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1.5a5.5 5.5 0 00-4.6 8.5L1.5 13l3.1-.9A5.5 5.5 0 107 1.5z"/></svg>
-        <a href="https://wa.me/5492216023377" target="_blank">+54 9 221 602 3377</a>
-      </div>
-    </div>
 
     <p class="footer-copy">© 2026 Feli Recetas · Hecho con tiempo en La Plata</p>
     <p class="footer-copy" style="margin-top:6px;opacity:.45">Diseño web: <a href="https://kodagit.com" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:3px">KODA</a></p>
@@ -1536,11 +1590,11 @@
 
   <!-- Desktop nav links (visible solo en desktop) -->
   <div class="desktop-nav" id="desktopNav">
-    <button class="dnav-link" onclick="switchView('catalogo')" data-section="catalogo">Catálogo</button>
-    <a class="dnav-link" href="#como-pedir" data-section="como-pedir">Cómo pedir</a>
+    <button class="dnav-link" data-section="catalogo">Catálogo</button>
+    <a class="dnav-link" href="#" data-section="como-pedir">Cómo pedir</a>
     <a class="dnav-link" href="#eventos" data-section="eventos">Eventos</a>
     <a class="dnav-link" href="#historia" data-section="historia">Nosotros</a>
-    <a class="dnav-link" href="#faq" data-section="faq">Preguntas</a>
+    <a class="dnav-link" href="#" data-section="faq">Preguntas</a>
   </div>
 
   <!-- Desktop CTA: Personalizar torta -->
@@ -1779,18 +1833,20 @@
     const tabbar      = document.querySelector('.tabbar');
     const fab         = document.querySelector('.whatsapp-fab');
 
-    if (view === 'catalogo') {
-      // Guardar posición de scroll antes de entrar al catálogo
+    var VIEW_CLASS = { catalogo: 'showing-catalogo', comopedir: 'showing-comopedir', faq: 'showing-faq' };
+    document.body.classList.remove('showing-catalogo', 'showing-comopedir', 'showing-faq');
+
+    if (VIEW_CLASS[view]) {
+      // Guardar posición de scroll antes de entrar a la vista
       sessionStorage.setItem('preCartScrollY', String(Math.round(window.scrollY)));
-      document.body.classList.add('showing-catalogo');
-      setActiveTab('tab-catalogo');
+      document.body.classList.add(VIEW_CLASS[view]);
+      setActiveTab(view === 'catalogo' ? 'tab-catalogo' : 'tab-home');
       if (topbar)      topbar.classList.remove('topbar-in-hero');
       if (splitHeader) splitHeader.classList.add('nav-visible');
       if (tabbar)      tabbar.classList.remove('nav-hidden');
       if (fab)         fab.classList.remove('hero-visible');
       window.scrollTo(0, 0);
     } else {
-      document.body.classList.remove('showing-catalogo');
       setActiveTab('tab-home');
       // Restaurar posición de scroll al salir del catálogo
       var savedY = sessionStorage.getItem('preCartScrollY');
@@ -1816,8 +1872,10 @@
   function goTo(sectionId, tabId) {
     if (sectionId === 'catalogo')     { switchView('catalogo'); return; }
     if (sectionId === 'personalizar') { window.location.href = 'configurar.html'; return; }
-    // Si estamos en catálogo, volvemos primero a inicio
-    if (document.body.classList.contains('showing-catalogo')) {
+    // Si estamos en una vista (catálogo, cómo pedir o FAQ), volvemos primero a inicio
+    if (document.body.classList.contains('showing-catalogo') ||
+        document.body.classList.contains('showing-comopedir') ||
+        document.body.classList.contains('showing-faq')) {
       switchView('main');
       setTimeout(() => {
         const el = document.getElementById(sectionId);
@@ -1868,14 +1926,8 @@
       const heroVisible = rect.bottom > 80;
       const inCatalogo  = document.body.classList.contains('showing-catalogo');
 
-      // Compensamos la altura del acordeón abierto para que no afecte el trigger
-      const accordionH = (comoPedirBody && comoPedirBody.classList.contains('open'))
-        ? comoPedirBody.offsetHeight : 0;
-
-      // Tabbar aparece/desaparece cuando #eventos ("— 02") entra o sale de pantalla
-      const eventosVisible = eventos
-        ? (eventos.getBoundingClientRect().top - accordionH) < window.innerHeight
-        : heroPassed;
+      // La barra aparece cuando el hero ya dejó la mitad superior de la pantalla
+      const heroGone = rect.bottom < window.innerHeight * 0.5;
 
       // Topbar: negro en hero, crema cuando sale
       if (topbar)
@@ -1884,8 +1936,8 @@
       // Split-header (desktop): aparece solo tras el hero
       if (splitHeader) splitHeader.classList.toggle('nav-visible', heroPassed || inCatalogo);
 
-      // Tabbar: ligado al momento en que "-02 Eventos" entra en pantalla
-      if (tabbar) tabbar.classList.toggle('nav-hidden', !eventosVisible && !inCatalogo);
+      // Tabbar: oculta mientras el hero domina la pantalla; aparece al salir de él
+      if (tabbar) tabbar.classList.toggle('nav-hidden', !heroGone && !inCatalogo);
 
       // FAB WA: solo aparece tras el hero
       if (fab && window.innerWidth < 768)
@@ -2529,8 +2581,8 @@
 
   // ── Desktop nav: clicks con offset + highlight de sección activa ──
   (function() {
-    var HEADER_H = 72; // altura del tabbar fijo en desktop
-    var SECTIONS = ['como-pedir', 'eventos', 'historia', 'testimonios', 'faq'];
+    var HEADER_H = 64; // altura del tabbar fijo en desktop (styles.css .tabbar height: 64px)
+    var SECTIONS = ['eventos', 'historia', 'testimonios'];
     var links    = document.querySelectorAll('.dnav-link[data-section]');
 
     function setActive(id) {
@@ -2542,7 +2594,7 @@
     function scrollToSection(id) {
       var el = document.getElementById(id);
       if (!el) return;
-      var top = el.getBoundingClientRect().top + window.scrollY - HEADER_H - 8;
+      var top = el.getBoundingClientRect().top + window.scrollY - HEADER_H;
       window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     }
 
@@ -2550,9 +2602,14 @@
     links.forEach(function(link) {
       link.addEventListener('click', function(e) {
         var id = link.dataset.section;
-        if (id === 'catalogo') { switchView('catalogo'); return; }
         e.preventDefault();
-        if (document.body.classList.contains('showing-catalogo')) {
+        if (id === 'catalogo') { switchView('catalogo'); return; }
+        if (id === 'como-pedir') { switchView('comopedir'); return; }
+        if (id === 'faq') { switchView('faq'); return; }
+        var showingSpecial = document.body.classList.contains('showing-catalogo') ||
+                             document.body.classList.contains('showing-comopedir') ||
+                             document.body.classList.contains('showing-faq');
+        if (showingSpecial) {
           switchView('main');
           setTimeout(function() { scrollToSection(id); }, 120);
         } else {
@@ -2565,6 +2622,14 @@
     function updateHighlight() {
       if (document.body.classList.contains('showing-catalogo')) {
         setActive('catalogo');
+        return;
+      }
+      if (document.body.classList.contains('showing-comopedir')) {
+        setActive('como-pedir');
+        return;
+      }
+      if (document.body.classList.contains('showing-faq')) {
+        setActive('faq');
         return;
       }
       var scrollY = window.scrollY + HEADER_H + 32;
